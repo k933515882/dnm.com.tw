@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM SENSE | 台中汽車鍍膜 貼膜專家</title>
+    <meta name="description" content="DM SENSE 台中汽車鍍膜專家，提供專業汽車鍍膜、車身貼膜、內裝保護服務。日本進口材料、5年保固、免費諮詢。">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Microsoft JhengHei", "Segoe UI", sans-serif; color: #1a1a1a; line-height: 1.6; overflow-x: hidden; }
+        
+        /* Header */
+        header { position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 15px 0; box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 800; color: #1a1a2e; text-decoration: none; }
+        .logo span { color: #ff8c00; }
+        nav { display: flex; gap: 30px; }
+        nav a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: #ff8c00; }
+        .cta-btn { background: linear-gradient(135deg, #ff8c00, #ffd700); color: #1a1a2e; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,140,0,0.3); }
+        
+        /* Hero */
+        .hero { min-height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; padding: 100px 20px; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23ffffff03"/></svg>'); background-size: 100px; }
+        .hero-content { position: relative; z-index: 1; max-width: 900px; }
+        .hero h1 { font-size: clamp(36px, 7vw, 64px); font-weight: 800; margin-bottom: 20px; }
+        .hero h1 span { background: linear-gradient(135deg, #ffd700, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: clamp(18px, 3vw, 24px); opacity: 0.9; margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-cta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+        .hero-btn { padding: 18px 40px; font-size: 18px; font-weight: 700; border-radius: 50px; text-decoration: none; transition: all 0.3s; }
+        .hero-btn.primary { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #1a1a2e; }
+        .hero-btn.secondary { background: transparent; color: white; border: 2px solid white; }
+        .hero-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,140,0,0.3); }
+        
+        /* Stats */
+        .stats { display: flex; justify-content: center; gap: 80px; margin-top: 60px; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 48px; font-weight: 800; color: #ffd700; }
+        .stat-label { font-size: 14px; opacity: 0.8; }
+        
+        /* Section Titles */
+        .section { padding: 100px 20px; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: clamp(32px, 5vw, 48px); margin-bottom: 16px; }
+        .section-title p { color: #666; font-size: 18px; max-width: 600px; margin: 0 auto; }
+        
+        /* Services */
+        .services { background: #f8f9fa; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .service-card { background: white; border-radius: 24px; padding: 40px; text-align: center; transition: all 0.3s; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+        .service-icon { font-size: 72px; margin-bottom: 20px; }
+        .service-card h3 { font-size: 24px; margin-bottom: 12px; }
+        .service-card p { color: #666; margin-bottom: 20px; }
+        .service-price { font-size: 28px; font-weight: 700; color: #ff8c00; }
+        
+        /* Features */
+        .features { background: white; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; max-width: 1000px; margin: 0 auto; }
+        .feature { display: flex; align-items: flex-start; gap: 20px; }
+        .feature-icon { font-size: 48px; flex-shrink: 0; }
+        .feature h4 { font-size: 20px; margin-bottom: 8px; }
+        .feature p { color: #666; }
+        
+        /* Gallery */
+        .gallery { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; }
+        .gallery h2 { text-align: center; font-size: clamp(32px, 5vw, 48px); margin-bottom: 60px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .gallery-item { aspect-ratio: 4/3; background: linear-gradient(135deg, #2d2d44, #3d3d5c); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 64px; transition: all 0.3s; }
+        .gallery-item:hover { transform: scale(1.02); }
+        
+        /* Testimonials */
+        .testimonials { background: #f8f9fa; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .testimonial { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+        .testimonial p { font-size: 18px; line-height: 1.8; margin-bottom: 20px; }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .author-avatar { width: 50px; height: 50px; background: linear-gradient(135deg, #ffd700, #ff8c00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .author-name { font-weight: 600; }
+        .author-title { color: #888; font-size: 14px; }
+        
+        /* Booking */
+        .booking { background: linear-gradient(135deg, #ffd700, #ff8c00); padding: 100px 20px; }
+        .booking-container { max-width: 600px; margin: 0 auto; background: white; border-radius: 24px; padding: 50px; text-align: center; }
+        .booking h2 { font-size: 32px; margin-bottom: 16px; }
+        .booking p { color: #666; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px 20px; border: 2px solid #e5e5e5; border-radius: 12px; font-size: 16px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #ff8c00; }
+        .submit-btn { width: 100%; padding: 18px; background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(26,26,46,0.3); }
+        
+        /* Contact */
+        .contact { background: #1a1a2e; color: white; padding: 80px 20px; text-align: center; }
+        .contact h2 { font-size: 32px; margin-bottom: 30px; }
+        .contact-info { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-bottom: 40px; }
+        .contact-item { text-align: center; }
+        .contact-item span { font-size: 36px; display: block; margin-bottom: 10px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; }
+        .social-link { width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; text-decoration: none; transition: all 0.3s; }
+        .social-link:hover { background: #ffd700; transform: translateY(-3px); }
+        
+        /* Footer */
+        footer { background: #0d0d1a; color: #666; padding: 30px 20px; text-align: center; }
+        
+        /* Process */
+        .process { background: white; }
+        .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .process-item { text-align: center; }
+        .process-num { width: 60px; height: 60px; background: linear-gradient(135deg, #ffd700, #ff8c00); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; margin: 0 auto 20px; }
+        .process-item h4 { margin-bottom: 10px; }
+        .process-item p { color: #666; font-size: 14px; }
+        
+        /* FAQ */
+        .faq { background: #f8f9fa; }
+        .faq-grid { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .faq-item h4 { margin-bottom: 10px; color: #1a1a2e; }
+        .faq-item p { color: #666; }
+        
+        /* Mobile Nav */
+        .mobile-nav { display: none; }
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .mobile-nav { display: block; }
+            .booking-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">DM <span>SENSE</span></a>
+            <nav>
+                <a href="#services">服務項目</a>
+                <a href="#features">為什麼選擇我們</a>
+                <a href="#process">施工流程</a>
+                <a href="#gallery">作品集</a>
+                <a href="#testimonials">客戶評價</a>
+                <a href="#faq">常見問題</a>
+            </nav>
+            <a href="#booking" class="cta-btn">立即預約</a>
+        </div>
+    </header>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>🚗 台中汽車<span>鍍膜</span>貼膜專家</h1>
+            <p>DM SENSE | 專業施工、頂級品質、讓您的愛車閃閃發亮<br>日本進口材料 · 5年保固 · 免費諮詢</p>
+            <div class="hero-cta">
+                <a href="#booking" class="hero-btn primary">免費諮詢</a>
+                <a href="#services" class="hero-btn secondary">了解更多</a>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-num">500+</div>
+                    <div class="stat-label">施工車輛</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">98%</div>
+                    <div class="stat-label">客戶滿意</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-num">5年</div>
+                    <div class="stat-label">保固服務</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services -->
+    <section class="section services" id="services">
+        <div class="section-title">
+            <h2>🎯 我們的服務</h2>
+            <p>專業團隊，為您的愛車提供最完善的保護</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">✨</div>
+                <h3>汽車鍍膜</h3>
+                <p>日本進口頂級鍍膜技術，形成保護膜層，保護車漆光亮如新，抵抗酸雨、紫外線</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>車身貼膜</h3>
+                <p>原廠認證膜材，多種顏色選擇，變色膜、保護膜、彩繪膜<br>施工案例：Tesla、BMW、賓士</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🛡️</div>
+                <h3>內裝保護</h3>
+                <p>皮革護理、塑料翻新、頂級鍍膜<br>讓內裝如新品般持久如新</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🔧</div>
+                <h3>美容修復</h3>
+                <p>拋光除紋、太陽紋去除、漆面重生<br>還原愛車原有光澤</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">💎</div>
+                <h3>玻璃鍍膜</h3>
+                <p>前擋風玻璃鍍膜，雨水不留痕<br>雨夜行車更安全</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🧽</div>
+                <h3>深度美容</h3>
+                <p>全車清潔、鐵粉去除、黏土處理<br>打蠟拋光一條龍</p>
+                <div class="service-price">諮詢報價</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section class="section features" id="features">
+        <div class="section-title">
+            <h2>💎 為什麼選擇 DM SENSE</h2>
+            <p>專業、品質、信任</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <div>
+                    <h4>原廠認證施工</h4>
+                    <p>所有技師皆受過專業訓練，擁有原廠認證，品質保證</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <div>
+                    <h4>頂級進口材料</h4>
+                    <p>使用日本、美國進口頂級材料，品質有保障</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⏰</div>
+                <div>
+                    <h4>快速交車</h4>
+                    <p>標準化流程，最快當天交車，不讓您久等</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📋</div>
+                <div>
+                    <h4>5年保固服務</h4>
+                    <p>提供業界最長保固，施工品質有保障</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💰</div>
+                <div>
+                    <h4>透明報價</h4>
+                    <p>沒有隱藏費用，報價清楚透明</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🚗</div>
+                <div>
+                    <h4>免費檢測</h4>
+                    <p>施工前免費全車檢測，記錄每個角落</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Process -->
+    <section class="section process" id="process">
+        <div class="section-title">
+            <h2>🔧 施工流程</h2>
+            <p>標準化作業，確保品質</p>
+        </div>
+        <div class="process-grid">
+            <div class="process-item">
+                <div class="process-num">1</div>
+                <h4>預約諮詢</h4>
+                <p>LINE 預約<br>免費諮詢</p>
+            </div>
+            <div class="process-item">
+                <div class="process-num">2</div>
+                <h4>到店檢測</h4>
+                <p>全車檢測<br>記錄狀況</p>
+            </div>
+            <div class="process-item">
+                <div class="process-num">3</div>
+                <h4>施工保護</h4>
+                <p>專業施工<br>層層把關</p>
+            </div>
+            <div class="process-item">
+                <div class="process-num">4</div>
+                <h4>驗收交車</h4>
+                <p>客戶驗收<br>保固說明</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Gallery -->
+    <section class="section gallery" id="gallery">
+        <h2>📸 施工案例</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item">🚗✨ Tesla Model 3 鍍膜</div>
+            <div class="gallery-item">🚙🎨 BMW 消光黑貼膜</div>
+            <div class="gallery-item">🏎️🛡️ 賓士 S-Class 鍍膜</div>
+            <div class="gallery-item">🚕💎 Toyota 拋光美容</div>
+            <div class="gallery-item">🚗🔧 Honda 鍍膜+內裝</div>
+            <div class="gallery-item">🚙✨ Lexus 全身鍍膜</div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="section testimonials" id="testimonials">
+        <div class="section-title">
+            <h2>⭐ 客戶評價</h2>
+            <p>听听他们怎么说</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial">
+                <p>"做完鍍膜後，車子真的超級亮！而且師傅很細心，每個角落都有照顧到。交車時還教我如何保養，非常專業！"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👨</div>
+                    <div>
+                        <div class="author-name">王先生</div>
+                        <div class="author-title">BMW 5 Series 車主</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p>"貼膜效果超乎預期，消光黑很有質感！重點是師傅服務態度很好，施工前還幫我全車拍照記錄，很細心！"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👩</div>
+                    <div>
+                        <div class="author-name">林小姐</div>
+                        <div class="author-title">Tesla Model 3 車主</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p>"本來只是想問問，結果免費諮詢就聊了半小時，師傅很誠實地分析我的需求，沒有強迫推銷。之後一定再回來做鍍膜！"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">👨</div>
+                    <div>
+                        <div class="author-name">張先生</div>
+                        <div class="author-title">賓士 C-Class 車主</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ -->
+    <section class="section faq" id="faq">
+        <div class="section-title">
+            <h2>❓ 常見問題</h2>
+            <p>快速解答您的疑問</p>
+        </div>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4>Q: 鍍膜可以維持多久？</h4>
+                <p>A: 我們使用日本進口頂級鍍膜，正常使用下可維持 2-3 年。我們提供 5 年保固服務。</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: 貼膜會傷害原廠車漆嗎？</h4>
+                <p>A: 不會！我們使用原廠認證膜材，可完整撕除，不殘膠、不傷害原廠漆面。</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: 施工需要多久時間？</h4>
+                <p>A: 依施工項目而定。基礎鍍膜約 4-6 小時，完整施工約 1-2 天。我們提供代步車服務。</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: 鍍膜後還需要洗車嗎？</h4>
+                <p>A: 需要！鍍膜後更容易清洗，洗車時污垢不易附著。我們會提供專用洗車液。</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: 可以只做部分嗎？</h4>
+                <p>A: 可以！我們提供局部施工選項，歡迎諮詢。</p>
+            </div>
+            <div class="faq-item">
+                <h4>Q: 預約後可以改時間嗎？</h4>
+                <p>A: 可以！請提前 24 小時通知我們改期。</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Booking -->
+    <section class="booking" id="booking">
+        <div class="booking-container">
+            <h2>📅 立即預約諮詢</h2>
+            <p>填寫以下表單，我們會盡快與您聯繫</p>
+            <form id="bookingForm">
+                <div class="form-group">
+                    <input type="text" placeholder="您的姓名" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" placeholder="手機號碼" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="LINE ID（方便聯繫）">
+                </div>
+                <div class="form-group">
+                    <select required>
+                        <option value="">選擇服務項目</option>
+                        <option value="coating">汽車鍍膜</option>
+                        <option value="wrap">車身貼膜</option>
+                        <option value="interior">內裝保護</option>
+                        <option value="glass">玻璃鍍膜</option>
+                        <option value="consult">其他諮詢</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="車款年份（例：2023 Toyota Camry）">
+                </div>
+                <div class="form-group">
+                    <textarea rows="3" placeholder="其他需求或問題"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">送出預約</button>
+            </form>
+        </div>
+    </section>
+    
+    <!-- Contact -->
+    <section class="contact">
+        <h2>📞 聯絡我們</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <span>📍</span>
+                <p>台中市</p>
+            </div>
+            <div class="contact-item">
+                <span>📱</span>
+                <p>0912-345-678</p>
+            </div>
+            <div class="contact-item">
+                <span>⏰</span>
+                <p>09:00 - 18:00</p>
+            </div>
+            <div class="contact-item">
+                <span>💬</span>
+                <p>LINE: @dmsense</p>
+            </div>
+        </div>
+        <div class="social-links">
+            <a href="https://www.facebook.com/dnm.com.tw" class="social-link">📘</a>
+            <a href="#" class="social-link">📸</a>
+            <a href="#" class="social-link">💬</a>
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2026 DM SENSE | 台中汽車鍍膜貼膜專家</p>
+    </footer>
+    
+    <script>
+        // Form submission
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('預約已送出！我們會盡快與您聯繫！');
+        });
+        
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
