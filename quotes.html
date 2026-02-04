@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM SENSE | 線上報價系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --white: #fff; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', -apple-system, sans-serif; background: var(--light); color: #333; line-height: 1.6; padding-bottom: 80px; }
+        
+        header { background: var(--dark); color: #fff; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        header h1 { font-size: 24px; font-weight: 700; }
+        header p { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+        
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        
+        .step { background: #fff; border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .step-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .step-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        
+        .car-brands { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .car-brand { padding: 14px; background: var(--light); border: 2px solid transparent; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; font-weight: 500; }
+        .car-brand:hover { border-color: var(--primary); }
+        .car-brand.selected { background: var(--primary); color: #fff; }
+        
+        .service-group { margin-bottom: 20px; }
+        .service-group h4 { font-size: 15px; font-weight: 600; color: #666; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid var(--primary); }
+        .service-options { display: grid; gap: 10px; }
+        .service-option { display: flex; align-items: center; justify-content: space-between; padding: 16px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .service-option:hover { border-color: var(--primary); }
+        .service-option.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
+        .service-option .name { font-weight: 500; }
+        .service-option .price { font-weight: 700; color: var(--primary); }
+        
+        .window-film { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .film-option { padding: 14px; background: var(--light); border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
+        .film-option:hover { border-color: var(--primary); }
+        .film-option.selected { border-color: var(--primary); background: var(--primary); color: #fff; }
+        .film-option .name { font-weight: 600; font-size: 15px; }
+        .film-option .desc { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+        
+        .summary { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 16px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 100; }
+        .summary-inner { max-width: 600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .summary-left .total-label { font-size: 13px; color: #666; }
+        .summary-left .total-price { font-size: 28px; font-weight: 800; color: var(--primary); }
+        .summary-btn { padding: 14px 32px; background: var(--primary); color: #fff; border: none; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .summary-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
+        
+        .result-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 200; padding: 20px; }
+        .result-modal.show { display: flex; }
+        .result-content { background: #fff; border-radius: 20px; padding: 30px; max-width: 500px; width: 100%; max-height: 80vh; overflow-y: auto; }
+        .result-header { text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #eee; }
+        .result-header h2 { font-size: 24px; margin-bottom: 8px; }
+        .result-header p { color: #666; font-size: 14px; }
+        .result-items { margin-bottom: 24px; }
+        .result-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+        .result-item:last-child { border-bottom: none; }
+        .result-item .name { font-weight: 500; }
+        .result-item .price { font-weight: 600; color: var(--primary); }
+        .result-total { display: flex; justify-content: space-between; padding: 16px; background: var(--light); border-radius: 12px; font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+        .result-actions { display: grid; gap: 12px; }
+        .result-btn { padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; text-align: center; text-decoration: none; }
+        .result-btn.line { background: #06c755; color: #fff; }
+        .result-btn.phone { background: var(--dark); color: #fff; }
+        .result-close { text-align: center; margin-top: 16px; color: #999; cursor: pointer; font-size: 14px; }
+        
+        .empty-state { text-align: center; padding: 40px 20px; color: #999; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DM SENSE 線上報價</h1>
+        <p>選擇您的車型和服務，獲得立即報價</p>
+    </header>
+    
+    <div class="container">
+        <!-- Step 1: 選擇車型 -->
+        <div class="step">
+            <div class="step-title"><span class="step-num">1</span>選擇您的車型</div>
+            <div class="car-brands" id="carBrands">
+                <div class="car-brand" data-brand="tesla">特斯拉 Tesla</div>
+                <div class="car-brand" data-brand="bmw">BMW 寶馬</div>
+                <div class="car-brand" data-brand="benz">賓士 Mercedes</div>
+                <div class="car-brand" data-brand="toyota">豐田 Toyota</div>
+                <div class="car-brand" data-brand="honda">本田 Honda</div>
+                <div class="car-brand" data-brand="lexus">Lexus 凌志</div>
+                <div class="car-brand" data-brand="ford">福特 Ford</div>
+                <div class="car-brand" data-brand="other">其他品牌</div>
+            </div>
+        </div>
+        
+        <!-- Step 2: 選擇服務 -->
+        <div class="step" id="serviceStep">
+            <div class="step-title"><span class="step-num">2</span>選擇服務項目</div>
+            
+            <!-- 鍍膜 -->
+            <div class="service-group">
+                <h4>🔹 鍍膜服務</h4>
+                <div class="service-options" id="coatingOptions">
+                    <div class="service-option" data-type="coating" data-name="單層陶瓷鍍膜">
+                        <span class="name">單層陶瓷鍍膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                    <div class="service-option" data-type="coating" data-name="雙層套餐鍍膜">
+                        <span class="name">雙層套餐鍍膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                    <div class="service-option" data-type="coating" data-name="雙層石墨烯鍍膜">
+                        <span class="name">雙層石墨烯鍍膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                    <div class="service-option" data-type="coating" data-name="三層石墨烯鍍膜">
+                        <span class="name">三層石墨烯鍍膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 包膜 -->
+            <div class="service-group">
+                <h4>🎨 包膜服務</h4>
+                <div class="service-options" id="wrapOptions">
+                    <div class="service-option" data-type="wrap" data-name="全車包膜">
+                        <span class="name">全車包膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                    <div class="service-option" data-type="wrap" data-name="全車改色包膜">
+                        <span class="name">全車改色包膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 改色材質 -->
+            <div class="service-group" id="colorFilmGroup" style="display:none;">
+                <h4>📌 改色膜材質</h4>
+                <div class="service-options">
+                    <div class="service-option" data-type="color" data-name="PET改色膜">
+                        <span class="name">PET 改色膜</span>
+                        <span class="price">平滑光亮</span>
+                    </div>
+                    <div class="service-option" data-type="color" data-name="PVC改色膜">
+                        <span class="name">PVC 改色膜</span>
+                        <span class="price">經濟實惠</span>
+                    </div>
+                    <div class="service-option" data-type="color" data-name="TPU改色膜">
+                        <span class="name">TPU 改色膜</span>
+                        <span class="price">自動修復</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 迎風面包膜 -->
+            <div class="service-group">
+                <h4>🏁 迎風面包膜</h4>
+                <div class="service-options">
+                    <div class="service-option" data-type="front" data-name="迎風面包膜">
+                        <span class="name">迎風面包膜</span>
+                        <span class="price" data-price="0">請洽專員</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 隔熱紙 -->
+            <div class="service-group">
+                <h4>🪟 隔熱紙</h4>
+                <div class="window-film">
+                    <div class="film-option" data-type="film" data-name="3M極黑">
+                        <div class="name">3M 極黑</div>
+                        <div class="desc">隱密性極佳</div>
+                    </div>
+                    <div class="film-option" data-type="film" data-name="3M極透">
+                        <div class="name">3M 極透</div>
+                        <div class="desc">高透光度</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Summary Bar -->
+    <div class="summary">
+        <div class="summary-inner">
+            <div class="summary-left">
+                <div class="total-label">預估總金額</div>
+                <div class="total-price" id="totalPrice">NT$ 0</div>
+            </div>
+            <button class="summary-btn" id="showResult">查看報價</button>
+        </div>
+    </div>
+    
+    <!-- Result Modal -->
+    <div class="result-modal" id="resultModal">
+        <div class="result-content">
+            <div class="result-header">
+                <h2>📋 報價單</h2>
+                <p>DM SENSE 車體鍍膜貼膜</p>
+            </div>
+            <div class="result-items" id="resultItems">
+                <div class="empty-state">
+                    <div class="icon">📝</div>
+                    <p>尚未選擇任何服務</p>
+                </div>
+            </div>
+            <div class="result-total">
+                <span>預估總金額</span>
+                <span id="modalTotal">NT$ 0</span>
+            </div>
+            <div class="result-actions">
+                <a href="https://line.me/R/ti/p/%40dmsense" class="result-btn line" target="_blank">💬 LINE 專員報價</a>
+                <a href="tel:04-2452-3533" class="result-btn phone">📞 電話諮詢</a>
+            </div>
+            <div class="result-close" id="closeModal">關閉</div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedBrand = null;
+        let selectedServices = [];
+        let selectedFilm = null;
+        
+        // Car Brand Selection
+        document.querySelectorAll('.car-brand').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.car-brand').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedBrand = btn.dataset.brand;
+                document.getElementById('serviceStep').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+        
+        // Service Options
+        document.querySelectorAll('.service-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const type = option.dataset.type;
+                const name = option.dataset.name;
+                const isSelected = option.classList.contains('selected');
+                
+                // Toggle selection
+                if (isSelected) {
+                    option.classList.remove('selected');
+                    selectedServices = selectedServices.filter(s => s.name !== name);
+                } else {
+                    option.classList.add('selected');
+                    selectedServices.push({ type, name });
+                }
+                
+                // Show color film options if "全車改色包膜" selected
+                document.getElementById('colorFilmGroup').style.display = 
+                    selectedServices.some(s => s.name === '全車改色包膜') ? 'block' : 'none';
+                
+                updateSummary();
+            });
+        });
+        
+        // Window Film Selection
+        document.querySelectorAll('.film-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.film-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedFilm = option.dataset.name;
+                updateSummary();
+            });
+        });
+        
+        function updateSummary() {
+            const items = [...selectedServices];
+            if (selectedFilm) items.push({ type: 'film', name: selectedFilm });
+            
+            // Update result items
+            const resultItems = document.getElementById('resultItems');
+            if (items.length === 0) {
+                resultItems.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>尚未選擇任何服務</p></div>';
+            } else {
+                resultItems.innerHTML = items.map(item => `
+                    <div class="result-item">
+                        <span class="name">${item.name}</span>
+                        <span class="price">請洽專員</span>
+                    </div>
+                `).join('');
+            }
+            
+            // Update modal total
+            document.getElementById('modalTotal').textContent = '請洽專員報價';
+        }
+        
+        // Show Result Modal
+        document.getElementById('showResult').addEventListener('click', () => {
+            if (selectedServices.length === 0 && !selectedFilm) {
+                alert('請先選擇服務項目');
+                return;
+            }
+            document.getElementById('resultModal').classList.add('show');
+        });
+        
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('resultModal').classList.remove('show');
+        });
+        
+        document.getElementById('resultModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('resultModal')) {
+                document.getElementById('resultModal').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
