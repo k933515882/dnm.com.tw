@@ -20,7 +20,7 @@
         .search-box { position: relative; margin-bottom: 16px; }
         .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
         .search-input:focus { border-color: var(--primary); }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%; font-size: 18px; }
         .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
         .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
@@ -85,7 +85,7 @@
             </div>
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、C63、Model 3">
+                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、C63、Model 3、Touring">
                 <div class="search-results" id="results"></div>
             </div>
             <div class="car-grid" id="grid">
@@ -161,153 +161,59 @@
         </div>
     </div>
     <script>
-        const db = [
-            // Tesla
-            {b:'特斯拉',m:'Model 3',t:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
-            {b:'特斯拉',m:'Model Y',t:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
-            {b:'特斯拉',m:'Model S',t:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
-            {b:'特斯拉',m:'Model X',t:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
-            // BMW
-            {b:'BMW',m:'1 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'2 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'2 Series Gran Coupe',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'3 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'3 Series Touring',t:'旅行車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'4 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'4 Series Gran Coupe',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'5 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'5 Series Touring',t:'旅行車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'6 Series GT',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'7 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'8 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X1',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X2',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X3',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X4',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X5',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X6',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'X7',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'iX',t:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'i4',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'i5',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {b:'BMW',m:'i7',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            // Mercedes-Benz
-            {b:'賓士',m:'A-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'A-Class Sedan',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'B-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'C-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'C-Class Estate',t:'旅行車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'E-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'E-Class Estate',t:'旅行車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'E-Class All-Terrain',t:'旅行車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'S-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'CLA',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'CLA Shooting Brake',t:'旅行車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'CLE',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'CLS',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'GLA',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'GLB',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'GLC',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'GLE',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'GLS',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'G-Class',t:'越野',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'EQE',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'EQE SUV',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'EQS',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'EQS SUV',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            // AMG
-            {b:'賓士',m:'AMG C63',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'AMG E63',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {b:'賓士',m:'AMG GT',t:'跑車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            // Lexus
-            {b:'Lexus',m:'UX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'NX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'RX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'RZ',t:'電動車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'ES',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'LS',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'LM',t:'MPV',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'IS',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'LC',t:'跑車',logo:'https://logo.clearbit.com/lexus.com'},
-            {b:'Lexus',m:'RC',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            // Toyota
-            {b:'豐田',m:'Altis',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Camry',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Crown',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Prius',t:'油電',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Prius PHV',t:'油電',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'bZ4X',t:'電動車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'RAV4',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Corolla Cross',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Highlander',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Sienta',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Alphard',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Vellfire',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Hilux',t:'皮卡',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Land Cruiser',t:'越野',logo:'https://logo.clearbit.com/toyota.com'},
-            {b:'豐田',m:'Fortuner',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            // Honda
-            {b:'本田',m:'CR-V',t:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'HR-V',t:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Civic',t:'轎車',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Civic Hatchback',t:'掀背',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Fit',t:'掀背',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Odyssey',t:'MPV',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Accord',t:'轎車',logo:'https://logo.clearbit.com/honda.com'},
-            {b:'本田',m:'Pilot',t:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
-            // Ford
-            {b:'福特',m:'Kuga',t:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Focus',t:'轎車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Focus Wagon',t:'旅行車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Focus Active',t:'跨界',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Mustang',t:'跑車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Mustang Mach-E',t:'電動車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Ranger',t:'皮卡',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Explorer',t:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Escape',t:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            {b:'福特',m:'Edge',t:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            // MG
-            {b:'MG',m:'HS',t:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {b:'MG',m:'ZS',t:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {b:'MG',m:'MG4',t:'轎車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {b:'MG',m:'MG5',t:'旅行車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {b:'MG',m:'Cyberster',t:'跑車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            // Hyundai
-            {b:'現代',m:'Tucson',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Santa Fe',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Palisade',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Ioniq 5',t:'電動車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Ioniq 6',t:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Elantra',t:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Sonata',t:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {b:'現代',m:'Creta',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            // Kia
-            {b:'Kia',m:'Sportage',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Sorento',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Carnival',t:'MPV',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'EV6',t:'電動車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'EV9',t:'電動車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Ceed',t:'轎車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Ceed SW',t:'旅行車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Stinger',t:'轎車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Seltos',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            {b:'Kia',m:'Telluride',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            // Volkswagen
-            {b:'福斯',m:'Golf',t:'掀背',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Golf Variant',t:'旅行車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Golf R',t:'掀背',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Passat',t:'轎車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Passat Variant',t:'旅行車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Arteon',t:'轎車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'T-Roc',t:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Tiguan',t:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Tiguan Allspace',t:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Touareg',t:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'ID.4',t:'電動車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'ID.5',t:'電動車',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'ID.Buzz',t:'MPV',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Polo',t:'掀背',logo:'https://logo.clearbit.com/vw.com'},
-            {b:'福斯',m:'Jetta',t:'轎車',logo:'https://logo.clearbit.com/vw.com'},
-            // Audi
-            {b:'奧迪',m:'A1',t:'掀背',logo:'https://logo.clearbit.com/audi.com'},
-            {b:'奧迪',m:'A3',t:'轎車',logo:'https://logo.clear
+    const db = [
+        {"b":"特斯拉","m":"Model 3","t":"轎車","l":"https://logo.clearbit.com/tesla.com"},{"b":"特斯拉","m":"Model Y","t":"休旅車","l":"https://logo.clearbit.com/tesla.com"},{"b":"特斯拉","m":"Model S","t":"轎車","l":"https://logo.clearbit.com/tesla.com"},{"b":"特斯拉","m":"Model X","t":"休旅車","l":"https://logo.clearbit.com/tesla.com"},{"b":"特斯拉","m":"Cybertruck","t":"皮卡","l":"https://logo.clearbit.com/tesla.com"},
+        {"b":"BMW","m":"3 Series","t":"轎車","l":"https://logo.clearbit.com/bmw.com"},{"b":"BMW","m":"3 Series Touring","t":"旅行車","l":"https://logo.clearbit.com/bmw.com"},{"b":"BMW","m":"5 Series","t":"轎車","l":"https://logo.clearbit.com/bmw.com"},{"b":"BMW","m":"5 Series Touring","t":"旅行車","l":"https://logo.clearbit.com/bmw.com"},{"b":"BMW","m":"X3","t":"休旅車","l":"https://logo.clearbit.com/bmw.com"},{"b":"BMW","m":"X5","t":"休旅車","l":"https://logo.clearbit.com/bmw.com"},
+        {"b":"賓士","m":"C-Class","t":"轎車","l":"https://logo.clearbit.com/mercedes-benz.com"},{"b":"賓士","m":"C-Class Estate","t":"旅行車","l":"https://logo.clearbit.com/mercedes-benz.com"},{"b":"賓士","m":"E-Class","t":"轎車","l":"https://logo.clearbit.com/mercedes-benz.com"},{"b":"賓士","m":"E-Class Estate","t":"旅行車","l":"https://logo.clearbit.com/mercedes-benz.com"},{"b":"賓士","m":"GLC","t":"休旅車","l":"https://logo.clearbit.com/mercedes-benz.com"},{"b":"賓士","m":"GLE","t":"休旅車","l":"https://logo.clearbit.com/mercedes-benz.com"},
+        {"b":"Lexus","m":"NX","t":"休旅車","l":"https://logo.clearbit.com/lexus.com"},{"b":"Lexus","m":"RX","t":"休旅車","l":"https://logo.clearbit.com/lexus.com"},{"b":"Lexus","m":"UX","t":"休旅車","l":"https://logo.clearbit.com/lexus.com"},
+        {"b":"豐田","m":"RAV4","t":"休旅車","l":"https://logo.clearbit.com/toyota.com"},{"b":"豐田","m":"Corolla Cross","t":"休旅車","l":"https://logo.clearbit.com/toyota.com"},{"b":"豐田","m":"Altis","t":"轎車","l":"https://logo.clearbit.com/toyota.com"},{"b":"豐田","m":"Alphard","t":"MPV","l":"https://logo.clearbit.com/toyota.com"},
+        {"b":"VW","m":"Golf","t":"掀背","l":"https://logo.clearbit.com/vw.com"},{"b":"VW","m":"Golf Variant","t":"旅行車","l":"https://logo.clearbit.com/vw.com"},{"b":"VW","m":"Passat Variant","t":"旅行車","l":"https://logo.clearbit.com/vw.com"},{"b":"VW","m":"Tiguan","t":"休旅車","l":"https://logo.clearbit.com/vw.com"},
+        {"b":"Volvo","m":"V60","t":"旅行車","l":"https://logo.clearbit.com/volvo.com"},{"b":"Volvo","m":"V90","t":"旅行車","l":"https://logo.clearbit.com/volvo.com"},{"b":"Volvo","m":"XC60","t":"休旅車","l":"https://logo.clearbit.com/volvo.com"},{"b":"Volvo","m":"XC90","t":"休旅車","l":"https://logo.clearbit.com/volvo.com"},
+        {"b":"奧迪","m":"A4 Avant","t":"旅行車","l":"https://logo.clearbit.com/audi.com"},{"b":"奧迪","m":"A6 Avant","t":"旅行車","l":"https://logo.clearbit.com/audi.com"},{"b":"奧迪","m":"Q5","t":"休旅車","l":"https://logo.clearbit.com/audi.com"},{"b":"奧迪","m":"Q7","t":"休旅車","l":"https://logo.clearbit.com/audi.com"},
+        {"b":"保時捷","m":"Taycan Cross Turismo","t":"旅行車","l":"https://logo.clearbit.com/porsche.com"},{"b":"保時捷","m":"Panamera Sport Turismo","t":"旅行車","l":"https://logo.clearbit.com/porsche.com"},{"b":"保時捷","m":"Macan","t":"休旅車","l":"https://logo.clearbit.com/porsche.com"},{"b":"保時捷","m":"Cayenne","t":"休旅車","l":"https://logo.clearbit.com/porsche.com"},
+        {"b":"Ford","m":"Focus Wagon","t":"旅行車","l":"https://logo.clearbit.com/ford.com"},{"b":"Ford","m":"Kuga","t":"休旅車","l":"https://logo.clearbit.com/ford.com"},{"b":"Ford","m":"Ranger","t":"皮卡","l":"https://logo.clearbit.com/ford.com"},
+        {"b":"Honda","m":"CR-V","t":"休旅車","l":"https://logo.clearbit.com/honda.com"},{"b":"Honda","m":"HR-V","t":"休旅車","l":"https://logo.clearbit.com/honda.com"},
+        {"b":"Kia","m":"Ceed SW","t":"旅行車","l":"https://logo.clearbit.com/kia.com"},{"b":"Kia","m":"Sportage","t":"休旅車","l":"https://logo.clearbit.com/kia.com"},{"b":"Kia","m":"EV6","t":"電動車","l":"https://logo.clearbit.com/kia.com"},
+        {"b":"Hyundai","m":"Tucson","t":"休旅車","l":"https://logo.clearbit.com/hyundai.com"},{"b":"Hyundai","m":"Santa Fe","t":"休旅車","l":"https://logo.clearbit.com/hyundai.com"},
+        {"b":"MG","m":"MG5","t":"旅行車","l":"https://logo.clearbit.com/mg.co.uk"},{"b":"MG","m":"HS","t":"休旅車","l":"https://logo.clearbit.com/mg.co.uk"},
+        {"b":"Subaru","m":"Outback","t":"旅行車","l":"https://logo.clearbit.com/subaru.com"},{"b":"Subaru","m":"Forester","t":"休旅車","l":"https://logo.clearbit.com/subaru.com"},
+        {"b":"Mazda","m":"CX-5","t":"休旅車","l":"https://logo.clearbit.com/mazda.com"},{"b":"Mazda","m":"CX-60","t":"休旅車","l":"https://logo.clearbit.com/mazda.com"},
+        {"b":"Skoda","m":"Octavia Combi","t":"旅行車","l":"https://logo.clearbit.com/skoda-auto.com"},{"b":"Skoda","m":"Superb Combi","t":"旅行車","l":"https://logo.clearbit.com/skoda-auto.com"},{"b":"Skoda","m":"Kodiaq","t":"休旅車","l":"https://logo.clearbit.com/skoda-auto.com"},
+        {"b":"Peugeot","m":"308 SW","t":"旅行車","l":"https://logo.clearbit.com/peugeot.com"},{"b":"Peugeot","m":"508 SW","t":"旅行車","l":"https://logo.clearbit.com/peugeot.com"},{"b":"Peugeot","m":"3008","t":"休旅車","l":"https://logo.clearbit.com/peugeot.com"},
+        {"b":"Land Rover","m":"Range Rover Evoque","t":"跨界","l":"https://logo.clearbit.com/landrover.com"},{"b":"Land Rover","m":"Discovery","t":"休旅車","l":"https://logo.clearbit.com/landrover.com"},{"b":"Land Rover","m":"Defender","t":"越野","l":"https://logo.clearbit.com/landrover.com"},
+        {"b":"Jaguar","m":"XF Sportbrake","t":"旅行車","l":"https://logo.clearbit.com/jaguar.com"},{"b":"Jaguar","m":"F-PACE","t":"休旅車","l":"https://logo.clearbit.com/jaguar.com"},
+        {"b":"Genesis","m":"GV70","t":"休旅車","l":"https://logo.clearbit.com/genesis.com"},{"b":"Genesis","m":"GV80","t":"休旅車","l":"https://logo.clearbit.com/genesis.com"},
+        {"b":"Cadillac","m":"XT5","t":"休旅車","l":"https://logo.clearbit.com/cadillac.com"},{"b":"Cadillac","m":"Escalade","t":"休旅車","l":"https://logo.clearbit.com/cadillac.com"},
+        {"b":"Nissan","m":"X-Trail","t":"休旅車","l":"https://logo.clearbit.com/nissan.com"},{"b":"Nissan","m":"Kicks","t":"休旅車","l":"https://logo.clearbit.com/nissan.com"},
+        {"b":"Suzuki","m":"Vitara","t":"休旅車","l":"https://logo.clearbit.com/suzuki.com"},{"b":"Suzuki","m":"Jimny","t":"越野","l":"https://logo.clearbit.com/suzuki.com"},
+        {"b":"Citroen","m":"C5 Aircross","t":"休旅車","l":"https://logo.clearbit.com/citroen.com"},
+        {"b":"Seat","m":"Leon Sportstourer","t":"旅行車","l":"https://logo.clearbit.com/seat.com"},{"b":"Seat","m":"Ateca","t":"休旅車","l":"https://logo.clearbit.com/seat.com"},
+        {"b":"DS","m":"DS 7","t":"休旅車","l":"https://logo.clearbit.com/ds.com"},
+        {"b":"Alfa Romeo","m":"Stelvio","t":"休旅車","l":"https://logo.clearbit.com/alfaromeo.com"},
+        {"b":"Fiat","m":"Tipo Station Wagon","t":"旅行車","l":"https://logo.clearbit.com/fiat.com"},
+        {"b":"Dodge","m":"Durango","t":"休旅車","l":"https://logo.clearbit.com/dodge.com"},
+        {"b":"Chevrolet","m":"Equinox","t":"休旅車","l":"https://logo.clearbit.com/chevrolet.com"},
+        {"b":"Lincoln","m":"Nautilus","t":"休旅車","l":"https://logo.clearbit.com/lincoln.com"}
+    ];
+    let car = null, svcs = [], color = null, film = null;
+    const search = document.getElementById('search'), results = document.getElementById('results');
+    search.oninput = () => {
+        const q = search.value.toLowerCase().trim();
+        if (!q) { results.classList.remove('show'); return; }
+        const r = db.filter(c => (c.b+c.m+c.t).toLowerCase().includes(q)).slice(0, 12);
+        results.innerHTML = r.map(c => `<div class="search-item" data-b="${c.b}" data-m="${c.m}"><img src="${c.l}"><div class="info"><div class="name">${c.b} ${c.m}</div><div class="type">${c.t}</div></div></div>`).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
+        document.querySelectorAll('.search-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
+        results.classList.add('show');
+    };
+    document.querySelectorAll('.car-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
+    function selCar(b, m) { car = {b,m}; document.querySelectorAll('.car-item').forEach(i => i.classList.remove('selected')); const el = document.querySelector(`.car-item[data-m="${m}"]`); if(el) el.classList.add('selected'); document.getElementById('step2').style.display = 'block'; document.getElementById('summary').style.display = 'block'; document.getElementById('step2').scrollIntoView({behavior:'smooth'}); results.classList.remove('show'); }
+    document.querySelectorAll('.service-opt').forEach(o => o.onclick = () => { const n = o.dataset.n; if (o.classList.contains('selected')) { o.classList.remove('selected'); svcs = svcs.filter(s => s.n !== n); } else { o.classList.add('selected'); svcs.push({t:o.dataset.t,n}); }});
+    document.querySelectorAll('.color-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.color-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); color = o.dataset.n; });
+    document.querySelectorAll('.film-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.film-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); film = o.dataset.n; });
+    document.getElementById('showQuote').onclick = () => { if (!car) return alert('請選擇車型'); if (svcs.length === 0) return alert('請選擇服務'); const items = [...svcs]; if(color) items.push({t:'color',n:color}); if(film) items.push({t:'film',n:film}); document.getElementById('items').innerHTML = items.map(i => `<div class="modal-item"><span>${i.n}</span><span>洽專員</span></div>`).join(''); document.getElementById('modal').classList.add('show'); };
+    document.getElementById('closeModal').onclick = () => document.getElementById('modal').classList.remove('show');
+    document.getElementById('modal').onclick = (e) => { if(e.target.id === 'modal') document.getElementById('modal').classList.remove('show'); };
+    document.onclick = (e) => { if(!e.target.closest('.search-box')) results.classList.remove('show'); };
+    </script>
+</body>
+</html>
