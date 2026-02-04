@@ -31,7 +31,7 @@
         .car-item { padding: 12px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
         .car-item:hover { border-color: var(--primary); }
         .car-item.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .car-item .car-icon { font-size: 28px; margin-bottom: 6px; }
+        .car-item .car-logo { width: 48px; height: 48px; object-fit: contain; margin-bottom: 6px; }
         .car-item .car-name { font-size: 14px; font-weight: 600; }
         .car-item .car-type { font-size: 11px; color: #999; margin-top: 4px; }
         .service-group { margin-bottom: 20px; }
@@ -99,14 +99,14 @@
                 <div class="search-results" id="searchResults"></div>
             </div>
             <div class="car-grid" id="carGrid">
-                <div class="car-item" data-brand="特斯拉" data-model="Model 3" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">Tesla Model 3</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="特斯拉" data-model="Model Y" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">Tesla Model Y</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="BMW" data-model="5 Series" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">BMW 5 Series</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="BMW" data-model="X5" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">BMW X5</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="賓士" data-model="C-Class" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">賓士 C-Class</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="賓士" data-model="GLC" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">賓士 GLC</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="Lexus" data-model="NX" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">Lexus NX</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="豐田" data-model="Corolla Cross" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">Toyota Corolla Cross</div><div class="car-type">休旅車</div></div>
+                <div class="car-item" data-brand="特斯拉" data-model="Model 3" data-type="轎車"><img src="https://logo.clearbit.com/tesla.com" class="car-logo" alt="Tesla"><div class="car-name">Tesla Model 3</div><div class="car-type">轎車</div></div>
+                <div class="car-item" data-brand="特斯拉" data-model="Model Y" data-type="休旅車"><img src="https://logo.clearbit.com/tesla.com" class="car-logo" alt="Tesla"><div class="car-name">Tesla Model Y</div><div class="car-type">休旅車</div></div>
+                <div class="car-item" data-brand="BMW" data-model="5 Series" data-type="轎車"><img src="https://logo.clearbit.com/bmw.com" class="car-logo" alt="BMW"><div class="car-name">BMW 5 Series</div><div class="car-type">轎車</div></div>
+                <div class="car-item" data-brand="BMW" data-model="X5" data-type="休旅車"><img src="https://logo.clearbit.com/bmw.com" class="car-logo" alt="BMW"><div class="car-name">BMW X5</div><div class="car-type">休旅車</div></div>
+                <div class="car-item" data-brand="賓士" data-model="C-Class" data-type="轎車"><img src="https://logo.clearbit.com/mercedes-benz.com" class="car-logo" alt="Mercedes"><div class="car-name">賓士 C-Class</div><div class="car-type">轎車</div></div>
+                <div class="car-item" data-brand="賓士" data-model="GLC" data-type="休旅車"><img src="https://logo.clearbit.com/mercedes-benz.com" class="car-logo" alt="Mercedes"><div class="car-name">賓士 GLC</div><div class="car-type">休旅車</div></div>
+                <div class="car-item" data-brand="Lexus" data-model="NX" data-type="休旅車"><img src="https://logo.clearbit.com/lexus.com" class="car-logo" alt="Lexus"><div class="car-name">Lexus NX</div><div class="car-type">休旅車</div></div>
+                <div class="car-item" data-brand="豐田" data-model="Corolla Cross" data-type="休旅車"><img src="https://logo.clearbit.com/toyota.com" class="car-logo" alt="Toyota"><div class="car-name">Toyota Corolla Cross</div><div class="car-type">休旅車</div></div>
             </div>
             <p style="text-align: center; color: #999; font-size: 13px; margin-top: 12px;">向下滑動看更多車型 ▼</p>
         </div>
@@ -232,152 +232,150 @@
         };
         
         // 完整車型資料庫
+        // logoUrl 使用 Clearbit 免費品牌 Logo API
         const carDatabase = [
             // Tesla
-            {brand:'特斯拉',model:'Model 3',type:'轎車',icon:'🚗'},
-            {brand:'特斯拉',model:'Model Y',type:'休旅車',icon:'🚙'},
-            {brand:'特斯拉',model:'Model S',type:'轎車',icon:'🚗'},
-            {brand:'特斯拉',model:'Model X',type:'休旅車',icon:'🚙'},
-            // BMW 1-8 Series
-            {brand:'BMW',model:'1 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'2 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'3 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'4 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'5 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'6 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'7 Series',type:'轎車',icon:'🚗'},
-            {brand:'BMW',model:'8 Series',type:'轎車',icon:'🚗'},
+            {brand:'特斯拉',model:'Model 3',type:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
+            {brand:'特斯拉',model:'Model Y',type:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
+            {brand:'特斯拉',model:'Model S',type:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
+            {brand:'特斯拉',model:'Model X',type:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
+            // BMW
+            {brand:'BMW',model:'1 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'2 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'3 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'4 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'5 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'6 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'7 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'8 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
             // BMW X Series
-            {brand:'BMW',model:'X1',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X2',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X3',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X4',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X5',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X6',type:'休旅車',icon:'🚙'},
-            {brand:'BMW',model:'X7',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X1',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X2',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X3',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X4',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X5',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X6',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'X7',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
             // BMW i Series
-            {brand:'BMW',model:'iX',type:'電動車',icon:'🚙'},
-            {brand:'BMW',model:'i4',type:'電動車',icon:'🚗'},
-            {brand:'BMW',model:'i5',type:'電動車',icon:'🚗'},
-            {brand:'BMW',model:'i7',type:'電動車',icon:'🚗'},
-            // Mercedes A-S Class
-            {brand:'賓士',model:'A-Class',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'B-Class',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'C-Class',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'E-Class',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'S-Class',type:'轎車',icon:'🚗'},
-            // Mercedes CLA/CLE/CLS
-            {brand:'賓士',model:'CLA',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'CLE',type:'轎車',icon:'🚗'},
-            {brand:'賓士',model:'CLS',type:'轎車',icon:'🚗'},
-            // Mercedes GLA/GLB/GLC/GLE/GLS
-            {brand:'賓士',model:'GLA',type:'休旅車',icon:'🚙'},
-            {brand:'賓士',model:'GLB',type:'休旅車',icon:'🚙'},
-            {brand:'賓士',model:'GLC',type:'休旅車',icon:'🚙'},
-            {brand:'賓士',model:'GLE',type:'休旅車',icon:'🚙'},
-            {brand:'賓士',model:'GLS',type:'休旅車',icon:'🚙'},
-            {brand:'賓士',model:'G-Class',type:'越野',icon:'🚙'},
-            // Mercedes EQ Series
-            {brand:'賓士',model:'EQE',type:'電動車',icon:'🚗'},
-            {brand:'賓士',model:'EQS',type:'電動車',icon:'🚗'},
+            {brand:'BMW',model:'iX',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'i4',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'i5',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {brand:'BMW',model:'i7',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            // Mercedes
+            {brand:'賓士',model:'A-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'B-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'C-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'E-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'S-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'CLA',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'CLE',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'CLS',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'GLA',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'GLB',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'GLC',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'GLE',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'GLS',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'G-Class',type:'越野',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'EQE',type:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {brand:'賓士',model:'EQS',type:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
             // Lexus
-            {brand:'Lexus',model:'UX',type:'休旅車',icon:'🚙'},
-            {brand:'Lexus',model:'NX',type:'休旅車',icon:'🚙'},
-            {brand:'Lexus',model:'RX',type:'休旅車',icon:'🚙'},
-            {brand:'Lexus',model:'RZ',type:'電動車',icon:'🚙'},
-            {brand:'Lexus',model:'ES',type:'轎車',icon:'🚗'},
-            {brand:'Lexus',model:'LS',type:'轎車',icon:'🚗'},
-            {brand:'Lexus',model:'LM',type:'MPV',icon:'🚐'},
-            {brand:'Lexus',model:'IS',type:'轎車',icon:'🚗'},
+            {brand:'Lexus',model:'UX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'NX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'RX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'RZ',type:'電動車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'ES',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'LS',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'LM',type:'MPV',logo:'https://logo.clearbit.com/lexus.com'},
+            {brand:'Lexus',model:'IS',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
             // Toyota
-            {brand:'豐田',model:'Altis',type:'轎車',icon:'🚗'},
-            {brand:'豐田',model:'Camry',type:'轎車',icon:'🚗'},
-            {brand:'豐田',model:'Crown',type:'轎車',icon:'🚗'},
-            {brand:'豐田',model:'Prius',type:'油電',icon:'🚗'},
-            {brand:'豐田',model:'bZ4X',type:'電動車',icon:'🚙'},
-            {brand:'豐田',model:'RAV4',type:'休旅車',icon:'🚙'},
-            {brand:'豐田',model:'Corolla Cross',type:'休旅車',icon:'🚙'},
-            {brand:'豐田',model:'Sienta',type:'MPV',icon:'🚐'},
-            {brand:'豐田',model:'Alphard',type:'MPV',icon:'🚐'},
-            {brand:'豐田',model:'Vellfire',type:'MPV',icon:'🚐'},
-            {brand:'豐田',model:'Hilux',type:'皮卡',icon:'🛻'},
-            {brand:'豐田',model:'Land Cruiser',type:'越野',icon:'🚙'},
+            {brand:'豐田',model:'Altis',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Camry',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Crown',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Prius',type:'油電',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'bZ4X',type:'電動車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'RAV4',type:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Corolla Cross',type:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Sienta',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Alphard',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Vellfire',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Hilux',type:'皮卡',logo:'https://logo.clearbit.com/toyota.com'},
+            {brand:'豐田',model:'Land Cruiser',type:'越野',logo:'https://logo.clearbit.com/toyota.com'},
             // Honda
-            {brand:'本田',model:'CR-V',type:'休旅車',icon:'🚙'},
-            {brand:'本田',model:'HR-V',type:'休旅車',icon:'🚙'},
-            {brand:'本田',model:'Civic',type:'轎車',icon:'🚗'},
-            {brand:'本田',model:'Fit',type:'掀背',icon:'🚗'},
-            {brand:'本田',model:'Odyssey',type:'MPV',icon:'🚐'},
+            {brand:'本田',model:'CR-V',type:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
+            {brand:'本田',model:'HR-V',type:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
+            {brand:'本田',model:'Civic',type:'轎車',logo:'https://logo.clearbit.com/honda.com'},
+            {brand:'本田',model:'Fit',type:'掀背',logo:'https://logo.clearbit.com/honda.com'},
+            {brand:'本田',model:'Odyssey',type:'MPV',logo:'https://logo.clearbit.com/honda.com'},
             // Ford
-            {brand:'福特',model:'Kuga',type:'休旅車',icon:'🚙'},
-            {brand:'福特',model:'Focus',type:'轎車',icon:'🚗'},
-            {brand:'福特',model:'Mustang',type:'跑車',icon:'🏎️'},
-            {brand:'福特',model:'Ranger',type:'皮卡',icon:'🛻'},
-            {brand:'福特',model:'Explorer',type:'休旅車',icon:'🚙'},
+            {brand:'福特',model:'Kuga',type:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
+            {brand:'福特',model:'Focus',type:'轎車',logo:'https://logo.clearbit.com/ford.com'},
+            {brand:'福特',model:'Mustang',type:'跑車',logo:'https://logo.clearbit.com/ford.com'},
+            {brand:'福特',model:'Ranger',type:'皮卡',logo:'https://logo.clearbit.com/ford.com'},
+            {brand:'福特',model:'Explorer',type:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
             // MG
-            {brand:'MG',model:'HS',type:'休旅車',icon:'🚙'},
-            {brand:'MG',model:'ZS',type:'休旅車',icon:'🚙'},
-            {brand:'MG',model:'MG4',type:'電動車',icon:'🚗'},
+            {brand:'MG',model:'HS',type:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
+            {brand:'MG',model:'ZS',type:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
+            {brand:'MG',model:'MG4',type:'電動車',logo:'https://logo.clearbit.com/mg.co.uk'},
             // Hyundai
-            {brand:'現代',model:'Tucson',type:'休旅車',icon:'🚙'},
-            {brand:'現代',model:'Santa Fe',type:'休旅車',icon:'🚙'},
-            {brand:'現代',model:'Ioniq 5',type:'電動車',icon:'🚙'},
-            {brand:'現代',model:'Ioniq 6',type:'轎車',icon:'🚗'},
+            {brand:'現代',model:'Tucson',type:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {brand:'現代',model:'Santa Fe',type:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {brand:'現代',model:'Ioniq 5',type:'電動車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {brand:'現代',model:'Ioniq 6',type:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
             // Kia
-            {brand:'Kia',model:'Sportage',type:'休旅車',icon:'🚙'},
-            {brand:'Kia',model:'Sorento',type:'休旅車',icon:'🚙'},
-            {brand:'Kia',model:'EV6',type:'電動車',icon:'🚙'},
-            {brand:'Kia',model:'EV9',type:'電動車',icon:'🚙'},
-            {brand:'Kia',model:'Carnival',type:'MPV',icon:'🚐'},
+            {brand:'Kia',model:'Sportage',type:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
+            {brand:'Kia',model:'Sorento',type:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
+            {brand:'Kia',model:'EV6',type:'電動車',logo:'https://logo.clearbit.com/kia.com'},
+            {brand:'Kia',model:'EV9',type:'電動車',logo:'https://logo.clearbit.com/kia.com'},
+            {brand:'Kia',model:'Carnival',type:'MPV',logo:'https://logo.clearbit.com/kia.com'},
             // VW
-            {brand:'福斯',model:'Golf',type:'掀背',icon:'🚗'},
-            {brand:'福斯',model:'T-Roc',type:'休旅車',icon:'🚙'},
-            {brand:'福斯',model:'Tiguan',type:'休旅車',icon:'🚙'},
-            {brand:'福斯',model:'ID.4',type:'電動車',icon:'🚙'},
-            {brand:'福斯',model:'ID.5',type:'電動車',icon:'🚙'},
+            {brand:'福斯',model:'Golf',type:'掀背',logo:'https://logo.clearbit.com/vw.com'},
+            {brand:'福斯',model:'T-Roc',type:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
+            {brand:'福斯',model:'Tiguan',type:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
+            {brand:'福斯',model:'ID.4',type:'電動車',logo:'https://logo.clearbit.com/vw.com'},
+            {brand:'福斯',model:'ID.5',type:'電動車',logo:'https://logo.clearbit.com/vw.com'},
             // Audi
-            {brand:'奧迪',model:'A1',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A3',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A4',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A5',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A6',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A7',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'A8',type:'轎車',icon:'🚗'},
-            {brand:'奧迪',model:'Q2',type:'休旅車',icon:'🚙'},
-            {brand:'奧迪',model:'Q3',type:'休旅車',icon:'🚙'},
-            {brand:'奧迪',model:'Q5',type:'休旅車',icon:'🚙'},
-            {brand:'奧迪',model:'Q7',type:'休旅車',icon:'🚙'},
-            {brand:'奧迪',model:'Q8 e-tron',type:'電動車',icon:'🚙'},
+            {brand:'奧迪',model:'A1',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A3',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A4',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A5',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A6',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A7',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'A8',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'Q2',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'Q3',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'Q5',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'Q7',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {brand:'奧迪',model:'Q8 e-tron',type:'電動車',logo:'https://logo.clearbit.com/audi.com'},
             // Porsche
-            {brand:'保時捷',model:'718',type:'跑車',icon:'🏎️'},
-            {brand:'保時捷',model:'911',type:'跑車',icon:'🏎️'},
-            {brand:'保時捷',model:'Taycan',type:'電動車',icon:'🏎️'},
-            {brand:'保時捷',model:'Macan',type:'休旅車',icon:'🚙'},
-            {brand:'保時捷',model:'Cayenne',type:'休旅車',icon:'🚙'},
-            {brand:'保時捷',model:'Panamera',type:'轎車',icon:'🚗'},
+            {brand:'保時捷',model:'718',type:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
+            {brand:'保時捷',model:'911',type:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
+            {brand:'保時捷',model:'Taycan',type:'電動車',logo:'https://logo.clearbit.com/porsche.com'},
+            {brand:'保時捷',model:'Macan',type:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
+            {brand:'保時捷',model:'Cayenne',type:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
+            {brand:'保時捷',model:'Panamera',type:'轎車',logo:'https://logo.clearbit.com/porsche.com'},
             // Subaru
-            {brand:'速霸陸',model:'Forester',type:'休旅車',icon:'🚙'},
-            {brand:'速霸陸',model:'Outback',type:'休旅車',icon:'🚙'},
-            {brand:'速霸陸',model:'Crosstrek',type:'休旅車',icon:'🚙'},
-            {brand:'速霸陸',model:'WRX',type:'跑車',icon:'🏎️'},
+            {brand:'速霸陸',model:'Forester',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
+            {brand:'速霸陸',model:'Outback',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
+            {brand:'速霸陸',model:'Crosstrek',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
+            {brand:'速霸陸',model:'WRX',type:'跑車',logo:'https://logo.clearbit.com/subaru.com'},
             // Mazda
-            {brand:'馬自達',model:'Mazda3',type:'轎車',icon:'🚗'},
-            {brand:'馬自達',model:'CX-30',type:'休旅車',icon:'🚙'},
-            {brand:'馬自達',model:'CX-5',type:'休旅車',icon:'🚙'},
-            {brand:'馬自達',model:'CX-60',type:'休旅車',icon:'🚙'},
-            {brand:'馬自達',model:'MX-5',type:'跑車',icon:'🏎️'},
+            {brand:'馬自達',model:'Mazda3',type:'轎車',logo:'https://logo.clearbit.com/mazda.com'},
+            {brand:'馬自達',model:'CX-30',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
+            {brand:'馬自達',model:'CX-5',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
+            {brand:'馬自達',model:'CX-60',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
+            {brand:'馬自達',model:'MX-5',type:'跑車',logo:'https://logo.clearbit.com/mazda.com'},
             // Suzuki
-            {brand:'鈴木',model:'Vitara',type:'休旅車',icon:'🚙'},
-            {brand:'鈴木',model:'Jimny',type:'越野',icon:'🚙'},
-            {brand:'鈴木',model:'Swift',type:'掀背',icon:'🚗'},
+            {brand:'鈴木',model:'Vitara',type:'休旅車',logo:'https://logo.clearbit.com/suzuki.com'},
+            {brand:'鈴木',model:'Jimny',type:'越野',logo:'https://logo.clearbit.com/suzuki.com'},
+            {brand:'鈴木',model:'Swift',type:'掀背',logo:'https://logo.clearbit.com/suzuki.com'},
             // Nissan
-            {brand:'日產',model:'Kicks',type:'休旅車',icon:'🚙'},
-            {brand:'日產',model:'X-Trail',type:'休旅車',icon:'🚙'},
-            {brand:'日產',model:'Sentra',type:'轎車',icon:'🚗'},
-            {brand:'日產',model:'Leaf',type:'電動車',icon:'🚗'},
+            {brand:'日產',model:'Kicks',type:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
+            {brand:'日產',model:'X-Trail',type:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
+            {brand:'日產',model:'Sentra',type:'轎車',logo:'https://logo.clearbit.com/nissan.com'},
+            {brand:'日產',model:'Leaf',type:'電動車',logo:'https://logo.clearbit.com/nissan.com'},
             // Luxgen
-            {brand:'納智捷',model:'URX',type:'休旅車',icon:'🚙'},
-            {brand:'納智捷',model:'n⁷',type:'電動車',icon:'🚙'}
+            {brand:'納智捷',model:'URX',type:'休旅車',logo:'https://logo.clearbit.com/luxgen.com.tw'},
+            {brand:'納智捷',model:'n⁷',type:'電動車',logo:'https://logo.clearbit.com/luxgen.com.tw'}
         ];
         
         let selectedCar = null, selectedServices = [], selectedColor = null, selectedFilm = null;
