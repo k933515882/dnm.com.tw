@@ -13,6 +13,62 @@
         :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --text: #333; --text-light: #666; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); line-height: 1.7; background: #fff; }
+        
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(255,107,53,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #backToTop:hover {
+            background: #e55a2b;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255,107,53,0.5);
+        }
+        
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(255,107,53,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #backToTop:hover {
+            background: #e55a2b;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255,107,53,0.5);
+        }
         header { background: #fff; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 100; }
         .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 24px; font-weight: 700; color: var(--dark); text-decoration: none; }
@@ -256,7 +312,24 @@
         </div>
     </section>
     <footer><p>© DM SENSE 台中汽車鍍膜美容 | 台中市西屯區環中路二段1332號 | 電話：04-2452-3533</p></footer>
+    <div id="backToTop" title="回到頂部">↑</div>
     <script>
+        // Back to Top Button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.style.opacity = '1';
+                backToTop.style.visibility = 'visible';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.visibility = 'hidden';
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // FAQ Toggle
         document.querySelectorAll('.faq-q').forEach(q => {
             q.addEventListener('click', () => {
                 q.closest('.faq-item').classList.toggle('active');
