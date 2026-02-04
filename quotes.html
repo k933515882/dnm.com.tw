@@ -4,80 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DM SENSE | 線上報價系統</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --white: #fff; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Noto Sans TC', -apple-system, sans-serif; background: var(--light); color: #333; line-height: 1.6; padding-bottom: 100px; }
+        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; }
+        body { font-family: 'Noto Sans TC', sans-serif; background: var(--light); color: #333; padding-bottom: 100px; }
         header { background: var(--dark); color: #fff; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
         header h1 { font-size: 22px; font-weight: 700; }
         header p { font-size: 13px; opacity: 0.8; margin-top: 5px; }
         .container { max-width: 600px; margin: 0 auto; padding: 16px; }
         .step { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
         .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .step-num { background: var(--primary); color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
-        .step-title { font-size: 17px; font-weight: 700; }
+        .step-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+        .step-title { font-size: 18px; font-weight: 700; }
         .search-box { position: relative; margin-bottom: 16px; }
-        .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; transition: all 0.3s; }
-        .search-input:focus { outline: none; border-color: var(--primary); }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
-        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
+        .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
+        .search-input:focus { border-color: var(--primary); }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%; font-size: 18px; }
+        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 300px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
-        .search-result-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f5f5f5; transition: background 0.2s; }
-        .search-result-item:last-child { border-bottom: none; }
-        .search-result-item:hover { background: var(--light); }
+        .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
+        .search-item:hover { background: var(--light); }
+        .search-item img { width: 40px; height: 40px; object-fit: contain; }
+        .search-item .name { font-weight: 600; font-size: 15px; }
+        .search-item .type { font-size: 12px; color: #888; }
         .car-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .car-item { padding: 12px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
-        .car-item:hover { border-color: var(--primary); }
+        .car-item { display: flex; flex-direction: column; align-items: center; padding: 14px 10px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .car-item:hover { border-color: var(--primary); transform: translateY(-2px); }
         .car-item.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .car-item .car-logo { width: 48px; height: 48px; object-fit: contain; margin-bottom: 6px; }
-        .car-item .car-name { font-size: 14px; font-weight: 600; }
-        .car-item .car-type { font-size: 11px; color: #999; margin-top: 4px; }
-        .service-group { margin-bottom: 20px; }
-        .service-group:last-child { margin-bottom: 0; }
-        .service-group-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding-left: 10px; border-left: 3px solid var(--primary); }
-        .service-group-header .icon { font-size: 18px; }
-        .service-group-header h4 { font-size: 14px; font-weight: 700; color: #555; }
-        .service-options { display: grid; gap: 10px; }
-        .service-option { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--light); border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
-        .service-option:hover { border-color: var(--primary); }
-        .service-option.selected { border-color: var(--primary); background: rgba(255,107,53,0.08); }
-        .service-option .name { font-size: 15px; font-weight: 500; }
-        .service-option .price { font-size: 14px; font-weight: 700; color: var(--primary); }
-        .color-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .color-option { padding: 12px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
-        .color-option:hover { border-color: var(--primary); }
-        .color-option.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .color-option .icon { font-size: 20px; margin-bottom: 4px; }
-        .color-option .name { font-size: 13px; font-weight: 600; }
-        .film-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .film-option { padding: 14px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
-        .film-option:hover { border-color: var(--primary); }
-        .film-option.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .film-option .name { font-size: 15px; font-weight: 700; }
-        .film-option .desc { font-size: 12px; color: #888; margin-top: 4px; }
+        .car-item img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 8px; }
+        .car-item .name { font-size: 13px; font-weight: 600; }
+        .car-item .type { font-size: 11px; color: #888; margin-top: 2px; }
+        .service-group { margin-bottom: 18px; }
+        .service-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid var(--primary); font-weight: 700; font-size: 15px; color: #555; }
+        .service-options { display: grid; gap: 8px; }
+        .service-opt { display: flex; justify-content: space-between; padding: 12px 14px; background: var(--light); border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .service-opt:hover { border-color: var(--primary); }
+        .service-opt.selected { border-color: var(--primary); background: rgba(255,107,53,0.08); }
+        .service-opt .name { font-size: 14px; font-weight: 500; }
+        .service-opt .price { font-weight: 700; color: var(--primary); font-size: 14px; }
+        .color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .color-opt { display: flex; flex-direction: column; align-items: center; padding: 10px; background: var(--light); border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+        .color-opt:hover { border-color: var(--primary); }
+        .color-opt.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
+        .color-opt .name { font-size: 12px; font-weight: 600; }
+        .film-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        .film-opt { padding: 12px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+        .film-opt:hover { border-color: var(--primary); }
+        .film-opt.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
+        .film-opt .name { font-weight: 700; font-size: 14px; }
+        .film-opt .desc { font-size: 11px; color: #888; margin-top: 3px; }
         .summary { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 14px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 100; }
-        .summary-inner { max-width: 600px; margin: 0 auto; }
-        .summary-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .summary-car { font-size: 14px; color: #666; }
-        .summary-car strong { color: #333; display: block; font-size: 16px; margin-top: 4px; }
-        .summary-btn { padding: 14px 28px; background: var(--primary); color: #fff; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s; width: 100%; }
-        .summary-btn:hover { transform: scale(1.02); box-shadow: 0 4px 20px rgba(255,107,53,0.4); }
+        .summary-btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: flex-end; z-index: 200; }
         .modal.show { display: flex; }
-        .modal-content { background: #fff; border-radius: 24px 24px 0 0; width: 100%; max-height: 85vh; overflow-y: auto; padding: 24px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #eee; }
-        .modal-header h2 { font-size: 20px; font-weight: 700; }
-        .modal-close { width: 36px; height: 36px; background: var(--light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; }
-        .modal-item { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
-        .modal-item:last-child { border-bottom: none; }
-        .modal-item .name { font-weight: 500; }
-        .modal-total { display: flex; justify-content: space-between; padding: 18px; background: var(--light); border-radius: 12px; font-size: 18px; font-weight: 700; margin: 20px 0; }
-        .modal-total .label { color: #666; }
+        .modal-content { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-height: 80vh; overflow-y: auto; padding: 20px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-header h2 { font-size: 18px; font-weight: 700; }
+        .modal-close { width: 32px; height: 32px; background: var(--light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .modal-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .modal-total { display: flex; justify-content: space-between; padding: 14px; background: var(--light); border-radius: 10px; font-size: 16px; font-weight: 700; margin: 16px 0; }
         .modal-total .price { color: var(--primary); }
-        .modal-actions { display: grid; gap: 12px; }
-        .modal-btn { display: block; padding: 16px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 600; }
+        .modal-actions { display: grid; gap: 10px; }
+        .modal-btn { display: block; padding: 14px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; }
         .modal-btn.line { background: #06c755; color: #fff; }
         .modal-btn.phone { background: var(--dark); color: #fff; }
     </style>
@@ -85,89 +74,85 @@
 <body>
     <header>
         <h1>DM SENSE 線上報價</h1>
-        <p>選擇車型和服務，獲得快速報價</p>
+        <p>選擇車型和服務，立即獲得報價</p>
     </header>
     <div class="container">
         <div class="step">
             <div class="step-header">
                 <span class="step-num">1</span>
-                <span class="step-title">選擇您的車型</span>
+                <span class="step-title">選擇車型</span>
             </div>
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="carSearch" placeholder="搜尋車型，如：520、530、Model 3、C300、RAV4...">
-                <div class="search-results" id="searchResults"></div>
+                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、Model 3、C300、RAV4">
+                <div class="search-results" id="results"></div>
             </div>
-            <div class="car-grid" id="carGrid">
-                <div class="car-item" data-brand="特斯拉" data-model="Model 3" data-type="轎車"><img src="https://logo.clearbit.com/tesla.com" class="car-logo" alt="Tesla"><div class="car-name">Tesla Model 3</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="特斯拉" data-model="Model Y" data-type="休旅車"><img src="https://logo.clearbit.com/tesla.com" class="car-logo" alt="Tesla"><div class="car-name">Tesla Model Y</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="BMW" data-model="5 Series" data-type="轎車"><img src="https://logo.clearbit.com/bmw.com" class="car-logo" alt="BMW"><div class="car-name">BMW 5 Series</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="BMW" data-model="X5" data-type="休旅車"><img src="https://logo.clearbit.com/bmw.com" class="car-logo" alt="BMW"><div class="car-name">BMW X5</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="賓士" data-model="C-Class" data-type="轎車"><img src="https://logo.clearbit.com/mercedes-benz.com" class="car-logo" alt="Mercedes"><div class="car-name">賓士 C-Class</div><div class="car-type">轎車</div></div>
-                <div class="car-item" data-brand="賓士" data-model="GLC" data-type="休旅車"><img src="https://logo.clearbit.com/mercedes-benz.com" class="car-logo" alt="Mercedes"><div class="car-name">賓士 GLC</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="Lexus" data-model="NX" data-type="休旅車"><img src="https://logo.clearbit.com/lexus.com" class="car-logo" alt="Lexus"><div class="car-name">Lexus NX</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="豐田" data-model="Corolla Cross" data-type="休旅車"><img src="https://logo.clearbit.com/toyota.com" class="car-logo" alt="Toyota"><div class="car-name">Toyota Corolla Cross</div><div class="car-type">休旅車</div></div>
+            <div class="car-grid" id="grid">
+                <div class="car-item" data-b="特斯拉" data-m="Model 3"><img src="https://logo.clearbit.com/tesla.com"><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model Y"><img src="https://logo.clearbit.com/tesla.com"><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="BMW" data-m="5 Series"><img src="https://logo.clearbit.com/bmw.com"><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="BMW" data-m="X5"><img src="https://logo.clearbit.com/bmw.com"><div class="name">BMW X5</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="賓士" data-m="C-Class"><img src="https://logo.clearbit.com/mercedes-benz.com"><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="賓士" data-m="GLC"><img src="https://logo.clearbit.com/mercedes-benz.com"><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="Lexus" data-m="NX"><img src="https://logo.clearbit.com/lexus.com"><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><img src="https://logo.clearbit.com/toyota.com"><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
             </div>
-            <p style="text-align: center; color: #999; font-size: 13px; margin-top: 12px;">向下滑動看更多車型 ▼</p>
         </div>
-        <div class="step" id="serviceStep" style="display:none;">
+        <div class="step" id="step2" style="display:none;">
             <div class="step-header">
                 <span class="step-num">2</span>
-                <span class="step-title">選擇服務項目</span>
+                <span class="step-title">選擇服務</span>
             </div>
             <div class="service-group">
-                <div class="service-group-header"><span class="icon">✨</span><h4>鍍膜服務</h4></div>
-                <div class="service-options" id="coatingOptions">
-                    <div class="service-option" data-type="coating" data-name="單層陶瓷鍍膜"><span class="name">單層陶瓷鍍膜</span><span class="price">洽專員</span></div>
-                    <div class="service-option" data-type="coating" data-name="雙層套餐鍍膜"><span class="name">雙層套餐鍍膜</span><span class="price">洽專員</span></div>
-                    <div class="service-option" data-type="coating" data-name="雙層石墨烯鍍膜"><span class="name">雙層石墨烯鍍膜</span><span class="price">洽專員</span></div>
-                    <div class="service-option" data-type="coating" data-name="三層石墨烯鍍膜"><span class="name">三層石墨烯鍍膜</span><span class="price">洽專員</span></div>
+                <div class="service-header">✨ 鍍膜服務</div>
+                <div class="service-options">
+                    <div class="service-opt" data-t="coating" data-n="單層陶瓷鍍膜"><span class="name">單層陶瓷鍍膜</span><span class="price">洽專員</span></div>
+                    <div class="service-opt" data-t="coating" data-n="雙層套餐鍍膜"><span class="name">雙層套餐鍍膜</span><span class="price">洽專員</span></div>
+                    <div class="service-opt" data-t="coating" data-n="雙層石墨烯鍍膜"><span class="name">雙層石墨烯鍍膜</span><span class="price">洽專員</span></div>
+                    <div class="service-opt" data-t="coating" data-n="三層石墨烯鍍膜"><span class="name">三層石墨烯鍍膜</span><span class="price">洽專員</span></div>
                 </div>
             </div>
             <div class="service-group">
-                <div class="service-group-header"><span class="icon">🎨</span><h4>包膜服務</h4></div>
-                <div class="service-options" id="wrapOptions">
-                    <div class="service-option" data-type="wrap" data-name="全車包膜"><span class="name">全車包膜</span><span class="price">洽專員</span></div>
-                    <div class="service-option" data-type="wrap" data-name="全車改色包膜"><span class="name">全車改色包膜</span><span class="price">洽專員</span></div>
+                <div class="service-header">🎨 包膜服務</div>
+                <div class="service-options">
+                    <div class="service-opt" data-t="wrap" data-n="全車包膜"><span class="name">全車包膜</span><span class="price">洽專員</span></div>
+                    <div class="service-opt" data-t="wrap" data-n="全車改色包膜"><span class="name">全車改色包膜</span><span class="price">洽專員</span></div>
                 </div>
             </div>
             <div class="service-group" id="colorGroup" style="display:none;">
-                <div class="service-group-header"><span class="icon">📌</span><h4>改色膜材質</h4></div>
-                <div class="color-options" id="colorOptions">
-                    <div class="color-option" data-type="color" data-name="PET改色膜"><div class="icon">✨</div><div class="name">PET</div></div>
-                    <div class="color-option" data-type="color" data-name="PVC改色膜"><div class="icon">💰</div><div class="name">PVC</div></div>
-                    <div class="color-option" data-type="color" data-name="TPU改色膜"><div class="icon">🔧</div><div class="name">TPU</div></div>
+                <div class="service-header">📌 改色膜材質</div>
+                <div class="color-grid">
+                    <div class="color-opt" data-t="color" data-n="PET改色膜"><div class="name">PET</div></div>
+                    <div class="color-opt" data-t="color" data-n="PVC改色膜"><div class="name">PVC</div></div>
+                    <div class="color-opt" data-t="color" data-n="TPU改色膜"><div class="name">TPU</div></div>
                 </div>
             </div>
             <div class="service-group">
-                <div class="service-group-header"><span class="icon">🏁</span><h4>迎風面包膜</h4></div>
-                <div class="service-options"><div class="service-option" data-type="front" data-name="迎風面包膜"><span class="name">迎風面包膜</span><span class="price">洽專員</span></div></div>
+                <div class="service-header">🏁 迎風面包膜</div>
+                <div class="service-options">
+                    <div class="service-opt" data-t="front" data-n="迎風面包膜"><span class="name">迎風面包膜</span><span class="price">洽專員</span></div>
+                </div>
             </div>
             <div class="service-group">
-                <div class="service-group-header"><span class="icon">🪟</span><h4>隔熱紙</h4></div>
-                <div class="film-options" id="filmOptions">
-                    <div class="film-option" data-type="film" data-name="3M極黑"><div class="name">3M 極黑</div><div class="desc">隱密性極佳</div></div>
-                    <div class="film-option" data-type="film" data-name="3M極透"><div class="name">3M 極透</div><div class="desc">高透光度</div></div>
+                <div class="service-header">🪟 隔熱紙</div>
+                <div class="film-grid">
+                    <div class="film-opt" data-t="film" data-n="3M極黑"><div class="name">3M 極黑</div><div class="desc">隱密性極佳</div></div>
+                    <div class="film-opt" data-t="film" data-n="3M極透"><div class="name">3M 極透</div><div class="desc">高透光度</div></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="summary" id="summaryBar" style="display:none;">
-        <div class="summary-inner">
-            <div class="summary-top">
-                <div class="summary-car">已選擇<strong id="selectedCar">-</strong></div>
-                <button class="summary-btn" id="showQuote">查看報價</button>
-            </div>
-        </div>
+    <div class="summary" id="summary" style="display:none;">
+        <button class="summary-btn" id="showQuote">查看報價</button>
     </div>
-    <div class="modal" id="quoteModal">
+    <div class="modal" id="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>📋 報價單</h2>
                 <div class="modal-close" id="closeModal">✕</div>
             </div>
-            <div id="quoteItems"></div>
-            <div class="modal-total"><span class="label">預估金額</span><span class="price">請洽專員報價</span></div>
+            <div id="items"></div>
+            <div class="modal-total"><span>預估金額</span><span class="price">請洽專員報價</span></div>
             <div class="modal-actions">
                 <a href="https://line.me/R/ti/p/%40dmsense" class="modal-btn line" target="_blank">💬 LINE 專員報價</a>
                 <a href="tel:04-2452-3533" class="modal-btn phone">📞 電話諮詢</a>
@@ -175,218 +160,148 @@
         </div>
     </div>
     <script>
-        // 品牌別名對照
-        const brandAlias = {
-            '賓士':['benz','mercedes','奔馳'], '寶馬':['bmw'], '豐田':['toyota'],
-            '凌志':['lexus'], '本田':['honda'], '福斯':['vw','volkswagen'],
-            '奧迪':['audi'], '保時捷':['porsche'], '馬自達':['mazda'],
-            '速霸陸':['subaru'], '現代':['hyundai'], '起亞':['kia'],
-            '福特':['ford'], '鈴木':['suzuki'], '日產':['nissan'],
-            '特斯拉':['tesla'], '納智捷':['luxgen']
-        };
-        
-        // 數字→車系對照表
-        const numberSeriesMap = {
-            // BMW: 5xx → 5 Series
-            '5': {brand:'BMW', model:'5 Series'},
-            // BMW: 3xx → 3 Series
-            '3': {brand:'BMW', model:'3 Series'},
-            // BMW: 4xx → 4 Series
-            '4': {brand:'BMW', model:'4 Series'},
-            // BMW: 2xx → 2 Series
-            '2': {brand:'BMW', model:'2 Series'},
-            // BMW: 1xx → 1 Series
-            '1': {brand:'BMW', model:'1 Series'},
-            // BMW: 7xx → 7 Series
-            '7': {brand:'BMW', model:'7 Series'},
-            // BMW: 8xx → 8 Series
-            '8': {brand:'BMW', model:'8 Series'},
-            // Mercedes: Cxx → C-Class
-            'c': {brand:'賓士', model:'C-Class'},
-            // Mercedes: Exx → E-Class
-            'e': {brand:'賓士', model:'E-Class'},
-            // Mercedes: Axx → A-Class
-            'a': {brand:'賓士', model:'A-Class'},
-            // Mercedes: Sxx → S-Class
-            's': {brand:'賓士', model:'S-Class'},
-            // Mercedes: GLx → GLA/GLB/GLC/GLE/GLS
-            'gla': {brand:'賓士', model:'GLA'},
-            'glb': {brand:'賓士', model:'GLB'},
-            'glc': {brand:'賓士', model:'GLC'},
-            'gle': {brand:'賓士', model:'GLE'},
-            'gls': {brand:'賓士', model:'GLS'},
-            // BMW X系列
-            'x1': {brand:'BMW', model:'X1'},
-            'x2': {brand:'BMW', model:'X2'},
-            'x3': {brand:'BMW', model:'X3'},
-            'x4': {brand:'BMW', model:'X4'},
-            'x5': {brand:'BMW', model:'X5'},
-            'x6': {brand:'BMW', model:'X6'},
-            'x7': {brand:'BMW', model:'X7'},
-            // Lexus
-            'nx': {brand:'Lexus', model:'NX'},
-            'rx': {brand:'Lexus', model:'RX'},
-            'ux': {brand:'Lexus', model:'UX'},
-            'es': {brand:'Lexus', model:'ES'},
-            'is': {brand:'Lexus', model:'IS'},
-        };
-        
-        // 完整車型資料庫
-        // logoUrl 使用 Clearbit 免費品牌 Logo API
-        const carDatabase = [
-            // Tesla
-            {brand:'特斯拉',model:'Model 3',type:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
-            {brand:'特斯拉',model:'Model Y',type:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
-            {brand:'特斯拉',model:'Model S',type:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
-            {brand:'特斯拉',model:'Model X',type:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
-            // BMW
-            {brand:'BMW',model:'1 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'2 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'3 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'4 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'5 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'6 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'7 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'8 Series',type:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
-            // BMW X Series
-            {brand:'BMW',model:'X1',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X2',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X3',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X4',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X5',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X6',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'X7',type:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
-            // BMW i Series
-            {brand:'BMW',model:'iX',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'i4',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'i5',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
-            {brand:'BMW',model:'i7',type:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
-            // Mercedes
-            {brand:'賓士',model:'A-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'B-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'C-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'E-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'S-Class',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'CLA',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'CLE',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'CLS',type:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'GLA',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'GLB',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'GLC',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'GLE',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'GLS',type:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'G-Class',type:'越野',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'EQE',type:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            {brand:'賓士',model:'EQS',type:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
-            // Lexus
-            {brand:'Lexus',model:'UX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'NX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'RX',type:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'RZ',type:'電動車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'ES',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'LS',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'LM',type:'MPV',logo:'https://logo.clearbit.com/lexus.com'},
-            {brand:'Lexus',model:'IS',type:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
-            // Toyota
-            {brand:'豐田',model:'Altis',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Camry',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Crown',type:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Prius',type:'油電',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'bZ4X',type:'電動車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'RAV4',type:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Corolla Cross',type:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Sienta',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Alphard',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Vellfire',type:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Hilux',type:'皮卡',logo:'https://logo.clearbit.com/toyota.com'},
-            {brand:'豐田',model:'Land Cruiser',type:'越野',logo:'https://logo.clearbit.com/toyota.com'},
-            // Honda
-            {brand:'本田',model:'CR-V',type:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
-            {brand:'本田',model:'HR-V',type:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
-            {brand:'本田',model:'Civic',type:'轎車',logo:'https://logo.clearbit.com/honda.com'},
-            {brand:'本田',model:'Fit',type:'掀背',logo:'https://logo.clearbit.com/honda.com'},
-            {brand:'本田',model:'Odyssey',type:'MPV',logo:'https://logo.clearbit.com/honda.com'},
-            // Ford
-            {brand:'福特',model:'Kuga',type:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            {brand:'福特',model:'Focus',type:'轎車',logo:'https://logo.clearbit.com/ford.com'},
-            {brand:'福特',model:'Mustang',type:'跑車',logo:'https://logo.clearbit.com/ford.com'},
-            {brand:'福特',model:'Ranger',type:'皮卡',logo:'https://logo.clearbit.com/ford.com'},
-            {brand:'福特',model:'Explorer',type:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
-            // MG
-            {brand:'MG',model:'HS',type:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {brand:'MG',model:'ZS',type:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            {brand:'MG',model:'MG4',type:'電動車',logo:'https://logo.clearbit.com/mg.co.uk'},
-            // Hyundai
-            {brand:'現代',model:'Tucson',type:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {brand:'現代',model:'Santa Fe',type:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {brand:'現代',model:'Ioniq 5',type:'電動車',logo:'https://logo.clearbit.com/hyundai.com'},
-            {brand:'現代',model:'Ioniq 6',type:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
-            // Kia
-            {brand:'Kia',model:'Sportage',type:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            {brand:'Kia',model:'Sorento',type:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
-            {brand:'Kia',model:'EV6',type:'電動車',logo:'https://logo.clearbit.com/kia.com'},
-            {brand:'Kia',model:'EV9',type:'電動車',logo:'https://logo.clearbit.com/kia.com'},
-            {brand:'Kia',model:'Carnival',type:'MPV',logo:'https://logo.clearbit.com/kia.com'},
-            // VW
-            {brand:'福斯',model:'Golf',type:'掀背',logo:'https://logo.clearbit.com/vw.com'},
-            {brand:'福斯',model:'T-Roc',type:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {brand:'福斯',model:'Tiguan',type:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
-            {brand:'福斯',model:'ID.4',type:'電動車',logo:'https://logo.clearbit.com/vw.com'},
-            {brand:'福斯',model:'ID.5',type:'電動車',logo:'https://logo.clearbit.com/vw.com'},
-            // Audi
-            {brand:'奧迪',model:'A1',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A3',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A4',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A5',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A6',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A7',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'A8',type:'轎車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'Q2',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'Q3',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'Q5',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'Q7',type:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
-            {brand:'奧迪',model:'Q8 e-tron',type:'電動車',logo:'https://logo.clearbit.com/audi.com'},
-            // Porsche
-            {brand:'保時捷',model:'718',type:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
-            {brand:'保時捷',model:'911',type:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
-            {brand:'保時捷',model:'Taycan',type:'電動車',logo:'https://logo.clearbit.com/porsche.com'},
-            {brand:'保時捷',model:'Macan',type:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
-            {brand:'保時捷',model:'Cayenne',type:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
-            {brand:'保時捷',model:'Panamera',type:'轎車',logo:'https://logo.clearbit.com/porsche.com'},
-            // Subaru
-            {brand:'速霸陸',model:'Forester',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
-            {brand:'速霸陸',model:'Outback',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
-            {brand:'速霸陸',model:'Crosstrek',type:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
-            {brand:'速霸陸',model:'WRX',type:'跑車',logo:'https://logo.clearbit.com/subaru.com'},
-            // Mazda
-            {brand:'馬自達',model:'Mazda3',type:'轎車',logo:'https://logo.clearbit.com/mazda.com'},
-            {brand:'馬自達',model:'CX-30',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
-            {brand:'馬自達',model:'CX-5',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
-            {brand:'馬自達',model:'CX-60',type:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
-            {brand:'馬自達',model:'MX-5',type:'跑車',logo:'https://logo.clearbit.com/mazda.com'},
-            // Suzuki
-            {brand:'鈴木',model:'Vitara',type:'休旅車',logo:'https://logo.clearbit.com/suzuki.com'},
-            {brand:'鈴木',model:'Jimny',type:'越野',logo:'https://logo.clearbit.com/suzuki.com'},
-            {brand:'鈴木',model:'Swift',type:'掀背',logo:'https://logo.clearbit.com/suzuki.com'},
-            // Nissan
-            {brand:'日產',model:'Kicks',type:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
-            {brand:'日產',model:'X-Trail',type:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
-            {brand:'日產',model:'Sentra',type:'轎車',logo:'https://logo.clearbit.com/nissan.com'},
-            {brand:'日產',model:'Leaf',type:'電動車',logo:'https://logo.clearbit.com/nissan.com'},
-            // Luxgen
-            {brand:'納智捷',model:'URX',type:'休旅車',logo:'https://logo.clearbit.com/luxgen.com.tw'},
-            {brand:'納智捷',model:'n⁷',type:'電動車',logo:'https://logo.clearbit.com/luxgen.com.tw'}
+        const db = [
+            {b:'特斯拉',m:'Model 3',t:'轎車',logo:'https://logo.clearbit.com/tesla.com'},
+            {b:'特斯拉',m:'Model Y',t:'休旅車',logo:'https://logo.clearbit.com/tesla.com'},
+            {b:'BMW',m:'1 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'2 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'3 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'4 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'5 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'6 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'7 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'8 Series',t:'轎車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X1',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X2',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X3',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X4',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X5',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X6',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'X7',t:'休旅車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'iX',t:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'i4',t:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'BMW',m:'i5',t:'電動車',logo:'https://logo.clearbit.com/bmw.com'},
+            {b:'賓士',m:'A-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'B-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'C-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'E-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'S-Class',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'CLA',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'CLE',t:'轎車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'GLA',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'GLB',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'GLC',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'GLE',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'GLS',t:'休旅車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'G-Class',t:'越野',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'EQE',t:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'賓士',m:'EQS',t:'電動車',logo:'https://logo.clearbit.com/mercedes-benz.com'},
+            {b:'Lexus',m:'UX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'NX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'RX',t:'休旅車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'RZ',t:'電動車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'ES',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'LS',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'LM',t:'MPV',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'Lexus',m:'IS',t:'轎車',logo:'https://logo.clearbit.com/lexus.com'},
+            {b:'豐田',m:'Altis',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Camry',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Crown',t:'轎車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Prius',t:'油電',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'bZ4X',t:'電動車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'RAV4',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Corolla Cross',t:'休旅車',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Sienta',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Alphard',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Vellfire',t:'MPV',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'豐田',m:'Hilux',t:'皮卡',logo:'https://logo.clearbit.com/toyota.com'},
+            {b:'本田',m:'CR-V',t:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
+            {b:'本田',m:'HR-V',t:'休旅車',logo:'https://logo.clearbit.com/honda.com'},
+            {b:'本田',m:'Civic',t:'轎車',logo:'https://logo.clearbit.com/honda.com'},
+            {b:'福特',m:'Kuga',t:'休旅車',logo:'https://logo.clearbit.com/ford.com'},
+            {b:'福特',m:'Focus',t:'轎車',logo:'https://logo.clearbit.com/ford.com'},
+            {b:'福特',m:'Mustang',t:'跑車',logo:'https://logo.clearbit.com/ford.com'},
+            {b:'福特',m:'Ranger',t:'皮卡',logo:'https://logo.clearbit.com/ford.com'},
+            {b:'MG',m:'HS',t:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
+            {b:'MG',m:'ZS',t:'休旅車',logo:'https://logo.clearbit.com/mg.co.uk'},
+            {b:'MG',m:'MG4',t:'電動車',logo:'https://logo.clearbit.com/mg.co.uk'},
+            {b:'現代',m:'Tucson',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {b:'現代',m:'Santa Fe',t:'休旅車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {b:'現代',m:'Ioniq 5',t:'電動車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {b:'現代',m:'Ioniq 6',t:'轎車',logo:'https://logo.clearbit.com/hyundai.com'},
+            {b:'Kia',m:'Sportage',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
+            {b:'Kia',m:'Sorento',t:'休旅車',logo:'https://logo.clearbit.com/kia.com'},
+            {b:'Kia',m:'EV6',t:'電動車',logo:'https://logo.clearbit.com/kia.com'},
+            {b:'Kia',m:'EV9',t:'電動車',logo:'https://logo.clearbit.com/kia.com'},
+            {b:'福斯',m:'Golf',t:'掀背',logo:'https://logo.clearbit.com/vw.com'},
+            {b:'福斯',m:'Tiguan',t:'休旅車',logo:'https://logo.clearbit.com/vw.com'},
+            {b:'福斯',m:'ID.4',t:'電動車',logo:'https://logo.clearbit.com/vw.com'},
+            {b:'福斯',m:'ID.5',t:'電動車',logo:'https://logo.clearbit.com/vw.com'},
+            {b:'奧迪',m:'A3',t:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'A4',t:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'A6',t:'轎車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'Q3',t:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'Q5',t:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'Q7',t:'休旅車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'奧迪',m:'Q8 e-tron',t:'電動車',logo:'https://logo.clearbit.com/audi.com'},
+            {b:'保時捷',m:'718',t:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'保時捷',m:'911',t:'跑車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'保時捷',m:'Taycan',t:'電動車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'保時捷',m:'Macan',t:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'保時捷',m:'Cayenne',t:'休旅車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'保時捷',m:'Panamera',t:'轎車',logo:'https://logo.clearbit.com/porsche.com'},
+            {b:'速霸陸',m:'Forester',t:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
+            {b:'速霸陸',m:'Outback',t:'休旅車',logo:'https://logo.clearbit.com/subaru.com'},
+            {b:'速霸陸',m:'WRX',t:'跑車',logo:'https://logo.clearbit.com/subaru.com'},
+            {b:'馬自達',m:'Mazda3',t:'轎車',logo:'https://logo.clearbit.com/mazda.com'},
+            {b:'馬自達',m:'CX-5',t:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
+            {b:'馬自達',m:'CX-60',t:'休旅車',logo:'https://logo.clearbit.com/mazda.com'},
+            {b:'鈴木',m:'Vitara',t:'休旅車',logo:'https://logo.clearbit.com/suzuki.com'},
+            {b:'鈴木',m:'Jimny',t:'越野',logo:'https://logo.clearbit.com/suzuki.com'},
+            {b:'鈴木',m:'Swift',t:'掀背',logo:'https://logo.clearbit.com/suzuki.com'},
+            {b:'日產',m:'Kicks',t:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
+            {b:'日產',m:'X-Trail',t:'休旅車',logo:'https://logo.clearbit.com/nissan.com'},
+            {b:'日產',m:'Sentra',t:'轎車',logo:'https://logo.clearbit.com/nissan.com'},
+            {b:'日產',m:'Leaf',t:'電動車',logo:'https://logo.clearbit.com/nissan.com'},
+            {b:'納智捷',m:'URX',t:'休旅車',logo:'https://logo.clearbit.com/luxgen.com.tw'},
+            {b:'納智捷',m:'n7',t:'電動車',logo:'https://logo.clearbit.com/luxgen.com.tw'}
         ];
-        
-        let selectedCar = null, selectedServices = [], selectedColor = null, selectedFilm = null;
-        const searchInput = document.getElementById('carSearch'), searchResults = document.getElementById('searchResults');
-        
-        // 智慧搜尋函數
-        function smartSearch(query) {
-            const q = query.toLowerCase().trim();
-            if (!q) return [];
-            
-            // 數字車系對應表
-            const seriesMap = {
-                '5': '5 Series', '3': '3 Series', '4': '4 Series',
-                '2': '2 Series', '1': '
+        let car = null, svcs = [], color = null, film = null;
+        const search = document.getElementById('search'), results = document.getElementById('results');
+        const smap = {'5':'5 Series','3':'3 Series','4':'4 Series','2':'2 Series','1':'1 Series','7':'7 Series','8':'8 Series'};
+        search.oninput = () => {
+            const q = search.value.toLowerCase().trim();
+            if (!q) { results.classList.remove('show'); return; }
+            const r = db.filter(c => {
+                const s = (c.b+c.m+c.t).toLowerCase();
+                if (s.includes(q)) return true;
+                if (/^\\d+$/.test(q) && smap[q] && c.m.toLowerCase().includes(smap[q].toLowerCase())) return true;
+                return q.split('').every(x => s.includes(x));
+            }).slice(0, 8);
+            results.innerHTML = r.map(c => `<div class="search-item" data-b="${c.b}" data-m="${c.m}"><img src="${c.logo}"><div><div class="name">${c.b} ${c.m}</div><div class="type">${c.t}</div></div></div>`).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
+            document.querySelectorAll('.search-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
+            results.classList.add('show');
+        };
+        document.querySelectorAll('.car-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
+        function selCar(b, m) { car = {b,m}; document.querySelectorAll('.car-item').forEach(i => i.classList.remove('selected')); const el = document.querySelector(`.car-item[data-m="${m}"]`); if(el) el.classList.add('selected'); document.getElementById('step2').style.display = 'block'; document.getElementById('summary').style.display = 'block'; document.getElementById('step2').scrollIntoView({behavior:'smooth'}); results.classList.remove('show'); }
+        document.querySelectorAll('.service-opt').forEach(o => o.onclick = () => {
+            const n = o.dataset.n, t = o.dataset.t;
+            if (o.classList.contains('selected')) { o.classList.remove('selected'); svcs = svcs.filter(s => s.n !== n); }
+            else { o.classList.add('selected'); svcs.push({t,n}); }
+            document.getElementById('colorGroup').style.display = svcs.some(s => s.n === '全車改色包膜') ? 'block' : 'none';
+        });
+        document.querySelectorAll('.color-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.color-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); color = o.dataset.n; });
+        document.querySelectorAll('.film-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.film-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); film = o.dataset.n; });
+        document.getElementById('showQuote').onclick = () => {
+            if (!car) return alert('請選擇車型');
+            if (svcs.length === 0) return alert('請選擇服務');
+            const items = [...svcs]; if(color) items.push({t:'color',n:color}); if(film) items.push({t:'film',n:film});
+            document.getElementById('items').innerHTML = items.map(i => `<div class="modal-item"><span>${i.n}</span><span>洽專員</span></div>`).join('');
+            document.getElementById('modal').classList.add('show');
+        };
+        document.getElementById('closeModal').onclick = () => document.getElementById('modal').classList.remove('show');
+        document.getElementById('modal').onclick = (e) => { if(e.target.id === 'modal') document.getElementById('modal').classList.remove('show'); };
+        document.onclick = (e) => { if(!e.target.closest('.search-box')) results.classList.remove('show'); };
+    </script>
+</body>
+</html>
