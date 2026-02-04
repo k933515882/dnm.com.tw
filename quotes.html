@@ -22,9 +22,10 @@
         .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; transition: all 0.3s; }
         .search-input:focus { outline: none; border-color: var(--primary); }
         .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
-        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 300px; overflow-y: auto; z-index: 50; display: none; }
+        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
         .search-result-item { padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f5f5f5; transition: background 0.2s; }
+        .search-result-item:last-child { border-bottom: none; }
         .search-result-item:hover { background: var(--light); }
         .car-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         .car-item { padding: 12px; background: var(--light); border-radius: 10px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.3s; }
@@ -94,13 +95,13 @@
             </div>
             <div class="search-box">
                 <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="carSearch" placeholder="搜尋車型，如：Model 3、C300、X5...">
+                <input type="text" class="search-input" id="carSearch" placeholder="搜尋車型，如：520、530、Model 3、C300、RAV4...">
                 <div class="search-results" id="searchResults"></div>
             </div>
             <div class="car-grid" id="carGrid">
                 <div class="car-item" data-brand="特斯拉" data-model="Model 3" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">Tesla Model 3</div><div class="car-type">轎車</div></div>
                 <div class="car-item" data-brand="特斯拉" data-model="Model Y" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">Tesla Model Y</div><div class="car-type">休旅車</div></div>
-                <div class="car-item" data-brand="BMW" data-model="3 Series" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">BMW 3 Series</div><div class="car-type">轎車</div></div>
+                <div class="car-item" data-brand="BMW" data-model="5 Series" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">BMW 5 Series</div><div class="car-type">轎車</div></div>
                 <div class="car-item" data-brand="BMW" data-model="X5" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">BMW X5</div><div class="car-type">休旅車</div></div>
                 <div class="car-item" data-brand="賓士" data-model="C-Class" data-type="轎車"><div class="car-icon">🚗</div><div class="car-name">賓士 C-Class</div><div class="car-type">轎車</div></div>
                 <div class="car-item" data-brand="賓士" data-model="GLC" data-type="休旅車"><div class="car-icon">🚙</div><div class="car-name">賓士 GLC</div><div class="car-type">休旅車</div></div>
@@ -174,69 +175,220 @@
         </div>
     </div>
     <script>
-        // 中文品牌對照 + 模糊搜尋
+        // 品牌別名對照
         const brandAlias = {
-            '賓士':['benz','mercedes','奔馳'], '寶馬':['bmw','BMW'], '豐田':['toyota','Toyota'],
-            '凌志':['lexus','Lexus'], '本田':['honda','Honda'], '福斯':['vw','volkswagen','福斯'],
-            '奧迪':['audi','Audi'], '保時捷':['porsche','Porsche'], '馬自達':['mazda','Mazda'],
-            '速霸陸':['subaru','Subaru'], '現代':['hyundai','Hyundai'], '起亞':['kia','Kia'],
-            '福特':['ford','Ford'], '鈴木':['suzuki','Suzuki'], '日產':['nissan','Nissan'],
-            '特斯拉':['tesla','Tesla'], '納智捷':['luxgen','Luxgen']
+            '賓士':['benz','mercedes','奔馳'], '寶馬':['bmw'], '豐田':['toyota'],
+            '凌志':['lexus'], '本田':['honda'], '福斯':['vw','volkswagen'],
+            '奧迪':['audi'], '保時捷':['porsche'], '馬自達':['mazda'],
+            '速霸陸':['subaru'], '現代':['hyundai'], '起亞':['kia'],
+            '福特':['ford'], '鈴木':['suzuki'], '日產':['nissan'],
+            '特斯拉':['tesla'], '納智捷':['luxgen']
         };
         
+        // 數字→車系對照表
+        const numberSeriesMap = {
+            // BMW: 5xx → 5 Series
+            '5': {brand:'BMW', model:'5 Series'},
+            // BMW: 3xx → 3 Series
+            '3': {brand:'BMW', model:'3 Series'},
+            // BMW: 4xx → 4 Series
+            '4': {brand:'BMW', model:'4 Series'},
+            // BMW: 2xx → 2 Series
+            '2': {brand:'BMW', model:'2 Series'},
+            // BMW: 1xx → 1 Series
+            '1': {brand:'BMW', model:'1 Series'},
+            // BMW: 7xx → 7 Series
+            '7': {brand:'BMW', model:'7 Series'},
+            // BMW: 8xx → 8 Series
+            '8': {brand:'BMW', model:'8 Series'},
+            // Mercedes: Cxx → C-Class
+            'c': {brand:'賓士', model:'C-Class'},
+            // Mercedes: Exx → E-Class
+            'e': {brand:'賓士', model:'E-Class'},
+            // Mercedes: Axx → A-Class
+            'a': {brand:'賓士', model:'A-Class'},
+            // Mercedes: Sxx → S-Class
+            's': {brand:'賓士', model:'S-Class'},
+            // Mercedes: GLx → GLA/GLB/GLC/GLE/GLS
+            'gla': {brand:'賓士', model:'GLA'},
+            'glb': {brand:'賓士', model:'GLB'},
+            'glc': {brand:'賓士', model:'GLC'},
+            'gle': {brand:'賓士', model:'GLE'},
+            'gls': {brand:'賓士', model:'GLS'},
+            // BMW X系列
+            'x1': {brand:'BMW', model:'X1'},
+            'x2': {brand:'BMW', model:'X2'},
+            'x3': {brand:'BMW', model:'X3'},
+            'x4': {brand:'BMW', model:'X4'},
+            'x5': {brand:'BMW', model:'X5'},
+            'x6': {brand:'BMW', model:'X6'},
+            'x7': {brand:'BMW', model:'X7'},
+            // Lexus
+            'nx': {brand:'Lexus', model:'NX'},
+            'rx': {brand:'Lexus', model:'RX'},
+            'ux': {brand:'Lexus', model:'UX'},
+            'es': {brand:'Lexus', model:'ES'},
+            'is': {brand:'Lexus', model:'IS'},
+        };
+        
+        // 完整車型資料庫
         const carDatabase = [
-            {brand:'特斯拉',model:'Model 3',type:'轎車',icon:'🚗'},{brand:'特斯拉',model:'Model Y',type:'休旅車',icon:'🚙'},{brand:'特斯拉',model:'Model S',type:'轎車',icon:'🚗'},{brand:'特斯拉',model:'Model X',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'1 Series',type:'轎車',icon:'🚗'},{brand:'BMW',model:'2 Series',type:'轎車',icon:'🚗'},{brand:'BMW',model:'3 Series',type:'轎車',icon:'🚗'},{brand:'BMW',model:'4 Series',type:'轎車',icon:'🚗'},{brand:'BMW',model:'5 Series',type:'轎車',icon:'🚗'},{brand:'BMW',model:'X1',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X2',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X3',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X4',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X5',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X6',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'X7',type:'休旅車',icon:'🚙'},{brand:'BMW',model:'iX',type:'電動車',icon:'🚙'},{brand:'BMW',model:'i4',type:'電動車',icon:'🚗'},{brand:'BMW',model:'i5',type:'電動車',icon:'🚗'},{brand:'賓士',model:'A-Class',type:'轎車',icon:'🚗'},{brand:'賓士',model:'C-Class',type:'轎車',icon:'🚗'},{brand:'賓士',model:'E-Class',type:'轎車',icon:'🚗'},{brand:'賓士',model:'S-Class',type:'轎車',icon:'🚗'},{brand:'賓士',model:'CLA',type:'轎車',icon:'🚗'},{brand:'賓士',model:'CLE',type:'轎車',icon:'🚗'},{brand:'賓士',model:'GLA',type:'休旅車',icon:'🚙'},{brand:'賓士',model:'GLB',type:'休旅車',icon:'🚙'},{brand:'賓士',model:'GLC',type:'休旅車',icon:'🚙'},{brand:'賓士',model:'GLE',type:'休旅車',icon:'🚙'},{brand:'賓士',model:'GLS',type:'休旅車',icon:'🚙'},{brand:'賓士',model:'EQE',type:'電動車',icon:'🚗'},{brand:'賓士',model:'EQS',type:'電動車',icon:'🚗'},{brand:'Lexus',model:'UX',type:'休旅車',icon:'🚙'},{brand:'Lexus',model:'NX',type:'休旅車',icon:'🚙'},{brand:'Lexus',model:'RX',type:'休旅車',icon:'🚙'},{brand:'Lexus',model:'RZ',type:'電動車',icon:'🚙'},{brand:'Lexus',model:'ES',type:'轎車',icon:'🚗'},{brand:'Lexus',model:'LS',type:'轎車',icon:'🚗'},{brand:'Lexus',model:'LM',type:'MPV',icon:'🚐'},{brand:'豐田',model:'Corolla Cross',type:'休旅車',icon:'🚙'},{brand:'豐田',model:'RAV4',type:'休旅車',icon:'🚙'},{brand:'豐田',model:'Altis',type:'轎車',icon:'🚗'},{brand:'豐田',model:'Camry',type:'轎車',icon:'🚗'},{brand:'豐田',model:'Crown',type:'轎車',icon:'🚗'},{brand:'豐田',model:'Prius',type:'油電',icon:'🚗'},{brand:'豐田',model:'bZ4X',type:'電動車',icon:'🚙'},{brand:'豐田',model:'Sienta',type:'MPV',icon:'🚐'},{brand:'豐田',model:'Alphard',type:'MPV',icon:'🚐'},{brand:'豐田',model:'Vellfire',type:'MPV',icon:'🚐'},{brand:'豐田',model:'Hilux',type:'皮卡',icon:'🛻'},{brand:'本田',model:'CR-V',type:'休旅車',icon:'🚙'},{brand:'本田',model:'HR-V',type:'休旅車',icon:'🚙'},{brand:'本田',model:'Civic',type:'轎車',icon:'🚗'},{brand:'本田',model:'Fit',type:'掀背',icon:'🚗'},{brand:'本田',model:'Odyssey',type:'MPV',icon:'🚐'},{brand:'福特',model:'Kuga',type:'休旅車',icon:'🚙'},{brand:'福特',model:'Focus',type:'轎車',icon:'🚗'},{brand:'福特',model:'Mustang',type:'跑車',icon:'🏎️'},{brand:'福特',model:'Ranger',type:'皮卡',icon:'🛻'},{brand:'福特',model:'Explorer',type:'休旅車',icon:'🚙'},{brand:'MG',model:'HS',type:'休旅車',icon:'🚙'},{brand:'MG',model:'ZS',type:'休旅車',icon:'🚙'},{brand:'MG',model:'MG4',type:'電動車',icon:'🚗'},{brand:'現代',model:'Tucson',type:'休旅車',icon:'🚙'},{brand:'現代',model:'Santa Fe',type:'休旅車',icon:'🚙'},{brand:'現代',model:'Ioniq 5',type:'電動車',icon:'🚙'},{brand:'現代',model:'Ioniq 6',type:'轎車',icon:'🚗'},{brand:'Kia',model:'Sportage',type:'休旅車',icon:'🚙'},{brand:'Kia',model:'Sorento',type:'休旅車',icon:'🚙'},{brand:'Kia',model:'EV6',type:'電動車',icon:'🚙'},{brand:'Kia',model:'EV9',type:'電動車',icon:'🚙'},{brand:'Kia',model:'Carnival',type:'MPV',icon:'🚐'},{brand:'福斯',model:'Golf',type:'掀背',icon:'🚗'},{brand:'福斯',model:'T-Roc',type:'休旅車',icon:'🚙'},{brand:'福斯',model:'Tiguan',type:'休旅車',icon:'🚙'},{brand:'福斯',model:'ID.4',type:'電動車',icon:'🚙'},{brand:'福斯',model:'ID.5',type:'電動車',icon:'🚙'},{brand:'奧迪',model:'A3',type:'轎車',icon:'🚗'},{brand:'奧迪',model:'A4',type:'轎車',icon:'🚗'},{brand:'奧迪',model:'A6',type:'轎車',icon:'🚗'},{brand:'奧迪',model:'Q2',type:'休旅車',icon:'🚙'},{brand:'奧迪',model:'Q3',type:'休旅車',icon:'🚙'},{brand:'奧迪',model:'Q5',type:'休旅車',icon:'🚙'},{brand:'奧迪',model:'Q8 e-tron',type:'電動車',icon:'🚙'},{brand:'保時捷',model:'718',type:'跑車',icon:'🏎️'},{brand:'保時捷',model:'911',type:'跑車',icon:'🏎️'},{brand:'保時捷',model:'Taycan',type:'電動車',icon:'🏎️'},{brand:'保時捷',model:'Macan',type:'休旅車',icon:'🚙'},{brand:'保時捷',model:'Cayenne',type:'休旅車',icon:'🚙'},{brand:'保時捷',model:'Panamera',type:'轎車',icon:'🚗'},{brand:'速霸陸',model:'Forester',type:'休旅車',icon:'🚙'},{brand:'速霸陸',model:'Outback',type:'休旅車',icon:'🚙'},{brand:'速霸陸',model:'Crosstrek',type:'休旅車',icon:'🚙'},{brand:'速霸陸',model:'WRX',type:'跑車',icon:'🏎️'},{brand:'馬自達',model:'Mazda3',type:'轎車',icon:'🚗'},{brand:'馬自達',model:'CX-30',type:'休旅車',icon:'🚙'},{brand:'馬自達',model:'CX-5',type:'休旅車',icon:'🚙'},{brand:'馬自達',model:'CX-60',type:'休旅車',icon:'🚙'},{brand:'馬自達',model:'MX-5',type:'跑車',icon:'🏎️'},{brand:'鈴木',model:'Vitara',type:'休旅車',icon:'🚙'},{brand:'鈴木',model:'Jimny',type:'越野',icon:'🚙'},{brand:'鈴木',model:'Swift',type:'掀背',icon:'🚗'},{brand:'日產',model:'Kicks',type:'休旅車',icon:'🚙'},{brand:'日產',model:'X-Trail',type:'休旅車',icon:'🚙'},{brand:'日產',model:'Sentra',type:'轎車',icon:'🚗'},{brand:'日產',model:'Leaf',type:'電動車',icon:'🚗'},{brand:'納智捷',model:'URX',type:'休旅車',icon:'🚙'},{brand:'納智捷',model:'n⁷',type:'電動車',icon:'🚙'}
+            // Tesla
+            {brand:'特斯拉',model:'Model 3',type:'轎車',icon:'🚗'},
+            {brand:'特斯拉',model:'Model Y',type:'休旅車',icon:'🚙'},
+            {brand:'特斯拉',model:'Model S',type:'轎車',icon:'🚗'},
+            {brand:'特斯拉',model:'Model X',type:'休旅車',icon:'🚙'},
+            // BMW 1-8 Series
+            {brand:'BMW',model:'1 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'2 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'3 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'4 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'5 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'6 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'7 Series',type:'轎車',icon:'🚗'},
+            {brand:'BMW',model:'8 Series',type:'轎車',icon:'🚗'},
+            // BMW X Series
+            {brand:'BMW',model:'X1',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X2',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X3',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X4',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X5',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X6',type:'休旅車',icon:'🚙'},
+            {brand:'BMW',model:'X7',type:'休旅車',icon:'🚙'},
+            // BMW i Series
+            {brand:'BMW',model:'iX',type:'電動車',icon:'🚙'},
+            {brand:'BMW',model:'i4',type:'電動車',icon:'🚗'},
+            {brand:'BMW',model:'i5',type:'電動車',icon:'🚗'},
+            {brand:'BMW',model:'i7',type:'電動車',icon:'🚗'},
+            // Mercedes A-S Class
+            {brand:'賓士',model:'A-Class',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'B-Class',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'C-Class',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'E-Class',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'S-Class',type:'轎車',icon:'🚗'},
+            // Mercedes CLA/CLE/CLS
+            {brand:'賓士',model:'CLA',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'CLE',type:'轎車',icon:'🚗'},
+            {brand:'賓士',model:'CLS',type:'轎車',icon:'🚗'},
+            // Mercedes GLA/GLB/GLC/GLE/GLS
+            {brand:'賓士',model:'GLA',type:'休旅車',icon:'🚙'},
+            {brand:'賓士',model:'GLB',type:'休旅車',icon:'🚙'},
+            {brand:'賓士',model:'GLC',type:'休旅車',icon:'🚙'},
+            {brand:'賓士',model:'GLE',type:'休旅車',icon:'🚙'},
+            {brand:'賓士',model:'GLS',type:'休旅車',icon:'🚙'},
+            {brand:'賓士',model:'G-Class',type:'越野',icon:'🚙'},
+            // Mercedes EQ Series
+            {brand:'賓士',model:'EQE',type:'電動車',icon:'🚗'},
+            {brand:'賓士',model:'EQS',type:'電動車',icon:'🚗'},
+            // Lexus
+            {brand:'Lexus',model:'UX',type:'休旅車',icon:'🚙'},
+            {brand:'Lexus',model:'NX',type:'休旅車',icon:'🚙'},
+            {brand:'Lexus',model:'RX',type:'休旅車',icon:'🚙'},
+            {brand:'Lexus',model:'RZ',type:'電動車',icon:'🚙'},
+            {brand:'Lexus',model:'ES',type:'轎車',icon:'🚗'},
+            {brand:'Lexus',model:'LS',type:'轎車',icon:'🚗'},
+            {brand:'Lexus',model:'LM',type:'MPV',icon:'🚐'},
+            {brand:'Lexus',model:'IS',type:'轎車',icon:'🚗'},
+            // Toyota
+            {brand:'豐田',model:'Altis',type:'轎車',icon:'🚗'},
+            {brand:'豐田',model:'Camry',type:'轎車',icon:'🚗'},
+            {brand:'豐田',model:'Crown',type:'轎車',icon:'🚗'},
+            {brand:'豐田',model:'Prius',type:'油電',icon:'🚗'},
+            {brand:'豐田',model:'bZ4X',type:'電動車',icon:'🚙'},
+            {brand:'豐田',model:'RAV4',type:'休旅車',icon:'🚙'},
+            {brand:'豐田',model:'Corolla Cross',type:'休旅車',icon:'🚙'},
+            {brand:'豐田',model:'Sienta',type:'MPV',icon:'🚐'},
+            {brand:'豐田',model:'Alphard',type:'MPV',icon:'🚐'},
+            {brand:'豐田',model:'Vellfire',type:'MPV',icon:'🚐'},
+            {brand:'豐田',model:'Hilux',type:'皮卡',icon:'🛻'},
+            {brand:'豐田',model:'Land Cruiser',type:'越野',icon:'🚙'},
+            // Honda
+            {brand:'本田',model:'CR-V',type:'休旅車',icon:'🚙'},
+            {brand:'本田',model:'HR-V',type:'休旅車',icon:'🚙'},
+            {brand:'本田',model:'Civic',type:'轎車',icon:'🚗'},
+            {brand:'本田',model:'Fit',type:'掀背',icon:'🚗'},
+            {brand:'本田',model:'Odyssey',type:'MPV',icon:'🚐'},
+            // Ford
+            {brand:'福特',model:'Kuga',type:'休旅車',icon:'🚙'},
+            {brand:'福特',model:'Focus',type:'轎車',icon:'🚗'},
+            {brand:'福特',model:'Mustang',type:'跑車',icon:'🏎️'},
+            {brand:'福特',model:'Ranger',type:'皮卡',icon:'🛻'},
+            {brand:'福特',model:'Explorer',type:'休旅車',icon:'🚙'},
+            // MG
+            {brand:'MG',model:'HS',type:'休旅車',icon:'🚙'},
+            {brand:'MG',model:'ZS',type:'休旅車',icon:'🚙'},
+            {brand:'MG',model:'MG4',type:'電動車',icon:'🚗'},
+            // Hyundai
+            {brand:'現代',model:'Tucson',type:'休旅車',icon:'🚙'},
+            {brand:'現代',model:'Santa Fe',type:'休旅車',icon:'🚙'},
+            {brand:'現代',model:'Ioniq 5',type:'電動車',icon:'🚙'},
+            {brand:'現代',model:'Ioniq 6',type:'轎車',icon:'🚗'},
+            // Kia
+            {brand:'Kia',model:'Sportage',type:'休旅車',icon:'🚙'},
+            {brand:'Kia',model:'Sorento',type:'休旅車',icon:'🚙'},
+            {brand:'Kia',model:'EV6',type:'電動車',icon:'🚙'},
+            {brand:'Kia',model:'EV9',type:'電動車',icon:'🚙'},
+            {brand:'Kia',model:'Carnival',type:'MPV',icon:'🚐'},
+            // VW
+            {brand:'福斯',model:'Golf',type:'掀背',icon:'🚗'},
+            {brand:'福斯',model:'T-Roc',type:'休旅車',icon:'🚙'},
+            {brand:'福斯',model:'Tiguan',type:'休旅車',icon:'🚙'},
+            {brand:'福斯',model:'ID.4',type:'電動車',icon:'🚙'},
+            {brand:'福斯',model:'ID.5',type:'電動車',icon:'🚙'},
+            // Audi
+            {brand:'奧迪',model:'A1',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A3',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A4',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A5',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A6',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A7',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'A8',type:'轎車',icon:'🚗'},
+            {brand:'奧迪',model:'Q2',type:'休旅車',icon:'🚙'},
+            {brand:'奧迪',model:'Q3',type:'休旅車',icon:'🚙'},
+            {brand:'奧迪',model:'Q5',type:'休旅車',icon:'🚙'},
+            {brand:'奧迪',model:'Q7',type:'休旅車',icon:'🚙'},
+            {brand:'奧迪',model:'Q8 e-tron',type:'電動車',icon:'🚙'},
+            // Porsche
+            {brand:'保時捷',model:'718',type:'跑車',icon:'🏎️'},
+            {brand:'保時捷',model:'911',type:'跑車',icon:'🏎️'},
+            {brand:'保時捷',model:'Taycan',type:'電動車',icon:'🏎️'},
+            {brand:'保時捷',model:'Macan',type:'休旅車',icon:'🚙'},
+            {brand:'保時捷',model:'Cayenne',type:'休旅車',icon:'🚙'},
+            {brand:'保時捷',model:'Panamera',type:'轎車',icon:'🚗'},
+            // Subaru
+            {brand:'速霸陸',model:'Forester',type:'休旅車',icon:'🚙'},
+            {brand:'速霸陸',model:'Outback',type:'休旅車',icon:'🚙'},
+            {brand:'速霸陸',model:'Crosstrek',type:'休旅車',icon:'🚙'},
+            {brand:'速霸陸',model:'WRX',type:'跑車',icon:'🏎️'},
+            // Mazda
+            {brand:'馬自達',model:'Mazda3',type:'轎車',icon:'🚗'},
+            {brand:'馬自達',model:'CX-30',type:'休旅車',icon:'🚙'},
+            {brand:'馬自達',model:'CX-5',type:'休旅車',icon:'🚙'},
+            {brand:'馬自達',model:'CX-60',type:'休旅車',icon:'🚙'},
+            {brand:'馬自達',model:'MX-5',type:'跑車',icon:'🏎️'},
+            // Suzuki
+            {brand:'鈴木',model:'Vitara',type:'休旅車',icon:'🚙'},
+            {brand:'鈴木',model:'Jimny',type:'越野',icon:'🚙'},
+            {brand:'鈴木',model:'Swift',type:'掀背',icon:'🚗'},
+            // Nissan
+            {brand:'日產',model:'Kicks',type:'休旅車',icon:'🚙'},
+            {brand:'日產',model:'X-Trail',type:'休旅車',icon:'🚙'},
+            {brand:'日產',model:'Sentra',type:'轎車',icon:'🚗'},
+            {brand:'日產',model:'Leaf',type:'電動車',icon:'🚗'},
+            // Luxgen
+            {brand:'納智捷',model:'URX',type:'休旅車',icon:'🚙'},
+            {brand:'納智捷',model:'n⁷',type:'電動車',icon:'🚙'}
         ];
+        
         let selectedCar = null, selectedServices = [], selectedColor = null, selectedFilm = null;
         const searchInput = document.getElementById('carSearch'), searchResults = document.getElementById('searchResults');
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            if (query.length < 1) { searchResults.classList.remove('show'); return; }
+        
+        // 智慧搜尋函數
+        function smartSearch(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) return [];
             
-            // Fuzzy search: partial match, number matching, common abbreviations
-            const results = carDatabase.filter(car => {
-                const searchStr = `${car.brand} ${car.model} ${car.type}`.toLowerCase();
-                const modelLower = car.model.toLowerCase();
-                const brandLower = car.brand.toLowerCase();
-                
-                // Direct match
-                if (searchStr.includes(query)) return true;
-                
-                // Brand alias matching (賓士 → Mercedes, 寶馬 → BMW)
-                for (const [alias, keywords] of Object.entries(brandAlias)) {
-                    if (alias.toLowerCase().includes(query) || keywords.some(k => k.toLowerCase().includes(query))) {
-                        if (car.brand === alias || keywords.some(k => car.brand.toLowerCase().includes(k.toLowerCase()))) return true;
-                    }
-                }
-                
-                // Partial number matching (520 → 5 Series)
-                if (/^\d+$/.test(query)) {
-                    if (modelLower.includes(query)) return true;
-                    // Smart: 520 → 5 Series, 320 → 3 Series
-                    const seriesMap = {'5': '5 Series', '3': '3 Series', '4': '4 Series', '2': '2 Series', '1': '1 Series'};
-                    if (seriesMap[query] && modelLower.includes(seriesMap[query].toLowerCase())) return true;
-                }
-                
-                // Fuzzy: misspell tolerance
-                for (let i = 0; i < query.length; i++) {
-                    if (!searchStr.includes(query[i])) return false;
-                }
-                return true;
-            }).slice(0, 12);
-            if (results.length === 0) { searchResults.innerHTML = '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>'; }
-            else { searchResults.innerHTML = results.map(car => `<div class="search-result-item" data-brand="${car.brand}" data-model="${car.model}" data-type="${car.type}"><div class="car-name">${car.icon} ${car.brand} ${car.model}</div><div class="car-brand">${car.type}</div></div>`).join(''); document.querySelectorAll('.search-result-item').forEach(item => item.addEventListener('click', () => selectCar(item.dataset.brand, item.dataset.model, item.dataset.type))); }
-            searchResults.classList.add('show');
-        });
-        document.querySelectorAll('.car-item').forEach(item => item.addEventListener('click', () => selectCar(item.dataset.brand, item.dataset.model, item.dataset.type)));
-        function selectCar(brand, model, type) { selectedCar = {brand,model,type}; document.querySelectorAll('.car-item').forEach(i => i.classList.remove('selected')); document.querySelector(`.car-item[data-model="${model}"]`)?.classList.add('selected'); document.getElementById('selectedCar').textContent = `${brand} ${model}`; document.getElementById('serviceStep').style.display = 'block'; document.getElementById('summaryBar').style.display = 'block'; document.getElementById('serviceStep').scrollIntoView({behavior:'smooth'}); searchResults.classList.remove('show'); }
-        document.querySelectorAll('.service-option').forEach(opt => opt.addEventListener('click', () => { const type=opt.dataset.type,name=opt.dataset.name; const isSel=opt.classList.contains('selected'); if(isSel){opt.classList.remove('selected');selectedServices=selectedServices.filter(s=>s.name!==name);}else{opt.classList.add('selected');selectedServices.push({type,name});} document.getElementById('colorGroup').style.display=selectedServices.some(s=>s.name==='全車改色包膜')?'block':'none'; updateQuote(); }));
-        document.querySelectorAll('.color-option').forEach(opt => opt.addEventListener('click', () => { document.querySelectorAll('.color-option').forEach(o=>o.classList.remove('selected')); opt.classList.add('selected'); selectedColor=opt.dataset.name; updateQuote(); }));
-        document.querySelectorAll('.film-option').forEach(opt => opt.addEventListener('click', () => { document.querySelectorAll('.film-option').forEach(o=>o.classList.remove('selected')); opt.classList.add('selected'); selectedFilm=opt.dataset.name; updateQuote(); }));
-        function updateQuote() { const items = [...selectedServices]; if(selectedColor) items.push({type:'color',name:selectedColor}); if(selectedFilm) items.push({type:'film',name:selectedFilm}); const quoteItems=document.getElementById('quoteItems'); if(items.length===0) quoteItems.innerHTML='<div style="text-align:center;padding:40px;color:#999;">尚未選擇服務</div>'; else quoteItems.innerHTML=items.map(i=>`<div class="modal-item"><span class="name">${i.name}</span><span class="price">洽專員</span></div>`).join(''); }
-        document.getElementById('showQuote').addEventListener('click', () => { if(!selectedCar){alert('請先選擇車型');return} if(selectedServices.length===0){alert('請先選擇服務');return} document.getElementById('quoteModal').classList.add('show'); });
-        document.getElementById('closeModal').addEventListener('click', () => document.getElementById('quoteModal').classList.remove('show'));
-        document.getElementById('quoteModal').addEventListener('click', (e) => { if(e.target===document.getElementById('quoteModal')) document.getElementById('quoteModal').classList.remove('show'); });
-        document.addEventListener('click', (e) => { if(!e.target.closest('.search-box')) searchResults.classList.remove('show'); });
-    </script>
-</body>
-</html>
+            // 數字車系對應表
+            const seriesMap = {
+                '5': '5 Series', '3': '3 Series', '4': '4 Series',
+                '2': '2 Series', '1': '
