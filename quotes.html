@@ -182,7 +182,30 @@
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
             if (query.length < 1) { searchResults.classList.remove('show'); return; }
-            const results = carDatabase.filter(car => car.brand.toLowerCase().includes(query) || car.model.toLowerCase().includes(query) || car.type.toLowerCase().includes(query)).slice(0, 10);
+            
+            // Fuzzy search: partial match, number matching, common abbreviations
+            const results = carDatabase.filter(car => {
+                const searchStr = `${car.brand} ${car.model} ${car.type}`.toLowerCase();
+                const modelLower = car.model.toLowerCase();
+                const brandLower = car.brand.toLowerCase();
+                
+                // Direct match
+                if (searchStr.includes(query)) return true;
+                
+                // Partial number matching (520 → 520, 5 Series)
+                if (/^\d+$/.test(query)) {
+                    if (modelLower.includes(query)) return true;
+                    // Smart: 520 → 5 Series, 320 → 3 Series
+                    const seriesMap = {'5': '5 Series', '3': '3 Series', '4': '4 Series', '2': '2 Series', '1': '1 Series'};
+                    if (seriesMap[query] && modelLower.includes(seriesMap[query].toLowerCase())) return true;
+                }
+                
+                // Fuzzy: misspell tolerance
+                for (let i = 0; i < query.length; i++) {
+                    if (!searchStr.includes(query[i])) return false;
+                }
+                return true;
+            }).slice(0, 12);
             if (results.length === 0) { searchResults.innerHTML = '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>'; }
             else { searchResults.innerHTML = results.map(car => `<div class="search-result-item" data-brand="${car.brand}" data-model="${car.model}" data-type="${car.type}"><div class="car-name">${car.icon} ${car.brand} ${car.model}</div><div class="car-brand">${car.type}</div></div>`).join(''); document.querySelectorAll('.search-result-item').forEach(item => item.addEventListener('click', () => selectCar(item.dataset.brand, item.dataset.model, item.dataset.type))); }
             searchResults.classList.add('show');
