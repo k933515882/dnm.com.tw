@@ -12,9 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --text: #333; --text-light: #666; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); line-height: 1.6; background: #fff; }
-        
-        /* Header */
+        body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); line-height: 1.7; background: #fff; }
         header { background: #fff; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 100; }
         .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 24px; font-weight: 700; color: var(--dark); text-decoration: none; }
@@ -24,10 +22,8 @@
         .nav a:hover { color: var(--primary); }
         .cta { background: var(--primary); color: #fff; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: 0.3s; }
         .cta:hover { background: #e55a2b; }
-        
-        /* Hero */
         .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); color: #fff; padding: 160px 20px 100px; text-align: center; position: relative; overflow: hidden; }
-        .hero-bg { position: absolute; inset: 0; background: url('https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic2.jpg') center/cover; opacity: 0.3; }
+        .hero-bg { position: absolute; inset: 0; background: url('https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic2.jpg') center/cover; opacity: 0.25; }
         .hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
         .hero h1 { font-size: clamp(32px, 5vw, 52px); margin-bottom: 20px; }
         .hero h1 span { color: var(--primary); }
@@ -37,13 +33,9 @@
         .btn-primary { background: var(--primary); color: #fff; }
         .btn-outline { border: 2px solid #fff; color: #fff; }
         .btn-outline:hover { background: #fff; color: var(--dark); }
-        
-        /* Section */
         section { padding: 80px 20px; }
         .section-title { text-align: center; font-size: 32px; margin-bottom: 15px; color: var(--dark); }
         .section-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        
-        /* Services */
         .services { background: var(--light); }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         .service-card { background: #fff; border-radius: 15px; overflow: hidden; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
@@ -53,16 +45,12 @@
         .service-card h3 { font-size: 20px; margin-bottom: 10px; color: var(--dark); }
         .service-card p { color: var(--text-light); font-size: 14px; margin-bottom: 15px; line-height: 1.7; }
         .service-price { font-size: 20px; font-weight: 700; color: var(--primary); }
-        
-        /* Gallery Grid */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
         .gallery-item { aspect-ratio: 4/3; border-radius: 15px; overflow: hidden; position: relative; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .gallery-item:hover img { transform: scale(1.05); }
         .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); display: flex; align-items: flex-end; padding: 20px; }
         .gallery-overlay span { color: #fff; font-weight: 600; font-size: 16px; }
-        
-        /* Pricing */
         .pricing { background: var(--light); }
         .pricing-table { max-width: 1000px; margin: 0 auto; border-collapse: collapse; width: 100%; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
         .pricing-table th, .pricing-table td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #eee; }
@@ -71,8 +59,6 @@
         .pricing-table tr:last-child td { border-bottom: none; }
         .price { font-weight: 700; color: var(--primary); font-size: 18px; }
         .price-note { font-size: 13px; color: var(--text-light); font-weight: 400; }
-        
-        /* Process */
         .process { background: var(--dark); color: #fff; }
         .process .section-title, .process .section-subtitle { color: #fff; }
         .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
@@ -80,8 +66,19 @@
         .step-num { width: 45px; height: 45px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; margin: 0 auto 12px; }
         .step h4 { font-size: 16px; margin-bottom: 8px; }
         .step p { font-size: 13px; opacity: 0.7; }
-        
-        /* Equipment */
+        .faq { background: #fff; }
+        .faq-grid { max-width: 900px; margin: 0 auto; }
+        .faq-item { background: var(--light); border-radius: 12px; margin-bottom: 15px; overflow: hidden; transition: 0.3s; }
+        .faq-item:hover { box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .faq-q { padding: 20px 25px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--dark); font-size: 17px; }
+        .faq-q::before { content: "Q:"; color: var(--primary); font-weight: 700; margin-right: 10px; }
+        .faq-q::after { content: "+"; font-size: 24px; color: var(--primary); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 50%; transition: 0.3s; }
+        .faq-item.active .faq-q::after { transform: rotate(45deg); }
+        .faq-a { padding: 0 25px; max-height: 0; overflow: hidden; transition: 0.4s ease; background: #fff; }
+        .faq-item.active .faq-a { padding: 0 25px 25px; max-height: 500px; }
+        .faq-a-content { border-left: 3px solid var(--primary); padding-left: 20px; margin-top: 20px; }
+        .faq-a-content p { margin-bottom: 12px; color: var(--text-light); font-size: 15px; line-height: 1.8; }
+        .faq-a-content strong { color: var(--dark); }
         .equipment { background: var(--light); }
         .equipment-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
         .equipment-img { width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
@@ -90,8 +87,6 @@
         .equipment-list { list-style: none; }
         .equipment-list li { padding: 12px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; font-size: 16px; }
         .equipment-list li::before { content: "✓"; color: var(--primary); font-weight: 700; font-size: 18px; }
-        
-        /* Contact */
         .contact { background: var(--dark); color: #fff; text-align: center; padding: 80px 20px; }
         .contact h2 { margin-bottom: 40px; color: #fff; }
         .contact-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; max-width: 800px; margin: 0 auto 40px; }
@@ -102,22 +97,11 @@
         .social { display: flex; gap: 15px; justify-content: center; }
         .social a { width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; transition: 0.3s; }
         .social a:hover { background: var(--primary); }
-        
-        /* Footer */
         footer { background: #0a0a0f; color: rgba(255,255,255,0.5); text-align: center; padding: 30px; font-size: 14px; }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav { display: none; }
-            .header-inner { padding: 0 15px; }
-            section { padding: 60px 15px; }
-            .pricing-table { font-size: 14px; }
-            .equipment-content { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .nav { display: none; } .header-inner { padding: 0 15px; } section { padding: 60px 15px; } .pricing-table { font-size: 14px; } .equipment-content { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-inner">
             <a href="#" class="logo">DM <span>SENSE</span></a>
@@ -125,14 +109,13 @@
                 <a href="#services">服務項目</a>
                 <a href="#price">價格表</a>
                 <a href="#process">施工流程</a>
+                <a href="#faq">專業問答</a>
                 <a href="#gallery">作品展示</a>
                 <a href="#contact">聯絡我們</a>
             </nav>
             <a href="tel:04-2452-3533" class="cta">📞 立即通話</a>
         </div>
     </header>
-    
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-bg"></div>
         <div class="hero-content">
@@ -144,8 +127,6 @@
             </div>
         </div>
     </section>
-    
-    <!-- Services -->
     <section class="services" id="services">
         <h2 class="section-title">服務項目</h2>
         <p class="section-subtitle">專業汽車美容服務，讓您的愛車煥然一新</p>
@@ -184,60 +165,22 @@
             </div>
         </div>
     </section>
-    
-    <!-- Price Table -->
     <section id="price">
         <h2 class="section-title">價格透明</h2>
         <p class="section-subtitle">無隱藏費用，清楚標價</p>
         <table class="pricing-table">
-            <thead>
-                <tr>
-                    <th>服務項目</th>
-                    <th>價格</th>
-                    <th>說明</th>
-                </tr>
-            </thead>
+            <thead><tr><th>服務項目</th><th>價格</th><th>說明</th></tr></thead>
             <tbody>
-                <tr>
-                    <td><strong>DM 石墨烯 3.0 鍍膜（轎車）</strong></td>
-                    <td class="price">NT$25,000 <span class="price-note">(原價 NT$30,000)</span></td>
-                    <td>顛覆鍍膜的革命性產品，當日交車，保固 24 個月</td>
-                </tr>
-                <tr>
-                    <td><strong>DM 石墨烯 3.0 鍍膜（休旅車）</strong></td>
-                    <td class="price">NT$27,000 <span class="price-note">(原價 NT$32,000)</span></td>
-                    <td>超強潑水，嬰兒肌膚般觸感，保固 24 個月</td>
-                </tr>
-                <tr>
-                    <td><strong>DM 頂級陶瓷雙層鍍膜</strong></td>
-                    <td class="price">NT$19,000</td>
-                    <td>保護車漆第一名，24 個月不用打蠟，當日交車</td>
-                </tr>
-                <tr>
-                    <td><strong>尊榮旗艦石墨烯專案</strong></td>
-                    <td class="price">NT$40,000 - 88,888</td>
-                    <td>石墨烯奈米鍍膜，長達 30 個月保固</td>
-                </tr>
-                <tr>
-                    <td><strong>拋光美容修復（小型車）</strong></td>
-                    <td class="price">NT$2,500 - 3,000</td>
-                    <td>含泡沫預洗、鐵粉去除、柏油去除、拋光打蠟</td>
-                </tr>
-                <tr>
-                    <td><strong>拋光美容修復（中型車）</strong></td>
-                    <td class="price">NT$3,000 - 4,000</td>
-                    <td>含全車美容護理、塑料件維護、輪胎保養</td>
-                </tr>
-                <tr>
-                    <td><strong>拋光美容修復（大型車）</strong></td>
-                    <td class="price">NT$4,000 - 6,000</td>
-                    <td>含引擎室清潔、鋁圈鍍膜、玻璃潑水護理</td>
-                </tr>
+                <tr><td><strong>DM 石墨烯 3.0 鍍膜（轎車）</strong></td><td class="price">NT$25,000 <span class="price-note">(原價 NT$30,000)</span></td><td>顛覆鍍膜的革命性產品，當日交車，保固 24 個月</td></tr>
+                <tr><td><strong>DM 石墨烯 3.0 鍍膜（休旅車）</strong></td><td class="price">NT$27,000 <span class="price-note">(原價 NT$32,000)</span></td><td>超強潑水，嬰兒肌膚般觸感，保固 24 個月</td></tr>
+                <tr><td><strong>DM 頂級陶瓷雙層鍍膜</strong></td><td class="price">NT$19,000</td><td>保護車漆第一名，24 個月不用打蠟，當日交車</td></tr>
+                <tr><td><strong>尊榮旗艦石墨烯專案</strong></td><td class="price">NT$40,000 - 88,888</td><td>石墨烯奈米鍍膜，長達 30 個月保固</td></tr>
+                <tr><td><strong>拋光美容修復（小型車）</strong></td><td class="price">NT$2,500 - 3,000</td><td>含泡沫預洗、鐵粉去除、柏油去除、拋光打蠟</td></tr>
+                <tr><td><strong>拋光美容修復（中型車）</strong></td><td class="price">NT$3,000 - 4,000</td><td>含全車美容護理、塑料件維護、輪胎保養</td></tr>
+                <tr><td><strong>拋光美容修復（大型車）</strong></td><td class="price">NT$4,000 - 6,000</td><td>含引擎室清潔、鋁圈鍍膜、玻璃潑水護理</td></tr>
             </tbody>
         </table>
     </section>
-    
-    <!-- Process -->
     <section class="process" id="process">
         <h2 class="section-title">標準施工流程</h2>
         <p class="section-subtitle">12 道工序，層層把關</p>
@@ -256,32 +199,31 @@
             <div class="step"><div class="step-num">12</div><h4>手工上蠟</h4><p>手工棕櫚蠟拋光</p></div>
         </div>
     </section>
-    
-    <!-- Gallery -->
+    <section class="faq" id="faq">
+        <h2 class="section-title">專業問答</h2>
+        <p class="section-subtitle">客人常見問題，我們的專業回答</p>
+        <div class="faq-grid">
+            <div class="faq-item"><div class="faq-q">鍍膜可以維持多久？需要多久打一次蠟？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>我們的鍍膜產品經過嚴格測試，效果持久。</p><p>• <strong>DM 石墨烯 3.0 鍍膜</strong>：保固 24 個月，12 個月內不用打蠟，之後建議每 6-12 個月回店檢查</p><p>• <strong>DM 頂級陶瓷雙層鍍膜</strong>：保固 24 個月，24 個月內不用打蠟</p><p>• <strong>尊榮旗艦石墨烯專案</strong>：長達 30 個月保固</p><p>鍍膜後洗車更容易，污垢不易附著，大幅減少您平時保養的時間。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">施工需要多久時間？當天可以交車嗎？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>依施工項目而定，我們提供當日交車服務：</p><p>• <strong>鍍膜施工</strong>：約 8-10 小時，當天傍晚即可交車</p><p>• <strong>拋光美容</strong>：約 4-8 小時，依車況調整</p><p>• <strong>基本洗車</strong>：約 1-2 小時</p><p>我們理解您需要用車，所以鍍膜服務特別安排當日交車，不讓您沒有車可用。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">鍍膜和打蠟有什麼差別？鍍膜比較好嗎？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>鍍膜和打蠟各有優缺點，適合不同需求：</p><p><strong>打蠟：</strong>優點是價格便宜、施工快速，但保護層薄，持續時間短（約 1-2 個月），容易被雨水沖洗掉。</p><p><strong>鍍膜：</strong>優點是保護層厚，持續時間長（2-3 年），潑水抗污效果好，硬度高可抵禦細紋。但價格較高，需要專業施工。</p><p><strong>我們的建議：</strong>如果您追求長期保護和省時，鍍膜是最佳選擇。一次鍍膜，2 年不用煩惱打蠟問題。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">你們的鍍膜和外面有什麼不一樣？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>DM SENSE 的鍍膜服務有幾個特色：</p><p>1. <strong>DM 獨家研發產品</strong>：石墨烯 3.0 是我們自己研發的革命性產品，台灣第一家發表</p><p>2. <strong>頂級設備</strong>：使用義大利 RUPES 高階拋光機，業界領先研磨技術</p><p>3. <strong>完整施工流程</strong>：12 道標準工序，每個環節都用心</p><p>4. <strong>免費售後服務</strong>：保固期間內，局部板烤免費重上</p><p>5. <strong>透明價格</strong>：清楚標價，絕無隱藏費用</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">新房需要做鍍膜嗎？還是等一段时间再處理？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>強烈建議新房落地後盡快處理！</p><p><strong>原因：</strong>新房漆面最完美，在最完美狀態下鍍膜，效果最佳。避免日後刮痕、氧化層形成後才處理，需要更複雜的拋光工程。</p><p><strong>我們的建議：</strong>交車後 1-2 個月內是鍍膜黃金期，保護效果最好。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">鍍膜後還可以洗車嗎？自己洗車要注意什麼？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>鍍膜後絕對可以洗車，而且洗車會更容易！</p><p><strong>鍍膜後洗車的好處：</strong>污垢不容易附著，沖水就能带走大部分髒污，減少洗車時間和力氣。</p><p><strong>注意事項：</strong>避免使用強酸強鹼清潔劑，不要用粗糙的海綿或刷子，建議使用中性洗車精，我們會提供專用洗車液給您。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">刮傷了怎麼辦？鍍膜能防止刮傷嗎？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>鍍膜可以有效減少刮傷，但無法完全防止。</p><p><strong>鍍膜的保護原理：</strong>在車漆表面形成一層硬膜，可以抵禦日常洗車、細紋，防止太陽紋、氧化層形成。</p><p><strong>但以下情況仍可能造成刮傷：</strong>尖銳物體直接刮過（如鑰匙、石子）、鳥屎、蟲屍長期未清理造成腐蝕。</p><p><strong>我們的保固：</strong>保固期間內，若因施工問題造成膜層脫落，我們免費重新施工。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">你們使用什麼材料？安全嗎？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>我們使用的材料經過嚴格挑選，安全無慮：</p><p>• <strong>DM 石墨烯鍍膜</strong>：DM 團隊自主研發，奈米石墨烯技術，台灣製造</p><p>• <strong>DM 陶瓷鍍膜</strong>：頂級雙劑配方，陶瓷塗層確保漆面平整度</p><p>• <strong>RUPES 研磨產品</strong>：義大利進口，專業汽車美容等級</p><p>所有材料對車漆、人體無害，施工過程安全環保。</p></div></div></div>
+            <div class="faq-item"><div class="faq-q">要怎麼預約？可以當天預約嗎？</div><div class="faq-a"><div class="faq-a-content"><p><strong>答：</strong>您可以透過以下方式預約：</p><p>• <strong>電話預約</strong>：04-2452-3533（建議提前 1-3 天）</p><p>• <strong>LINE 預約</strong>：@dmsense</p><p>• <strong>Facebook 粉絲團</strong>：私訊小編</p><p><strong>當天預約：</strong>視當天師傅檔期而定，基本洗車通常可以當天預約，鍍膜施工建議提前 2-3 天預約。</p></div></div></div>
+        </div>
+    </section>
     <section id="gallery">
         <h2 class="section-title">作品展示</h2>
         <p class="section-subtitle">實際施工案例，品質保證</p>
         <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210954101f36.jpg" alt="作品展示">
-                <div class="gallery-overlay"><span>拋光美容修復</span></div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210935402c11.jpg" alt="作品展示">
-                <div class="gallery-overlay"><span>鍍膜施工</span></div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240301100122bd45.jpg" alt="作品展示">
-                <div class="gallery-overlay"><span>刮傷修復</span></div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240117142936d578.jpg" alt="作品展示">
-                <div class="gallery-overlay"><span>深層清潔</span></div>
-            </div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210954101f36.jpg" alt="拋光美容"><div class="gallery-overlay"><span>拋光美容修復</span></div></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210935402c11.jpg" alt="鍍膜施工"><div class="gallery-overlay"><span>鍍膜施工</span></div></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240301100122bd45.jpg" alt="刮傷修復"><div class="gallery-overlay"><span>刮傷修復</span></div></div>
+            <div class="gallery-item"><img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240117142936d578.jpg" alt="深層清潔"><div class="gallery-overlay"><span>深層清潔</span></div></div>
         </div>
     </section>
-    
-    <!-- Equipment -->
     <section class="equipment">
         <h2 class="section-title">專業設備</h2>
         <p class="section-subtitle">使用義大利進口頂級設備</p>
@@ -300,26 +242,12 @@
             </div>
         </div>
     </section>
-    
-    <!-- Contact -->
     <section class="contact" id="contact">
         <h2 class="section-title" style="color:#fff;">聯絡我們</h2>
         <div class="contact-grid">
-            <div class="contact-item">
-                <span>📍</span>
-                <h4>地址</h4>
-                <p>台中市西屯區環中路二段1332號</p>
-            </div>
-            <div class="contact-item">
-                <span>📞</span>
-                <h4>電話</h4>
-                <p>04-2452-3533</p>
-            </div>
-            <div class="contact-item">
-                <span>⏰</span>
-                <h4>營業時間</h4>
-                <p>09:00 - 20:00（週一公休）</p>
-            </div>
+            <div class="contact-item"><span>📍</span><h4>地址</h4><p>台中市西屯區環中路二段1332號</p></div>
+            <div class="contact-item"><span>📞</span><h4>電話</h4><p>04-2452-3533</p></div>
+            <div class="contact-item"><span>⏰</span><h4>營業時間</h4><p>09:00 - 20:00（週一公休）</p></div>
         </div>
         <div class="social">
             <a href="https://www.facebook.com/dnm.com.tw" title="Facebook">📘</a>
@@ -327,10 +255,13 @@
             <a href="tel:04-2452-3533" title="電話">📞</a>
         </div>
     </section>
-    
-    <!-- Footer -->
-    <footer>
-        <p>© DM SENSE 台中汽車鍍膜美容 | 台中市西屯區環中路二段1332號 | 電話：04-2452-3533</p>
-    </footer>
+    <footer><p>© DM SENSE 台中汽車鍍膜美容 | 台中市西屯區環中路二段1332號 | 電話：04-2452-3533</p></footer>
+    <script>
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                q.closest('.faq-item').classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 </html>
