@@ -3,270 +3,404 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DM SENSE | 台中汽車鍍膜 PPF車體保護膜 專業施工 首選</title>
-    <meta name="description" content="DM SENSE 台中專業汽車保護膜中心｜XPEL認證施工商｜提供PPF車體保護膜、陶瓷鍍膜、窗膜、內裝護理｜正品保證5年質保｜台中市西屯區環中路二段1332號">
-    <meta name="keywords" content="台中汽車鍍膜,PPF車體保護膜,XPEL,陶瓷鍍膜,汽車窗膜,台中貼膜,內裝保護,汽車美容">
-    <meta property="og:title" content="DM SENSE | 台中汽車鍍膜 PPF保護膜 首選">
-    <meta property="og:description" content="XPEL認證施工商｜正品保證5年質保｜專業汽車保護膜鍍膜中心">
-    <meta property="og:type" content="website">
+    <title>DM SENSE | 台中汽車鍍膜 汽車美容 台中市西屯區環中路</title>
+    <meta name="description" content="DM SENSE 台中汽車鍍膜，位於台中市西屯區環中路二段1332號。專業汽車美容、拋光修復、石墨烯鍍膜、陶瓷鍍膜。使用義大利RUPES進口設備，價格透明。電話：04-2452-3533">
+    <meta name="keywords" content="台中汽車鍍膜,台中汽車美容,台中拋光,石墨烯鍍膜,陶瓷鍍膜,DM SENSE">
     <link rel="canonical" href="https://dnm.com.tw">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ff6b35; --primary-dark: #e55a2b; --accent: #ffd93d; --dark: #0a0a0f; --dark-secondary: #1a1a2e; --text: #2d3436; --text-light: #636e72; --light: #f8f9fa; --white: #ffffff; --shadow-sm: 0 4px 20px rgba(0,0,0,0.08); --shadow-md: 0 10px 40px rgba(0,0,0,0.12); --shadow-lg: 0 20px 60px rgba(0,0,0,0.2); --radius-sm: 8px; --radius-md: 16px; --radius-lg: 24px; --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; font-size: 16px; }
-        body { font-family: 'Noto Sans TC', -apple-system, sans-serif; color: var(--text); line-height: 1.8; overflow-x: hidden; }
-        header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); padding: 12px 0; box-shadow: 0 2px 30px rgba(0,0,0,0.1); }
-        .header-container { max-width: 1400px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 26px; font-weight: 800; text-decoration: none; color: var(--dark); display: flex; align-items: center; gap: 10px; }
-        .logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --text: #333; --text-light: #666; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; color: var(--text); line-height: 1.6; background: #fff; }
+        
+        /* Header */
+        header { background: #fff; padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: fixed; width: 100%; top: 0; z-index: 100; }
+        .header-inner { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--dark); text-decoration: none; }
         .logo span { color: var(--primary); }
-        nav { display: flex; gap: 36px; }
-        nav a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 15px; transition: var(--transition); position: relative; }
-        nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary); transition: var(--transition); }
-        nav a:hover { color: var(--primary); }
-        nav a:hover::after { width: 100%; }
-        .cta-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 12px 28px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 14px; transition: var(--transition); }
-        .cta-header:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,107,53,0.35); }
-        .hero { min-height: 100vh; background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 50%, #16213e 100%); display: flex; align-items: center; justify-content: center; text-align: center; color: white; position: relative; overflow: hidden; padding: 140px 40px 100px; }
-        .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(255,107,53,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,217,61,0.1) 0%, transparent 50%); }
-        .hero-pattern { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); animation: float 30s ease-in-out infinite; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-        .hero-content { position: relative; z-index: 2; max-width: 900px; }
-        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,53,0.15); border: 1px solid rgba(255,107,53,0.3); padding: 10px 24px; border-radius: 50px; font-size: 14px; margin-bottom: 32px; }
-        .hero h1 { font-size: clamp(42px, 7vw, 72px); font-weight: 800; margin-bottom: 24px; line-height: 1.15; }
-        .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero-desc { font-size: clamp(18px, 2.2vw, 22px); opacity: 0.9; margin-bottom: 40px; color: rgba(255,255,255,0.85); }
-        .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
-        .btn { padding: 18px 36px; font-size: 16px; font-weight: 700; border-radius: 50px; text-decoration: none; transition: var(--transition); display: inline-flex; align-items: center; gap: 10px; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(255,107,53,0.4); }
-        .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
-        .hero-stats { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
-        .stat-item { text-align: center; padding: 20px 30px; background: rgba(255,255,255,0.05); border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.1); min-width: 150px; }
-        .stat-num { font-size: 42px; font-weight: 800; color: var(--accent); display: block; line-height: 1; margin-bottom: 8px; }
+        .nav { display: flex; gap: 30px; }
+        .nav a { text-decoration: none; color: var(--text); font-weight: 500; transition: 0.3s; }
+        .nav a:hover { color: var(--primary); }
+        .cta { background: var(--primary); color: #fff; padding: 10px 25px; border-radius: 25px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .cta:hover { background: #e55a2b; }
+        
+        /* Hero */
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); color: #fff; padding: 160px 20px 100px; text-align: center; }
+        .hero h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 20px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 18px; opacity: 0.9; max-width: 700px; margin: 0 auto 30px; }
+        .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 15px 35px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: 0.3s; display: inline-block; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-outline { border: 2px solid #fff; color: #fff; }
+        .btn-outline:hover { background: #fff; color: var(--dark); }
+        .stats { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 36px; font-weight: 700; color: var(--primary); display: block; }
         .stat-label { font-size: 14px; opacity: 0.8; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        section { padding: 100px 40px; }
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,107,53,0.08); color: var(--primary); padding: 8px 20px; border-radius: 50px; font-size: 14px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .section-title { font-size: clamp(32px, 5vw, 48px); font-weight: 800; margin-bottom: 16px; color: var(--dark); }
-        .section-subtitle { font-size: 18px; color: var(--text-light); max-width: 650px; margin: 0 auto; }
+        
+        /* Section */
+        section { padding: 80px 20px; }
+        .section-title { text-align: center; font-size: 32px; margin-bottom: 15px; color: var(--dark); }
+        .section-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; }
+        
+        /* Services */
         .services { background: var(--light); }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 28px; max-width: 1400px; margin: 0 auto; }
-        .service-card { background: white; border-radius: var(--radius-lg); padding: 44px 36px; text-align: center; transition: var(--transition); position: relative; border: 1px solid rgba(0,0,0,0.04); }
-        .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent)); transform: scaleX(0); transition: var(--transition); }
-        .service-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
-        .service-card:hover::before { transform: scaleX(1); }
-        .service-icon { width: 90px; height: 90px; background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(255,217,61,0.1)); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 42px; transition: var(--transition); }
-        .service-card:hover .service-icon { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); transform: scale(1.1); }
-        .service-card h3 { font-size: 24px; margin-bottom: 14px; color: var(--dark); font-weight: 700; }
-        .service-card p { color: var(--text-light); margin-bottom: 20px; font-size: 15px; }
-        .service-features { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
-        .service-feature { background: var(--light); padding: 6px 14px; border-radius: 20px; font-size: 13px; color: var(--text-light); font-weight: 500; }
-        .service-price { font-size: 22px; font-weight: 700; color: var(--primary); }
-        .features { background: white; }
-        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; max-width: 1200px; margin: 0 auto; }
-        .feature-item { display: flex; align-items: flex-start; gap: 24px; padding: 32px; background: var(--light); border-radius: var(--radius-lg); transition: var(--transition); }
-        .feature-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-        .feature-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; color: white; box-shadow: 0 8px 24px rgba(255,107,53,0.3); }
-        .feature-item h4 { font-size: 20px; margin-bottom: 10px; color: var(--dark); font-weight: 700; }
-        .feature-item p { color: var(--text-light); font-size: 15px; }
-        .process { background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 50%, #16213e 100%); color: white; position: relative; overflow: hidden; }
-        .process::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 50%, rgba(255,107,53,0.08) 0%, transparent 70%); }
-        .process .section-title { color: white; }
-        .process .section-subtitle { color: rgba(255,255,255,0.7); }
-        .process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
-        .process-item { text-align: center; padding: 40px 30px; background: rgba(255,255,255,0.03); border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.08); transition: var(--transition); }
-        .process-item:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); }
-        .process-num { width: 72px; height: 72px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; margin: 0 auto 24px; box-shadow: 0 10px 30px rgba(255,107,53,0.3); }
-        .process-item h4 { font-size: 22px; margin-bottom: 14px; font-weight: 700; }
-        .process-item p { color: rgba(255,255,255,0.7); font-size: 15px; }
-        .process-time { display: inline-block; background: rgba(255,107,53,0.15); color: var(--accent); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 16px; }
-        .brands { background: var(--light); padding: 60px 40px; }
-        .brands-grid { display: flex; justify-content: center; align-items: center; gap: 60px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
-        .brand-item { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; color: var(--text-light); opacity: 0.5; transition: var(--transition); }
-        .brand-item:hover { opacity: 1; }
-        .brand-badge { background: white; padding: 12px 24px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); font-weight: 700; }
-        .gallery { background: white; }
-        .gallery-tabs { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
-        .gallery-tab { padding: 12px 28px; border: 2px solid var(--light); background: white; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); color: var(--text); }
-        .gallery-tab:hover, .gallery-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; max-width: 1400px; margin: 0 auto; }
-        .gallery-item { aspect-ratio: 4/3; border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 20px; font-weight: 600; position: relative; overflow: hidden; cursor: pointer; transition: var(--transition); }
-        .gallery-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(10,10,15,0.7) 0%, transparent 60%); transition: var(--transition); }
-        .gallery-item:hover { transform: scale(1.02); }
-        .gallery-item:hover::before { background: linear-gradient(135deg, rgba(255,107,53,0.6) 0%, rgba(255,107,53,0.3) 100%); }
-        .gallery-item-content { position: relative; z-index: 2; text-align: center; }
-        .gallery-item h4 { font-size: 22px; margin-bottom: 6px; }
-        .gallery-item span { font-size: 14px; opacity: 0.8; }
-        .gallery-tag { position: absolute; bottom: 20px; left: 20px; background: white; color: var(--dark); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; }
-        .testimonials { background: var(--light); }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
-        .testimonial-card { background: white; border-radius: var(--radius-lg); padding: 40px; box-shadow: var(--shadow-sm); transition: var(--transition); position: relative; }
-        .testimonial-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .testimonial-stars { color: var(--accent); font-size: 18px; margin-bottom: 20px; letter-spacing: 2px; }
-        .testimonial-card p { font-size: 16px; line-height: 1.85; color: var(--text); margin-bottom: 28px; font-style: italic; }
-        .testimonial-author { display: flex; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid var(--light); }
-        .author-avatar { width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: white; }
-        .author-info h5 { font-size: 17px; color: var(--dark); font-weight: 700; }
-        .author-info span { font-size: 14px; color: var(--primary); }
-        .pricing { background: white; }
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
-        .pricing-card { background: white; border-radius: var(--radius-lg); padding: 44px 36px; text-align: center; border: 2px solid var(--light); transition: var(--transition); position: relative; }
-        .pricing-card.featured { border-color: var(--primary); transform: scale(1.02); }
-        .pricing-card.featured::before { content: '最受歡迎'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 6px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; }
-        .pricing-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        .pricing-icon { font-size: 56px; margin-bottom: 20px; }
-        .pricing-card h3 { font-size: 26px; margin-bottom: 8px; color: var(--dark); font-weight: 700; }
-        .pricing-desc { color: var(--text-light); font-size: 14px; margin-bottom: 24px; }
-        .pricing-price { font-size: 48px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
-        .pricing-price span { font-size: 16px; color: var(--text-light); font-weight: 400; }
-        .pricing-features { list-style: none; text-align: left; margin: 28px 0; padding: 0; }
-        .pricing-features li { padding: 12px 0; border-bottom: 1px solid var(--light); display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--text); }
-        .pricing-features li::before { content: '✓'; color: var(--primary); font-weight: 700; }
-        .pricing-btn { width: 100%; padding: 16px; background: var(--light); border: none; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; cursor: pointer; transition: var(--transition); color: var(--dark); }
-        .pricing-card.featured .pricing-btn { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        .faq { background: var(--light); }
-        .faq-grid { max-width: 850px; margin: 0 auto; }
-        .faq-item { background: white; border-radius: var(--radius-md); margin-bottom: 16px; overflow: hidden; box-shadow: var(--shadow-sm); }
-        .faq-item h4 { padding: 24px 30px; font-size: 17px; color: var(--dark); margin: 0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
-        .faq-item h4::after { content: '+'; font-size: 24px; color: var(--primary); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: var(--light); border-radius: 50%; transition: var(--transition); }
-        .faq-item.active h4::after { transform: rotate(45deg); background: var(--primary); color: white; }
-        .faq-item p { padding: 0 30px; max-height: 0; overflow: hidden; color: var(--text-light); font-size: 15px; transition: all 0.3s ease; }
-        .faq-item.active p { padding-bottom: 24px; max-height: 500px; }
-        .booking { background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 50%, #16213e 100%); position: relative; overflow: hidden; }
-        .booking::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 80% 20%, rgba(255,107,53,0.1) 0%, transparent 50%); }
-        .booking .section-title { color: white; }
-        .booking-container { max-width: 700px; margin: 0 auto; background: white; border-radius: var(--radius-lg); padding: 50px 44px; position: relative; z-index: 2; box-shadow: var(--shadow-lg); }
-        .booking-container > p { text-align: center; color: var(--text-light); margin-bottom: 36px; font-size: 16px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--dark); }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px 20px; border: 2px solid #e5e5e5; border-radius: var(--radius-sm); font-size: 16px; font-family: inherit; transition: var(--transition); background: var(--light); }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255,107,53,0.1); }
-        .submit-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; border-radius: var(--radius-sm); font-size: 18px; font-weight: 700; cursor: pointer; transition: var(--transition); }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(255,107,53,0.4); }
-        .contact { background: var(--dark); color: white; text-align: center; }
-        .contact h2 { margin-bottom: 40px; }
-        .contact-grid { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin-bottom: 50px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .service-card { background: #fff; border-radius: 15px; padding: 35px; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .service-icon { font-size: 48px; margin-bottom: 15px; display: block; }
+        .service-card h3 { font-size: 22px; margin-bottom: 12px; color: var(--dark); }
+        .service-card p { color: var(--text-light); font-size: 15px; margin-bottom: 15px; }
+        .service-price { font-size: 20px; font-weight: 700; color: var(--primary); }
+        .service-features { list-style: none; margin: 15px 0; }
+        .service-features li { padding: 5px 0; font-size: 14px; color: var(--text-light); }
+        .service-features li::before { content: "✓"; color: var(--primary); margin-right: 8px; }
+        
+        /* Pricing */
+        .pricing-table { max-width: 1000px; margin: 0 auto; border-collapse: collapse; width: 100%; }
+        .pricing-table th, .pricing-table td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #eee; }
+        .pricing-table th { background: var(--dark); color: #fff; font-weight: 600; }
+        .pricing-table tr:hover { background: var(--light); }
+        .price { font-weight: 700; color: var(--primary); font-size: 18px; }
+        .price-note { font-size: 13px; color: var(--text-light); font-weight: 400; }
+        
+        /* Process */
+        .process { background: var(--dark); color: #fff; }
+        .process .section-title, .process .section-subtitle { color: #fff; }
+        .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .step { text-align: center; padding: 30px 20px; background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .step-num { width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; margin: 0 auto 15px; }
+        .step h4 { margin-bottom: 10px; font-size: 18px; }
+        .step p { font-size: 14px; opacity: 0.7; }
+        
+        /* Equipment */
+        .equipment { background: var(--light); }
+        .equipment-content { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; justify-content: center; }
+        .equipment-text { flex: 1; min-width: 300px; }
+        .equipment-text h3 { font-size: 28px; margin-bottom: 20px; color: var(--dark); }
+        .equipment-text p { margin-bottom: 15px; color: var(--text-light); }
+        .equipment-list { list-style: none; }
+        .equipment-list li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
+        .equipment-list li::before { content: "🇮🇹"; }
+        
+        /* Gallery */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .gallery-item { aspect-ratio: 4/3; background: linear-gradient(135deg, #667 0%, #334 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; font-weight: 600; position: relative; overflow: hidden; }
+        .gallery-item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%); }
+        .gallery-item span { position: relative; z-index: 2; }
+        
+        /* Contact */
+        .contact { background: var(--dark); color: #fff; text-align: center; }
+        .contact-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; max-width: 800px; margin: 0 auto 40px; }
         .contact-item { text-align: center; }
-        .contact-item span { font-size: 40px; display: block; margin-bottom: 16px; }
-        .contact-item h4 { font-size: 18px; margin-bottom: 8px; }
-        .contact-item p { color: rgba(255,255,255,0.7); font-size: 15px; }
-        .social-links { display: flex; justify-content: center; gap: 16px; }
-        .social-link { width: 56px; height: 56px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; text-decoration: none; transition: var(--transition); }
-        .social-link:hover { background: var(--primary); transform: translateY(-3px); }
-        footer { background: #0d0d1a; color: rgba(255,255,255,0.5); text-align: center; padding: 30px; font-size: 14px; }
-        .fade-in { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        @media (max-width: 992px) { nav { display: none; } section { padding: 80px 24px; } .hero { padding: 100px 24px 60px; } .booking-container { padding: 40px 30px; } .form-row { grid-template-columns: 1fr; } }
+        .contact-item span { font-size: 36px; display: block; margin-bottom: 10px; }
+        .contact-item h4 { margin-bottom: 5px; }
+        .contact-item p { opacity: 0.7; font-size: 15px; }
+        .social { display: flex; gap: 15px; justify-content: center; }
+        .social a { width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; transition: 0.3s; }
+        .social a:hover { background: var(--primary); }
+        
+        /* FAQ */
+        .faq { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: var(--light); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+        .faq-q { padding: 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-q::after { content: "+"; font-size: 24px; color: var(--primary); }
+        .faq-item.active .faq-q::after { transform: rotate(45deg); }
+        .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.3s; color: var(--text-light); }
+        .faq-item.active .faq-a { padding: 0 20px 20px; max-height: 500px; }
+        
+        /* Footer */
+        footer { background: #0a0a0f; color: rgba(255,255,255,0.5); text-align: center; padding: 30px; font-size: 14px; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav { display: none; }
+            .header-inner { padding: 0 15px; }
+            section { padding: 60px 15px; }
+            .pricing-table { font-size: 14px; }
+            .pricing-table th, .pricing-table td { padding: 12px 10px; }
+            .contact-grid { gap: 30px; }
+        }
     </style>
 </head>
 <body>
-    <header id="header">
-        <div class="header-container">
-            <a href="#" class="logo"><div class="logo-icon">🛡️</div>DM <span>SENSE</span></a>
-            <nav>
+    <!-- Header -->
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo">DM <span>SENSE</span></a>
+            <nav class="nav">
                 <a href="#services">服務項目</a>
-                <a href="#features">為什麼選擇我們</a>
+                <a href="#price">價格表</a>
                 <a href="#process">施工流程</a>
-                <a href="#pricing">價格方案</a>
-                <a href="#gallery">作品集</a>
-                <a href="#testimonials">客戶評價</a>
-                <a href="#faq">常見問題</a>
+                <a href="#equipment">設備介紹</a>
+                <a href="#contact">聯絡我們</a>
             </nav>
-            <a href="#booking" class="cta-header">立即預約</a>
+            <a href="tel:04-2452-3533" class="cta">📞 立即通話</a>
         </div>
     </header>
     
+    <!-- Hero -->
     <section class="hero">
-        <div class="hero-pattern"></div>
-        <div class="hero-content">
-            <div class="hero-badge">🏆 XPEL 認證施工商</div>
-            <h1>您的愛車<span>值得頂級保護</span></h1>
-            <p class="hero-desc">專業 PPF 車體保護膜、陶瓷鍍膜、窗膜服務<br>使用全球第一品牌 XPEL 正品材料｜5 年原廠保固</p>
-            <div class="hero-cta">
-                <a href="#booking" class="btn btn-primary">📱 免費諮詢</a>
-                <a href="tel:04-2452-3533" class="btn btn-secondary">📞 電話聯絡</a>
-            </div>
-            <div class="hero-stats">
-                <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">施工車輛</span></div>
-                <div class="stat-item"><span class="stat-num">98%</span><span class="stat-label">客戶滿意</span></div>
-                <div class="stat-item"><span class="stat-num">5年</span><span class="stat-label">原廠保固</span></div>
-                <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">正品材料</span></div>
-            </div>
+        <h1>您的愛車值得<span>頂級呵護</span></h1>
+        <p>DM SENSE 台中專業汽車美容，採用義大利進口 RUPES 設備，提供鍍膜、拋光、美容服務。價格透明、施工專業，讓您的愛車煥然一新。</p>
+        <div class="hero-btns">
+            <a href="#price" class="btn btn-primary">查看價格</a>
+            <a href="tel:04-2452-3533" class="btn btn-outline">📞 電話諮詢</a>
+        </div>
+        <div class="stats">
+            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">義大利進口設備</span></div>
+            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">價格透明</span></div>
+            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">免費諮詢</span></div>
         </div>
     </section>
     
-    <section class="brands">
-        <div class="brands-grid">
-            <div class="brand-item"><div class="brand-badge">XPEL</div></div>
-            <div class="brand-item"><div class="brand-badge">LLumar</div></div>
-            <div class="brand-item"><div class="brand-badge">3M</div></div>
-            <div class="brand-item"><div class="brand-badge">Ceramic Pro</div></div>
-        </div>
-    </section>
-    
+    <!-- Services -->
     <section class="services" id="services">
-        <div class="section-header fade-in">
-            <span class="section-tag">專業服務</span>
-            <h2 class="section-title">頂級汽車保護服務</h2>
-            <p class="section-subtitle">使用全球頂級品牌材料，為您的愛車提供全方位保護</p>
-        </div>
+        <h2 class="section-title">服務項目</h2>
+        <p class="section-subtitle">專業汽車美容服務，讓您的愛車煥然一新</p>
         <div class="services-grid">
-            <div class="service-card fade-in">
-                <div class="service-icon">🛡️</div>
-                <h3>PPF 車體保護膜</h3>
-                <p>XPEL Ultimate Plus、Ultimate MAXX 頂級保護膜，自動修復功能，抵禦石跳、刮傷、酸雨腐蝕。</p>
-                <div class="service-features">
-                    <span class="service-feature">XPEL 正品</span>
-                    <span class="service-feature">自動修復</span>
-                    <span class="service-feature">10mil 厚度</span>
-                </div>
-                <div class="service-price">諮詢報價</div>
+            <div class="service-card">
+                <span class="service-icon">✨</span>
+                <h3>拋光美容修復</h3>
+                <p>去除氧化層、太陽紋，恢復車漆光澤。使用義大利 RUPES 高階研磨設備。</p>
+                <ul class="service-features">
+                    <li>去除氧化層與污垢</li>
+                    <li>拋光與打蠟</li>
+                    <li>車漆鍍膜提升亮度</li>
+                </ul>
+                <div class="service-price">NT$2,500 起</div>
             </div>
-            <div class="service-card fade-in">
-                <div class="service-icon">💎</div>
-                <h3>陶瓷鍍膜</h3>
-                <p>Ceramic Pro 9H 陶瓷鍍膜，奈米級保護，提供超強潑水、抗污、抗 UV 效果。</p>
-                <div class="service-features">
-                    <span class="service-feature">9H 硬度</span>
-                    <span class="service-feature">潑水自潔</span>
-                    <span class="service-feature">抗 UV</span>
-                </div>
-                <div class="service-price">諮詢報價</div>
+            <div class="service-card">
+                <span class="service-icon">💎</span>
+                <h3>DM 石墨烯 3.0 鍍膜</h3>
+                <p>DM 獨創革命性產品，超強奈米科技，水銀金屬光澤，超強潑水效果。</p>
+                <ul class="service-features">
+                    <li>手感超光滑</li>
+                    <li>保固 2 年</li>
+                    <li>當日交車</li>
+                </ul>
+                <div class="service-price">轎車 NT$25,000 / 休旅車 NT$27,000</div>
             </div>
-            <div class="service-card fade-in">
-                <div class="service-icon">🌙</div>
-                <h3>汽車隔熱紙</h3>
-                <p>LLumar、3M 頂級隔熱紙，提供優異隔熱效果，減少空調負載，保護內裝。</p>
-                <div class="service-features">
-                    <span class="service-feature">紅外線阻隔</span>
-                    <span class="service-feature">防爆功能</span>
-                    <span class="service-feature">隱密性佳</span>
-                </div>
-                <div class="service-price">諮詢報價</div>
+            <div class="service-card">
+                <span class="service-icon">🛡️</span>
+                <h3>DM 頂級陶瓷雙層鍍膜</h3>
+                <p>保護車漆排行榜第一名，頂級雙劑鍍膜，陶瓷塗層確保漆面最大平整度。</p>
+                <ul class="service-features">
+                    <li>24 個月不用打蠟</li>
+                    <li>保固期間局部板烤免費重上</li>
+                    <li>當日交車</li>
+                </ul>
+                <div class="service-price">NT$19,000</div>
             </div>
-            <div class="service-card fade-in">
-                <div class="service-icon">🎨</div>
-                <h3>車身改色膜</h3>
-                <p>XPEL STEALTH 消光膜、彩色改色膜，多種顏色選擇，質感升級。</p>
-                <div class="service-features">
-                    <span class="service-feature">消光/亮面</span>
-                    <span class="service-feature">變色龍系列</span>
-                    <span class="service-feature">可撕除</span>
-                </div>
-                <div class="service-price">諮詢報價</div>
+            <div class="service-card">
+                <span class="service-icon">🚗</span>
+                <h3>回春除紋美容護理</h3>
+                <p>全面深層清潔與拋光，恢復愛車最佳狀態，包含鐵粉去除、柏油去除等。</p>
+                <ul class="service-features">
+                    <li>泡沫預洗與細節清潔</li>
+                    <li>手工棕櫚蠟維護</li>
+                    <li>全車塑料件維護</li>
+                </ul>
+                <div class="service-price">NT$5,000 起</div>
             </div>
-            <div class="service-card fade-in">
-                <div class="service-icon">🧽</div>
-                <h3>內裝保護</h3>
-                <p>皮革護理、塑料翻新、鍍膜處理，保持內裝如新品般潔淨。</p>
-                <div class="service-features">
-                    <span class="service-feature">皮革鍍膜</span>
-                    <span class="service-feature">防污處理</span>
-                    <span class="service-feature">UV 保護</span>
-                </div>
-                <div class="service-price">諮詢報價</div>
+            <div class="service-card">
+                <span class="service-icon">🧽</span>
+                <h3>精緻洗車護理</h3>
+                <p>基本清潔洗車、深層清潔洗車、引擎室深層清潔服務。</p>
+                <ul class="service-features">
+                    <li>中性泡沫清潔</li>
+                    <li>鐵粉去除</li>
+                    <li>車內空間消毒</li>
+                </ul>
+                <div class="service-price">NT$500 起</div>
+            </div>
+            <div class="service-card">
+                <span class="service-icon">🎨</span>
+                <h3>客製包膜服務</h3>
+                <p>內裝飾板改色，使用進口膜料，最耐用的品質。</p>
+                <ul class="service-features">
+                    <li>不使用劣質膜料</li>
+                    <li>可撕除不傷原廠</li>
+                    <li>顏色多樣選擇</li>
+                </ul>
+                <div class="service-price">依車況報價</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Price Table -->
+    <section id="price">
+        <h2 class="section-title">價格表</h2>
+        <p class="section-subtitle">透明定價，無隱藏費用</p>
+        <table class="pricing-table">
+            <thead>
+                <tr>
+                    <th>服務項目</th>
+                    <th>價格</th>
+                    <th>說明</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>DM 石墨烯 3.0 鍍膜（轎車）</strong></td>
+                    <td class="price">NT$25,000 <span class="price-note">(原價 NT$30,000)</span></td>
+                    <td>顛覆鍍膜的革命性產品，當日交車，保固 24 個月</td>
+                </tr>
+                <tr>
+                    <td><strong>DM 石墨烯 3.0 鍍膜（休旅車）</strong></td>
+                    <td class="price">NT$27,000 <span class="price-note">(原價 NT$32,000)</span></td>
+                    <td>超強潑水，嬰兒肌膚般觸感，保固 24 個月</td>
+                </tr>
+                <tr>
+                    <td><strong>DM 頂級陶瓷雙層鍍膜</strong></td>
+                    <td class="price">NT$19,000</td>
+                    <td>保護車漆第一名，24 個月不用打蠟，當日交車</td>
+                </tr>
+                <tr>
+                    <td><strong>尊榮旗艦石墨烯專案</strong></td>
+                    <td class="price">NT$40,000 - 88,888</td>
+                    <td>石墨烯奈米鍍膜，長達 30 個月保固</td>
+                </tr>
+                <tr>
+                    <td><strong>拋光美容修復（小型車）</strong></td>
+                    <td class="price">NT$2,500 - 3,000</td>
+                    <td>含泡沫預洗、鐵粉去除、柏油去除、拋光打蠟</td>
+                </tr>
+                <tr>
+                    <td><strong>拋光美容修復（中型車）</strong></td>
+                    <td class="price">NT$3,000 - 4,000</td>
+                    <td>含全車美容護理、塑料件維護、輪胎保養</td>
+                </tr>
+                <tr>
+                    <td><strong>拋光美容修復（大型車）</strong></td>
+                    <td class="price">NT$4,000 - 6,000</td>
+                    <td>含引擎室清潔、鋁圈鍍膜、玻璃潑水護理</td>
+                </tr>
+                <tr>
+                    <td><strong>回春除紋美容護理</strong></td>
+                    <td class="price">NT$5,000 - 8,000</td>
+                    <td>深層清潔、棕櫚蠟維護、石墨烯護理</td>
+                </tr>
+                <tr>
+                    <td><strong>精緻洗車</strong></td>
+                    <td class="price">NT$500 - 3,000</td>
+                    <td>基本清潔 / 深層清潔 / 引擎室深層清潔</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    
+    <!-- Process -->
+    <section class="process" id="process">
+        <h2 class="section-title">施工流程</h2>
+        <p class="section-subtitle">標準 12 步驟，層層把關</p>
+        <div class="process-steps">
+            <div class="step"><div class="step-num">1</div><h4>柏油去除</h4><p>去除車漆表面柏油顆粒</p></div>
+            <div class="step"><div class="step-num">2</div><h4>泡沫預洗</h4><p>中性泡沫軟化髒污</p></div>
+            <div class="step"><div class="step-num">3</div><h4>輪圈清潔</h4><p>鋁圈內外徹底清洗</p></div>
+            <div class="step"><div class="step-num">4</div><h4>泡沫洗車</h4><p>車身全面清潔</p></div>
+            <div class="step"><div class="step-num">5</div><h4>鐵粉去除</h4><p>去除嵌附鐵粉</p></div>
+            <div class="step"><div class="step-num">6</div><h4>磁土清潔</h4><p>黏土去除顆粒</p></div>
+            <div class="step"><div class="step-num">7</div><h4>車身拋光</h4><p>恢復漆面光澤</p></div>
+            <div class="step"><div class="step-num">8</div><h4>再次洗車</h4><p>去除拋光殘留</p></div>
+            <div class="step"><div class="step-num">9</div><h4>內裝吸塵</h4><p>車室徹底除塵</p></div>
+            <div class="step"><div class="step-num">10</div><h4>玻璃清潔</h4><p>內外玻璃徹底清潔</p></div>
+            <div class="step"><div class="step-num">11</div><h4>塑料保護</h4><p>塑料件鍍膜護理</p></div>
+            <div class="step"><div class="step-num">12</div><h4>手工上蠟</h4><p>手工棕櫚蠟拋光</p></div>
+        </div>
+    </section>
+    
+    <!-- Equipment -->
+    <section class="equipment" id="equipment">
+        <h2 class="section-title">專業設備</h2>
+        <p class="section-subtitle">使用義大利進口頂級設備</p>
+        <div class="equipment-content">
+            <div class="equipment-text">
+                <h3>義大利 RUPES 高階設備</h3>
+                <p>我們使用業界頂級設備，確保每一個施工環節都能達到最佳效果。</p>
+                <ul class="equipment-list">
+                    <li><strong>RUPES 高階拋光機</strong> - 業界領先研磨技術</li>
+                    <li><strong>高規格燈具</strong> - 照射出細微刮痕</li>
+                    <li><strong>高階研磨產品</strong> - 不傷車漆</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- FAQ -->
+    <section class="faq">
+        <h2 class="section-title">常見問題</h2>
+        <div class="faq-item">
+            <div class="faq-q">鍍膜可以維持多久？</div>
+            <div class="faq-a">石墨烯鍍膜保固 2 年，陶瓷鍍膜保固 24 個月。期間內若有任何問題，我們提供免費重新施工服務。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">施工需要多少時間？</div>
+            <div class="faq-a">視施工項目而定。鍍膜服務當日可交車（約 10 小時），拋光美容約 4-8 小時。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">貼膜會傷害原廠車漆嗎？</div>
+            <div class="faq-a">不會！我們使用進口膜料，可完整撕除，不殘膠、不傷害原廠漆面。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">需要預約嗎？</div>
+            <div class="faq-a">建議先電話預約，確保師傅有空檔。我們會為您安排最適合的時間。</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-q">你們使用什麼材料？</div>
+            <div class="faq-a">我們使用 DM 獨創的石墨烯與陶瓷鍍膜產品，搭配義大利 RUPES 進口設備施工。</div>
+        </div>
+    </section>
+    
+    <!-- Contact -->
+    <section class="contact" id="contact">
+        <h2 class="section-title" style="color:#fff;">聯絡我們</h2>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <span>📍</span>
+                <h4>地址</h4>
+                <p>台中市西屯區環中路二段1332號</p>
+            </div>
+            <div class="contact-item">
+                <span>📞</span>
+                <h4>電話</h4>
+                <p>04-2452-3533</p>
+            </div>
+            <div class="contact-item">
+                <span>⏰</span>
+                <h4>營業時間</h4>
+                <p>09:00 - 20:00（週一公休）</p>
+            </div>
+        </div>
+        <div class="social">
+            <a href="https://www.facebook.com/dnm.com.tw" title="Facebook">📘</a>
+            <a href="https://line.me/R/ti/p/%40dmsense" title="LINE">💬</a>
+            <a href="tel:04-2452-3533" title="電話">📞</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <p>© DM SENSE 台中汽車鍍膜美容 | 台中市西屯區環中路二段1332號 | 電話：04-2452-3533</p>
+    </footer>
+    
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-q').forEach(q => {
+            q.addEventListener('click', () => {
+                q.closest('.faq-item').classList.toggle('active');
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
