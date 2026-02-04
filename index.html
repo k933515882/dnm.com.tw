@@ -26,8 +26,10 @@
         .cta:hover { background: #e55a2b; }
         
         /* Hero */
-        .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); color: #fff; padding: 160px 20px 100px; text-align: center; }
-        .hero h1 { font-size: clamp(36px, 5vw, 56px); margin-bottom: 20px; }
+        .hero { background: linear-gradient(135deg, var(--dark) 0%, #16213e 100%); color: #fff; padding: 160px 20px 100px; text-align: center; position: relative; overflow: hidden; }
+        .hero-bg { position: absolute; inset: 0; background: url('https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic2.jpg') center/cover; opacity: 0.3; }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: clamp(32px, 5vw, 52px); margin-bottom: 20px; }
         .hero h1 span { color: var(--primary); }
         .hero p { font-size: 18px; opacity: 0.9; max-width: 700px; margin: 0 auto 30px; }
         .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
@@ -35,64 +37,63 @@
         .btn-primary { background: var(--primary); color: #fff; }
         .btn-outline { border: 2px solid #fff; color: #fff; }
         .btn-outline:hover { background: #fff; color: var(--dark); }
-        .stats { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; }
-        .stat { text-align: center; }
-        .stat-num { font-size: 36px; font-weight: 700; color: var(--primary); display: block; }
-        .stat-label { font-size: 14px; opacity: 0.8; }
         
         /* Section */
         section { padding: 80px 20px; }
         .section-title { text-align: center; font-size: 32px; margin-bottom: 15px; color: var(--dark); }
-        .section-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; }
+        .section-subtitle { text-align: center; color: var(--text-light); margin-bottom: 50px; max-width: 600px; margin-left: auto; margin-right: auto; }
         
         /* Services */
         .services { background: var(--light); }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
-        .service-card { background: #fff; border-radius: 15px; padding: 35px; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .service-icon { font-size: 48px; margin-bottom: 15px; display: block; }
-        .service-card h3 { font-size: 22px; margin-bottom: 12px; color: var(--dark); }
-        .service-card p { color: var(--text-light); font-size: 15px; margin-bottom: 15px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .service-card { background: #fff; border-radius: 15px; overflow: hidden; transition: 0.3s; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+        .service-img { width: 100%; height: 200px; object-fit: cover; }
+        .service-content { padding: 25px; }
+        .service-card h3 { font-size: 20px; margin-bottom: 10px; color: var(--dark); }
+        .service-card p { color: var(--text-light); font-size: 14px; margin-bottom: 15px; line-height: 1.7; }
         .service-price { font-size: 20px; font-weight: 700; color: var(--primary); }
-        .service-features { list-style: none; margin: 15px 0; }
-        .service-features li { padding: 5px 0; font-size: 14px; color: var(--text-light); }
-        .service-features li::before { content: "✓"; color: var(--primary); margin-right: 8px; }
+        
+        /* Gallery Grid */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+        .gallery-item { aspect-ratio: 4/3; border-radius: 15px; overflow: hidden; position: relative; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%); display: flex; align-items: flex-end; padding: 20px; }
+        .gallery-overlay span { color: #fff; font-weight: 600; font-size: 16px; }
         
         /* Pricing */
-        .pricing-table { max-width: 1000px; margin: 0 auto; border-collapse: collapse; width: 100%; }
+        .pricing { background: var(--light); }
+        .pricing-table { max-width: 1000px; margin: 0 auto; border-collapse: collapse; width: 100%; background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
         .pricing-table th, .pricing-table td { padding: 18px 20px; text-align: left; border-bottom: 1px solid #eee; }
         .pricing-table th { background: var(--dark); color: #fff; font-weight: 600; }
-        .pricing-table tr:hover { background: var(--light); }
+        .pricing-table tr:hover { background: #fafafa; }
+        .pricing-table tr:last-child td { border-bottom: none; }
         .price { font-weight: 700; color: var(--primary); font-size: 18px; }
         .price-note { font-size: 13px; color: var(--text-light); font-weight: 400; }
         
         /* Process */
         .process { background: var(--dark); color: #fff; }
         .process .section-title, .process .section-subtitle { color: #fff; }
-        .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .step { text-align: center; padding: 30px 20px; background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .step-num { width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; margin: 0 auto 15px; }
-        .step h4 { margin-bottom: 10px; font-size: 18px; }
-        .step p { font-size: 14px; opacity: 0.7; }
+        .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+        .step { text-align: center; padding: 25px 15px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .step-num { width: 45px; height: 45px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; margin: 0 auto 12px; }
+        .step h4 { font-size: 16px; margin-bottom: 8px; }
+        .step p { font-size: 13px; opacity: 0.7; }
         
         /* Equipment */
         .equipment { background: var(--light); }
-        .equipment-content { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; gap: 50px; flex-wrap: wrap; justify-content: center; }
-        .equipment-text { flex: 1; min-width: 300px; }
+        .equipment-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .equipment-img { width: 100%; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); }
         .equipment-text h3 { font-size: 28px; margin-bottom: 20px; color: var(--dark); }
         .equipment-text p { margin-bottom: 15px; color: var(--text-light); }
         .equipment-list { list-style: none; }
-        .equipment-list li { padding: 10px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; }
-        .equipment-list li::before { content: "🇮🇹"; }
-        
-        /* Gallery */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
-        .gallery-item { aspect-ratio: 4/3; background: linear-gradient(135deg, #667 0%, #334 100%); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; font-weight: 600; position: relative; overflow: hidden; }
-        .gallery-item::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%); }
-        .gallery-item span { position: relative; z-index: 2; }
+        .equipment-list li { padding: 12px 0; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; font-size: 16px; }
+        .equipment-list li::before { content: "✓"; color: var(--primary); font-weight: 700; font-size: 18px; }
         
         /* Contact */
-        .contact { background: var(--dark); color: #fff; text-align: center; }
+        .contact { background: var(--dark); color: #fff; text-align: center; padding: 80px 20px; }
+        .contact h2 { margin-bottom: 40px; color: #fff; }
         .contact-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; max-width: 800px; margin: 0 auto 40px; }
         .contact-item { text-align: center; }
         .contact-item span { font-size: 36px; display: block; margin-bottom: 10px; }
@@ -101,15 +102,6 @@
         .social { display: flex; gap: 15px; justify-content: center; }
         .social a { width: 50px; height: 50px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; transition: 0.3s; }
         .social a:hover { background: var(--primary); }
-        
-        /* FAQ */
-        .faq { max-width: 800px; margin: 0 auto; }
-        .faq-item { background: var(--light); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
-        .faq-q { padding: 20px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .faq-q::after { content: "+"; font-size: 24px; color: var(--primary); }
-        .faq-item.active .faq-q::after { transform: rotate(45deg); }
-        .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.3s; color: var(--text-light); }
-        .faq-item.active .faq-a { padding: 0 20px 20px; max-height: 500px; }
         
         /* Footer */
         footer { background: #0a0a0f; color: rgba(255,255,255,0.5); text-align: center; padding: 30px; font-size: 14px; }
@@ -120,8 +112,7 @@
             .header-inner { padding: 0 15px; }
             section { padding: 60px 15px; }
             .pricing-table { font-size: 14px; }
-            .pricing-table th, .pricing-table td { padding: 12px 10px; }
-            .contact-grid { gap: 30px; }
+            .equipment-content { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -134,7 +125,7 @@
                 <a href="#services">服務項目</a>
                 <a href="#price">價格表</a>
                 <a href="#process">施工流程</a>
-                <a href="#equipment">設備介紹</a>
+                <a href="#gallery">作品展示</a>
                 <a href="#contact">聯絡我們</a>
             </nav>
             <a href="tel:04-2452-3533" class="cta">📞 立即通話</a>
@@ -143,16 +134,14 @@
     
     <!-- Hero -->
     <section class="hero">
-        <h1>您的愛車值得<span>頂級呵護</span></h1>
-        <p>DM SENSE 台中專業汽車美容，採用義大利進口 RUPES 設備，提供鍍膜、拋光、美容服務。價格透明、施工專業，讓您的愛車煥然一新。</p>
-        <div class="hero-btns">
-            <a href="#price" class="btn btn-primary">查看價格</a>
-            <a href="tel:04-2452-3533" class="btn btn-outline">📞 電話諮詢</a>
-        </div>
-        <div class="stats">
-            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">義大利進口設備</span></div>
-            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">價格透明</span></div>
-            <div class="stat"><span class="stat-num">✓</span><span class="stat-label">免費諮詢</span></div>
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>您的愛車值得<span>頂級呵護</span></h1>
+            <p>DM SENSE 台中專業汽車美容，採用義大利進口 RUPES 設備，提供鍍膜、拋光、美容服務。價格透明、施工專業，讓您的愛車煥然一新。</p>
+            <div class="hero-btns">
+                <a href="#price" class="btn btn-primary">查看價格</a>
+                <a href="tel:04-2452-3533" class="btn btn-outline">📞 電話諮詢</a>
+            </div>
         </div>
     </section>
     
@@ -162,78 +151,44 @@
         <p class="section-subtitle">專業汽車美容服務，讓您的愛車煥然一新</p>
         <div class="services-grid">
             <div class="service-card">
-                <span class="service-icon">✨</span>
-                <h3>拋光美容修復</h3>
-                <p>去除氧化層、太陽紋，恢復車漆光澤。使用義大利 RUPES 高階研磨設備。</p>
-                <ul class="service-features">
-                    <li>去除氧化層與污垢</li>
-                    <li>拋光與打蠟</li>
-                    <li>車漆鍍膜提升亮度</li>
-                </ul>
-                <div class="service-price">NT$2,500 起</div>
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic2.jpg" alt="車體鍍膜" class="service-img">
+                <div class="service-content">
+                    <h3>✨ 拋光美容修復</h3>
+                    <p>去除氧化層、太陽紋，恢復車漆光澤。使用義大利 RUPES 高階研磨設備，含泡沫預洗、鐵粉去除、柏油去除、拋光打蠟。</p>
+                    <div class="service-price">NT$2,500 起</div>
+                </div>
             </div>
             <div class="service-card">
-                <span class="service-icon">💎</span>
-                <h3>DM 石墨烯 3.0 鍍膜</h3>
-                <p>DM 獨創革命性產品，超強奈米科技，水銀金屬光澤，超強潑水效果。</p>
-                <ul class="service-features">
-                    <li>手感超光滑</li>
-                    <li>保固 2 年</li>
-                    <li>當日交車</li>
-                </ul>
-                <div class="service-price">轎車 NT$25,000 / 休旅車 NT$27,000</div>
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic1.jpg" alt="美容保養" class="service-img">
+                <div class="service-content">
+                    <h3>💎 DM 石墨烯 3.0 鍍膜</h3>
+                    <p>DM 獨創革命性產品，超強奈米科技，水銀金屬光澤，超強潑水效果。當日交車，保固 24 個月。</p>
+                    <div class="service-price">轎車 NT$25,000 / 休旅車 NT$27,000</div>
+                </div>
             </div>
             <div class="service-card">
-                <span class="service-icon">🛡️</span>
-                <h3>DM 頂級陶瓷雙層鍍膜</h3>
-                <p>保護車漆排行榜第一名，頂級雙劑鍍膜，陶瓷塗層確保漆面最大平整度。</p>
-                <ul class="service-features">
-                    <li>24 個月不用打蠟</li>
-                    <li>保固期間局部板烤免費重上</li>
-                    <li>當日交車</li>
-                </ul>
-                <div class="service-price">NT$19,000</div>
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic6.jpg" alt="汽車美容" class="service-img">
+                <div class="service-content">
+                    <h3>🛡️ DM 頂級陶瓷雙層鍍膜</h3>
+                    <p>保護車漆排行榜第一名，頂級雙劑鍍膜，陶瓷塗層確保漆面最大平整度。24 個月不用打蠟。</p>
+                    <div class="service-price">NT$19,000</div>
+                </div>
             </div>
             <div class="service-card">
-                <span class="service-icon">🚗</span>
-                <h3>回春除紋美容護理</h3>
-                <p>全面深層清潔與拋光，恢復愛車最佳狀態，包含鐵粉去除、柏油去除等。</p>
-                <ul class="service-features">
-                    <li>泡沫預洗與細節清潔</li>
-                    <li>手工棕櫚蠟維護</li>
-                    <li>全車塑料件維護</li>
-                </ul>
-                <div class="service-price">NT$5,000 起</div>
-            </div>
-            <div class="service-card">
-                <span class="service-icon">🧽</span>
-                <h3>精緻洗車護理</h3>
-                <p>基本清潔洗車、深層清潔洗車、引擎室深層清潔服務。</p>
-                <ul class="service-features">
-                    <li>中性泡沫清潔</li>
-                    <li>鐵粉去除</li>
-                    <li>車內空間消毒</li>
-                </ul>
-                <div class="service-price">NT$500 起</div>
-            </div>
-            <div class="service-card">
-                <span class="service-icon">🎨</span>
-                <h3>客製包膜服務</h3>
-                <p>內裝飾板改色，使用進口膜料，最耐用的品質。</p>
-                <ul class="service-features">
-                    <li>不使用劣質膜料</li>
-                    <li>可撕除不傷原廠</li>
-                    <li>顏色多樣選擇</li>
-                </ul>
-                <div class="service-price">依車況報價</div>
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic4.jpg" alt="手工洗車" class="service-img">
+                <div class="service-content">
+                    <h3>🧽 精緻洗車護理</h3>
+                    <p>基本清潔洗車、深層清潔洗車、引擎室深層清潔服務。中性泡沫清潔、鐵粉去除、車內空間消毒。</p>
+                    <div class="service-price">NT$500 起</div>
+                </div>
             </div>
         </div>
     </section>
     
     <!-- Price Table -->
     <section id="price">
-        <h2 class="section-title">價格表</h2>
-        <p class="section-subtitle">透明定價，無隱藏費用</p>
+        <h2 class="section-title">價格透明</h2>
+        <p class="section-subtitle">無隱藏費用，清楚標價</p>
         <table class="pricing-table">
             <thead>
                 <tr>
@@ -278,24 +233,14 @@
                     <td class="price">NT$4,000 - 6,000</td>
                     <td>含引擎室清潔、鋁圈鍍膜、玻璃潑水護理</td>
                 </tr>
-                <tr>
-                    <td><strong>回春除紋美容護理</strong></td>
-                    <td class="price">NT$5,000 - 8,000</td>
-                    <td>深層清潔、棕櫚蠟維護、石墨烯護理</td>
-                </tr>
-                <tr>
-                    <td><strong>精緻洗車</strong></td>
-                    <td class="price">NT$500 - 3,000</td>
-                    <td>基本清潔 / 深層清潔 / 引擎室深層清潔</td>
-                </tr>
             </tbody>
         </table>
     </section>
     
     <!-- Process -->
     <section class="process" id="process">
-        <h2 class="section-title">施工流程</h2>
-        <p class="section-subtitle">標準 12 步驟，層層把關</p>
+        <h2 class="section-title">標準施工流程</h2>
+        <p class="section-subtitle">12 道工序，層層把關</p>
         <div class="process-steps">
             <div class="step"><div class="step-num">1</div><h4>柏油去除</h4><p>去除車漆表面柏油顆粒</p></div>
             <div class="step"><div class="step-num">2</div><h4>泡沫預洗</h4><p>中性泡沫軟化髒污</p></div>
@@ -312,11 +257,36 @@
         </div>
     </section>
     
+    <!-- Gallery -->
+    <section id="gallery">
+        <h2 class="section-title">作品展示</h2>
+        <p class="section-subtitle">實際施工案例，品質保證</p>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210954101f36.jpg" alt="作品展示">
+                <div class="gallery-overlay"><span>拋光美容修復</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/202403210935402c11.jpg" alt="作品展示">
+                <div class="gallery-overlay"><span>鍍膜施工</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240301100122bd45.jpg" alt="作品展示">
+                <div class="gallery-overlay"><span>刮傷修復</span></div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/20240117142936d578.jpg" alt="作品展示">
+                <div class="gallery-overlay"><span>深層清潔</span></div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Equipment -->
-    <section class="equipment" id="equipment">
+    <section class="equipment">
         <h2 class="section-title">專業設備</h2>
         <p class="section-subtitle">使用義大利進口頂級設備</p>
         <div class="equipment-content">
+            <img src="https://raw.githubusercontent.com/k933515882/dnm.com.tw/main/images/pic7.jpg" alt="設備展示" class="equipment-img">
             <div class="equipment-text">
                 <h3>義大利 RUPES 高階設備</h3>
                 <p>我們使用業界頂級設備，確保每一個施工環節都能達到最佳效果。</p>
@@ -324,33 +294,10 @@
                     <li><strong>RUPES 高階拋光機</strong> - 業界領先研磨技術</li>
                     <li><strong>高規格燈具</strong> - 照射出細微刮痕</li>
                     <li><strong>高階研磨產品</strong> - 不傷車漆</li>
+                    <li><strong>DM 石墨烯鍍膜</strong> - 奈米科技保護</li>
+                    <li><strong>DM 陶瓷鍍膜</strong> - 雙劑鍍膜技術</li>
                 </ul>
             </div>
-        </div>
-    </section>
-    
-    <!-- FAQ -->
-    <section class="faq">
-        <h2 class="section-title">常見問題</h2>
-        <div class="faq-item">
-            <div class="faq-q">鍍膜可以維持多久？</div>
-            <div class="faq-a">石墨烯鍍膜保固 2 年，陶瓷鍍膜保固 24 個月。期間內若有任何問題，我們提供免費重新施工服務。</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">施工需要多少時間？</div>
-            <div class="faq-a">視施工項目而定。鍍膜服務當日可交車（約 10 小時），拋光美容約 4-8 小時。</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">貼膜會傷害原廠車漆嗎？</div>
-            <div class="faq-a">不會！我們使用進口膜料，可完整撕除，不殘膠、不傷害原廠漆面。</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">需要預約嗎？</div>
-            <div class="faq-a">建議先電話預約，確保師傅有空檔。我們會為您安排最適合的時間。</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-q">你們使用什麼材料？</div>
-            <div class="faq-a">我們使用 DM 獨創的石墨烯與陶瓷鍍膜產品，搭配義大利 RUPES 進口設備施工。</div>
         </div>
     </section>
     
@@ -385,22 +332,5 @@
     <footer>
         <p>© DM SENSE 台中汽車鍍膜美容 | 台中市西屯區環中路二段1332號 | 電話：04-2452-3533</p>
     </footer>
-    
-    <script>
-        // FAQ Toggle
-        document.querySelectorAll('.faq-q').forEach(q => {
-            q.addEventListener('click', () => {
-                q.closest('.faq-item').classList.toggle('active');
-            });
-        });
-        
-        // Smooth scroll
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => {
-                e.preventDefault();
-                document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-    </script>
 </body>
 </html>
