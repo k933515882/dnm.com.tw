@@ -357,7 +357,12 @@ const carData = [
     };
     
     function formatPrice(val) {
-        return val !== null ? '<span class="price-value">NT$ ' + val.toLocaleString() + '</span>' : '-';
+        var span = document.createElement('span');
+        span.className = 'price-value';
+        span.textContent = 'NT$ ' + val.toLocaleString();
+        var div = document.createElement('div');
+        div.appendChild(span);
+        return div.innerHTML;
     }
     
     function init() {
