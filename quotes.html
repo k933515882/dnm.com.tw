@@ -314,14 +314,7 @@
         for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
     }
     
-    
-    document.getElementById(carLists).addEventListener(click, function(e) {
-        var item = e.target.closest(\.car-item);
-        if (item) {
-            selCar(item.dataset.b, item.dataset.m);
-        }
-    });
-function showCarInfo(c) {
+    showCarList();
         document.getElementById("carTitle").textContent = c.b + " " + c.m;
         var specs = [];
         if (c.l) specs.push({l:"車長",v:c.l+" mm"});
