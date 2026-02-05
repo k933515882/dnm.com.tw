@@ -275,12 +275,8 @@
         }
         
         .price-table { width: 100%; }
-        .price-table tr {
-            transition: all 0.3s ease;
-        }
-        .price-table tr:hover {
-            background: rgba(255,255,255,0.05);
-        }
+        .price-table tr { transition: all 0.3s ease; }
+        .price-table tr:hover { background: rgba(255,255,255,0.05); }
         .price-table th {
             padding: 16px;
             text-align: left;
@@ -290,10 +286,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .price-table td {
-            padding: 16px;
-            text-align: right;
-        }
+        .price-table td { padding: 16px; text-align: right; }
         .price-value {
             font-weight: 700;
             font-size: 1.2rem;
@@ -302,10 +295,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .no-price {
-            color: rgba(255,255,255,0.3);
-            font-style: italic;
-        }
+        .no-price { color: rgba(255,255,255,0.3); font-style: italic; }
         
         @media (max-width: 768px) {
             header h1 { font-size: 2rem; }
@@ -724,11 +714,15 @@ const carData = [
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 
+                // 數字部分包含查詢（支援部分匹配）
                 var numbers = model.match(/\d+/g) || [];
                 var hasNumberMatch = numbers.some(function(num) {
+                    // query 包含在 num 中 (如 "18" 匹配 "180", "718")
+                    // 或者 num 包含在 query 中 (如 "180" 匹配 "18")
                     return num.indexOf(query) !== -1 || query.indexOf(num) !== -1;
                 });
                 
+                // 別名對照檢查
                 var aliasMatch = false;
                 for (var key in aliasMap) {
                     if (query.indexOf(key) !== -1 && model.indexOf(aliasMap[key].toLowerCase().split(" ")[0]) !== -1) {
@@ -737,6 +731,7 @@ const carData = [
                     }
                 }
                 
+                // 搜尋條件：品牌包含 OR 車款名稱包含 OR 數字部分匹配 OR 別名匹配
                 var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || hasNumberMatch || aliasMatch;
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
