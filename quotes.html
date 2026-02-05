@@ -78,17 +78,15 @@
                 <span class="step-num">1</span>
                 <span class="step-title">選擇車型</span>
             </div>
-            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、Model 3、RAV4">
+            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60、Model 3、RAV4">
             <div class="search-results" id="results"></div>
-            <div class="car-grid" id="grid">
-                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="特斯拉" data-m="Model Y"><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
+            <div class="car-grid">
                 <div class="car-item" data-b="BMW" data-m="5 Series"><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
                 <div class="car-item" data-b="BMW" data-m="X5"><div class="name">BMW X5</div><div class="type">休旅車</div></div>
                 <div class="car-item" data-b="賓士" data-m="C-Class"><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
                 <div class="car-item" data-b="賓士" data-m="GLC"><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
                 <div class="car-item" data-b="Lexus" data-m="NX"><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
             </div>
         </div>
         <div class="step" id="step2" style="display:none;">
@@ -153,15 +151,38 @@
         </div>
     </div>
     <script>
+    // 車款別名對照表
+    var aliasMap = {
+        "c200":"C-Class","c260":"C-Class","c300":"C-Class","c350":"C-Class",
+        "e200":"E-Class","e260":"E-Class","e300":"E-Class","e350":"E-Class","e450":"E-Class",
+        "a180":"A-Class","a200":"A-Class","a250":"A-Class",
+        "s350":"S-Class","s450":"S-Class","s500":"S-Class",
+        "320":"3 Series","330":"3 Series","340":"3 Series",
+        "520":"5 Series","530":"5 Series","540":"5 Series","550":"5 Series",
+        "420":"4 Series","430":"4 Series","440":"4 Series",
+        "220":"2 Series","230":"2 Series",
+        "x3":"X3","x5":"X5","x1":"X1","x7":"X7",
+        "rx300":"RX","rx350":"RX","nx300":"NX",
+        "rav4":"RAV4","rav":"RAV4",
+        "model3":"Model 3","model y":"Model Y","m3":"Model 3","my":"Model Y"
+    };
+    
     var db = [
-        {"b":"BMW","m":"5 Series","t":"轎車"},{"b":"BMW","m":"3 Series","t":"轎車"},{"b":"BMW","m":"X5","t":"休旅車"},
-        {"b":"賓士","m":"C-Class","t":"轎車"},{"b":"賓士","m":"GLC","t":"休旅車"},{"b":"賓士","m":"E-Class","t":"轎車"},
-        {"b":"特斯拉","m":"Model 3","t":"轎車"},{"b":"特斯拉","m":"Model Y","t":"休旅車"},
-        {"b":"Lexus","m":"NX","t":"休旅車"},{"b":"Lexus","m":"RX","t":"休旅車"},
-        {"b":"豐田","m":"RAV4","t":"休旅車"},{"b":"豐田","m":"Corolla Cross","t":"休旅車"},
-        {"b":"Volvo","m":"V60","t":"旅行車"},{"b":"Volvo","m":"V90","t":"旅行車"},
-        {"b":"VW","m":"Golf Variant","t":"旅行車"},{"b":"VW","m":"Passat Variant","t":"旅行車"},
-        {"b":"奧迪","m":"A4 Avant","t":"旅行車"},{"b":"奧迪","m":"A6 Avant","t":"旅行車"}
+        {b:"BMW",m:"5 Series",t:"轎車"},{b:"BMW",m:"3 Series",t:"轎車"},{b:"BMW",m:"X3",t:"休旅車"},{b:"BMW",m:"X5",t:"休旅車"},
+        {b:"賓士",m:"C-Class",t:"轎車"},{b:"賓士",m:"E-Class",t:"轎車"},{b:"賓士",m:"GLC",t:"休旅車"},{b:"賓士",m:"GLE",t:"休旅車"},
+        {b:"Lexus",m:"NX",t:"休旅車"},{b:"Lexus",m:"RX",t:"休旅車"},{b:"Lexus",m:"UX",t:"休旅車"},
+        {b:"特斯拉",m:"Model 3",t:"轎車"},{b:"特斯拉",m:"Model Y",t:"休旅車"},
+        {b:"豐田",m:"RAV4",t:"休旅車"},{b:"豐田",m:"Corolla Cross",t:"休旅車"},{b:"豐田",m:"Altis",t:"轎車"},
+        {b:"Volvo",m:"V60",t:"旅行車"},{b:"Volvo",m:"XC60",t:"休旅車"},
+        {b:"VW",m:"Golf Variant",t:"旅行車"},{b:"VW",m:"Tiguan",t:"休旅車"},
+        {b:"奧迪",m:"A4 Avant",t:"旅行車"},{b:"奧迪",m:"Q5",t:"休旅車"},
+        {b:"Honda",m:"CR-V",t:"休旅車"},{b:"Honda",m:"HR-V",t:"休旅車"},
+        {b:"Ford",m:"Kuga",t:"休旅車"},{b:"Ford",m:"Focus Wagon",t:"旅行車"},
+        {b:"Kia",m:"Sportage",t:"休旅車"},{b:"Kia",m:"EV6",t:"電動車"},
+        {b:"Mazda",m:"CX-5",t:"休旅車"},{b:"Mazda",m:"CX-60",t:"休旅車"},
+        {b:"Nissan",m:"X-Trail",t:"休旅車"},{b:"Nissan",m:"Kicks",t:"休旅車"},
+        {b:"Suzuki",m:"Vitara",t:"休旅車"},{b:"Suzuki",m:"Jimny",t:"越野"},
+        {b:"Subaru",m:"Forester",t:"休旅車"},{b:"Subaru",m:"Outback",t:"旅行車"}
     ];
     
     var car = null, svcs = [], color = null, film = null;
@@ -174,10 +195,17 @@
         var q = search.value.toLowerCase().trim();
         results.style.display = "none";
         if (!q) return;
+        
+        // 先查別名表
+        var target = aliasMap[q] || q;
+        
         var r = db.filter(function(c) {
             var s = (c.b + " " + c.m + " " + c.t).toLowerCase();
-            return s.indexOf(q) >= 0 || s.replace(/[^0-9]/g, "").indexOf(q.replace(/[^0-9]/g, "")) >= 0;
+            var t = target.toLowerCase();
+            // 完全匹配或部分匹配
+            return s.indexOf(t) >= 0 || s.replace(/[^a-z0-9]/g, "").indexOf(t.replace(/[^a-z0-9]/g, "")) >= 0;
         }).slice(0, 10);
+        
         if (r.length > 0) {
             results.innerHTML = r.map(function(c) {
                 return "<div class="search-item" data-b="" + c.b + "" data-m="" + c.m + ""><div class="name">" + c.b + " " + c.m + "</div><div class="type">" + c.t + "</div></div>";
