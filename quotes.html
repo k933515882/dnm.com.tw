@@ -17,9 +17,9 @@
         .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
         .step-num { background: var(--primary); color: var(--white); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
         .step-title { font-size: 18px; font-weight: 700; }
-        .search-input { width: 100%; padding: 14px 20px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; margin-bottom: 16px; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 560px; z-index: 50; background: var(--white); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .search-input { width: 100%; padding: 14px 20px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 560px; z-index: 50; background: var(--white); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .search-input:focus { border-color: var(--primary); }
-        .search-results { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 560px; background: var(--white); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
+        .search-results { position: fixed; bottom: 230px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 560px; background: var(--white); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
         .search-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .search-item:hover { background: var(--light); }
@@ -84,13 +84,13 @@
         <p>選擇車型和服務，立即獲得報價</p>
     </header>
     <div class="container">
+        <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60">
+        <div class="search-results" id="results"></div>
         <div class="step">
             <div class="step-header">
                 <span class="step-num">1</span>
                 <span class="step-title">選擇車型</span>
             </div>
-            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60">
-            <div class="search-results" id="results"></div>
             <div id="carLists"></div>
         </div>
         <div class="car-info" id="carInfo">
