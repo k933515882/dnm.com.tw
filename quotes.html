@@ -24,6 +24,7 @@
         .search-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .search-item:hover { background: var(--light); }
         .search-item .name { font-weight: 600; font-size: 15px; }
+        .search-item .type { font-size: 12px; color: var(--gray); }
         .brand-section { margin-bottom: 16px; }
         .brand-title { font-size: 14px; font-weight: 700; color: var(--gray); margin-bottom: 8px; padding-left: 4px; }
         .car-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -75,8 +76,6 @@
         .modal-btn { display: block; padding: 14px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; }
         .modal-btn.line { background: #06c755; color: var(--white); }
         .modal-btn.phone { background: var(--dark); color: var(--white); }
-        .back-to-top { position: fixed; bottom: 160px; right: 20px; width: 48px; height: 48px; background: var(--primary); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; z-index: 150; box-shadow: 0 4px 12px rgba(0,0,0,0.2); opacity: 0; visibility: hidden; transition: all 0.3s; }
-        .back-to-top.show { opacity: 1; visibility: visible; }
     </style>
 </head>
 <body>
@@ -86,12 +85,12 @@
     </header>
     <div class="container">
         <div class="step">
-            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60">
-            <div class="search-results" id="results"></div>
             <div class="step-header">
                 <span class="step-num">1</span>
                 <span class="step-title">選擇車型</span>
             </div>
+            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60">
+            <div class="search-results" id="results"></div>
             <div id="carLists"></div>
         </div>
         <div class="car-info" id="carInfo">
@@ -108,12 +107,18 @@
                 <div class="service-options" id="coatingList"></div>
             </div>
             <div class="service-group">
-                <div class="service-header">全車包膜</div>
+                <div class="service-header">包膜服務</div>
                 <div class="service-options" id="wrapList"></div>
             </div>
+            <div class="service-group" id="colorGroup" style="display:none;">
+                <div class="service-header">改色膜材質</div>
+                <div class="color-grid" id="colorList"></div>
+            </div>
             <div class="service-group">
-                <div class="service-header">改色膜</div>
-                <div class="service-options" id="colorList"></div>
+                <div class="service-header">迎風面包膜</div>
+                <div class="service-options">
+                    <div class="service-opt" data-t="front" data-n="迎風面包膜"><span class="name">迎風面包膜</span><span class="price">洽專員</span></div>
+                </div>
             </div>
             <div class="service-group">
                 <div class="service-header">隔熱紙</div>
@@ -138,274 +143,286 @@
             </div>
         </div>
     </div>
-    <div class="back-to-top" id="backToTop">↑</div>
     <script>
     var db = [
-        {b:"Audi",m:"Q5",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"Q3",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"Q2",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"Q7",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"E-Tron",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Audi",m:"E-Tron GT",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"Q8",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"RS6",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A1",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A3",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:55,wrapc:55,film:null,film2:null},
-        {b:"Audi",m:"A4",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A5",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Audi",m:"A6",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A7",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A8",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Audi",m:"A6 Avant (Wagon)",t:"旅行車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"X1",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"BMW",m:"iX1",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"BMW",m:"X2",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"BMW",m:"X3",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:22000,film2:null},
-        {b:"BMW",m:"X4",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:22000,film2:null},
-        {b:"BMW",m:"X5",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:70,wrapc:70,film:22000,film2:null},
-        {b:"BMW",m:"X6",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:70,wrapc:70,film:22000,film2:null},
-        {b:"BMW",m:"X7",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:80,wrapc:80,film:null,film2:null},
-        {b:"BMW",m:"1 Series",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"BMW",m:"2 Series",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"3 Series",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"Touring (旅行車)",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"i4",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"BMW",m:"4 Series",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"5 Series",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"6 Series",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"7 Series",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"8 Series",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"IX",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"BMW",m:"M2",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"BMW",m:"Z4",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"BMW",m:"2AT",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Citroen / Smart",m:"Berlingo",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"Citroen / Smart",m:"C5",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Citroen / Smart",m:"Smart Fortwo",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Fiat / Alfa",m:"Fiat",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Fiat / Alfa",m:"Stelvio",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Fiat / Alfa",m:"Giulia",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Fiat / Alfa",m:"Tonale",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Honda",m:"CRZ",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Honda",m:"HRV",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:55,wrapc:55,film:null,film2:null},
-        {b:"Honda",m:"CRV",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:20000,film2:null},
-        {b:"Honda",m:"FIT",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:50,wrapc:50,film:null,film2:null},
-        {b:"Honda",m:"Odyssey",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Honda",m:"Civic",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Infiniti",m:"Q50",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Infiniti",m:"Q60",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Infiniti",m:"Q30",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Infiniti",m:"QX50",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Infiniti",m:"QX55",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Infiniti",m:"QX60",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:20000,film2:null},
-        {b:"Infiniti",m:"FX35",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Jaguar",m:"E-Pace",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Jaguar",m:"F-Pace",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Jaguar",m:"I-Pace",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Jaguar",m:"F-Type",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Jaguar",m:"XF",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Sportage",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Kia",m:"EV6",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Stonic",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Sorento",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Picanto",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Sportswagon",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Carens",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Carnival",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"KA4 Carnival",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"EV9",t:"休旅車",c1:26000,c2:23000,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Kia",m:"Ceed",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"CT200H",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"RX",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:65,wrapc:65,film:22000,film2:null},
-        {b:"LEXUS",m:"NX",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"LEXUS",m:"RZ",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"UX200",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"LEXUS",m:"IS",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"LEXUS",m:"ES",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"RC300",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"LC",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"LS",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"LBX",t:"轎車",c1:23000,c2:20000,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"LEXUS",m:"LM",t:"轎車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:28000,film2:null},
-        {b:"Land Rover",m:"Defender 130",t:"休旅車",c1:35000,c2:32000,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Land Rover",m:"Defender 90",t:"休旅車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Land Rover",m:"Defender 110",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:70,wrapc:70,film:22000,film2:null},
-        {b:"Land Rover",m:"Evoque",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Land Rover",m:"Discovery Sport",t:"轎跑",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Land Rover",m:"Range Rover",t:"轎車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Land Rover",m:"Range Rover Velar",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Land Rover",m:"Discovery",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"U7",t:"轎車",c1:25000,c2:22000,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"U6 GT",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"URX",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"U5",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"S5",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Luxgen",m:"M7",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:200008000,film2:null},
-        {b:"Luxgen",m:"N7",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:60,wrapc:60,film:20000,film2:null},
-        {b:"MAZDA",m:"CX-3",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MAZDA",m:"MX-5",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:50,wrapc:50,film:null,film2:null},
-        {b:"MAZDA",m:"Mazda3",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MAZDA",m:"Mazda6",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MAZDA",m:"Mazda6 wagon",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MAZDA",m:"CX-5",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"MAZDA",m:"CX-9",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MAZDA",m:"老款MAZDA5",t:"掀背",c1:31000,c2:28000,c3:19000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"MAZDA",m:"mazda5",t:"掀背",c1:31000,c2:28000,c3:19000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"MAZDA",m:"CX-60",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"MG",m:"HS",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MG",m:"ZS",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"MG",m:"MG4",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"MG",m:"G50",t:"轎車",c1:31000,c2:28000,c3:null,wrap:null,wrapc:null,film:25000,film2:null},
-        {b:"Maserati",m:"Levante",t:"MPV",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Maserati",m:"Grecale",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Maserati",m:"Ghibli",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Mini",m:"Countryman",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Mini",m:"Mini Cooper",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Mini",m:"Clubman",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"Mini",m:"GP",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"Kicks",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"X-trail",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"Altima",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"Sentra",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"Juke",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"TIIDA",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"GTR",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"NISSAN",m:"LEAF",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"NISSAN",m:"Ariya",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:20000,film2:null},
-        {b:"NISSAN",m:"Livina",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Peugeot",m:"5008",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:60,wrapc:60,film:22000,film2:null},
-        {b:"Peugeot",m:"3008",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:20000,film2:null},
-        {b:"Peugeot",m:"508",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"Porsche",m:"Macan",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:85,wrapc:85,film:null,film2:null},
-        {b:"Porsche",m:"Cayenne",t:"轎跑",c1:25000,c2:22000,c3:13000,wrap:70,wrapc:70,film:22000,film2:null},
-        {b:"Porsche",m:"Taycan",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Porsche",m:"718",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Porsche",m:"911",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Porsche",m:"Panamera",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:20000,film2:null},
-        {b:"Skoda",m:"Karoq",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Skoda",m:"Kamiq",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Skoda",m:"Kodiaq",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:65,wrapc:65,film:22000,film2:null},
-        {b:"Skoda",m:"Fabia",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Skoda",m:"Scala",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Skoda",m:"SuperB",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Skoda",m:"Octavia",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Skoda",m:"Octavia Combi",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"Levorg",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"Forester",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"XV",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"Outback",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"BRZ",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"WRX",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"WRX Wagon",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Subaru",m:"Crosstrek",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Suzuki",m:"Swift",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Suzuki",m:"SX4",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Suzuki",m:"Vitara",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Suzuki",m:"Jimny",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Suzuki",m:"Ignis",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"TESLA",m:"MODEL 3",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"TESLA",m:"MODEL Y",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"TESLA",m:"MODEL X",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"TESLA",m:"MODEL S",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Corolla Cross",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"RAV4",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"CHR",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"BZ4X",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:22000,film2:null},
-        {b:"Toyota",m:"ALTIS",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Toyota",m:"Auris",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Toyota",m:"CAMRY",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"VIOS",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Corolla Sport",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Prius PHV",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"GR YARIS",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Fortis",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Toyota",m:"Alphard",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:75,wrapc:75,film:null,film2:null},
-        {b:"Toyota",m:"SIENNA",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Hiace",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Granvia",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"GR86",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Toyota",m:"Supra",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:4,wrapc:4,film:18000,film2:null},
-        {b:"Toyota",m:"Hilux",t:"轎車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Wish",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Toyota",m:"Previa",t:"轎車",c1:33000,c2:30000,c3:21000,wrap:75,wrapc:75,film:null,film2:null},
-        {b:"Toyota",m:"Yaris Cross",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"VOLVO",m:"V40",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"VOLVO",m:"V60",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"VOLVO",m:"V90",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"VOLVO",m:"S60",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"VOLVO",m:"S90",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"VOLVO",m:"XC40",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:55,wrapc:55,film:null,film2:null},
-        {b:"VOLVO",m:"XC60",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"VOLVO",m:"XC90",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:23000,film2:null},
-        {b:"Volkswagen",m:"T5",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"T6",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Tiguan",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:20000,film2:null},
-        {b:"Volkswagen",m:"Allspace",t:"旅行車",c1:25000,c2:22000,c3:13000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Volkswagen",m:"T-ROC",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"T-Cross",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Golf",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Golf GTI",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Variant",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"Volkswagen",m:"Arteon",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Shooting Brake",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Polo",t:"掀背",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Caddy",t:"休旅車",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Multivan",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"Volkswagen",m:"Touran",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"Volkswagen",m:"California",t:"轎車",c1:33000,c2:30000,c3:21000,wrap:70,wrapc:70,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Eclipse (日蝕)",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Outlander",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Fortis",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Colt plus",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Lancer",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Savrin",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"三菱 (Mitsubishi)",m:"Zinger",t:"轎車",c1:25000,c2:22000,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"其他超跑/美系",m:"Lamborghini Urus",t:"轎跑",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"其他超跑/美系",m:"Ferrari 488",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"其他超跑/美系",m:"Chevrolet Camaro",t:"轎跑",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"其他超跑/美系",m:"McLaren",t:"轎車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Santa fe",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Tucson",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:20000,film2:null},
-        {b:"現代 Hyundai",m:"Elantra",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Venue",t:"掀背",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Kona",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Ioniq5",t:"休旅車",c1:23000,c2:20000,c3:11000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Custin",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:75,wrapc:75,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Staria",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"現代 Hyundai",m:"Ioniq6",t:"休旅車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"福特 Ford",m:"Kuga",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:20000,film2:null},
-        {b:"福特 Ford",m:"Focus",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"福特 Ford",m:"Focus Wagon",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"福特 Ford",m:"Focus Active",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"福特 Ford",m:"Mondeo wagon",t:"旅行車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"福特 Ford",m:"貨卡 Ranger",t:"休旅車",c1:33000,c2:30000,c3:21000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"福特 Ford",m:"野馬 Mustang",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:75,wrapc:75,film:null,film2:null},
-        {b:"福特 Ford",m:"Territory",t:"轎車",c1:25000,c2:22000,c3:null,wrap:null,wrapc:null,film:22000,film2:null},
-        {b:"福特 Ford",m:"旅玩家 Tourneo",t:"休旅車",c1:null,c2:null,c3:null,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"AMG-GT",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:22000,film2:null},
-        {b:"賓士 (Mercedes)",m:"C系列 (C-Class)",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"CLA",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"CLS",t:"轎車",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"E系列 (E-Class)",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"G CAR (G-Class)",t:"轎跑",c1:33000,c2:30000,c3:21000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"S350D (S-Class)",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"GLS",t:"轎車",c1:26000,c2:23000,c3:14000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"GLE",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:75,wrapc:75,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"GLB",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:20000,film2:null},
-        {b:"賓士 (Mercedes)",m:"GLA",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:65,wrapc:65,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"GLC",t:"轎跑",c1:24000,c2:21000,c3:12000,wrap:60,wrapc:60,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"ML400",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"V-250D (V-Class)",t:"轎跑",c1:31000,c2:28000,c3:19000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQA",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQE",t:"轎車",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQE SUV",t:"休旅車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQS",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQB (五人座)",t:"轎車",c1:24000,c2:21000,c3:12000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"EQB (七人座)",t:"轎車",c1:25000,c2:22000,c3:13000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"A180 (A-Class)",t:"轎跑",c1:22000,c2:19000,c3:10000,wrap:null,wrapc:null,film:null,film2:null},
-        {b:"賓士 (Mercedes)",m:"B180 (B-Class)",t:"轎跑",c1:23000,c2:20000,c3:11000,wrap:null,wrapc:null,film:null,film2:null}
+        {b:"LEXUS",m:"CT200H",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"LEXUS",m:"RX",c2:22000,c3:13000,wrap:65,film:22000},
+        {b:"LEXUS",m:"NX",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"LEXUS",m:"RZ",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"LEXUS",m:"UX200",c2:20000,c3:11000,wrap:60,film:null},
+        {b:"LEXUS",m:"IS",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"LEXUS",m:"ES",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"LEXUS",m:"RC300",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"LEXUS",m:"LC",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"LEXUS",m:"LS",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"LEXUS",m:"LBX",c2:20000,c3:null,wrap:null,film:null},
+        {b:"LEXUS",m:"LM",c2:28000,c3:19000,wrap:null,film:28000},
+        {b:"BMW",m:"X1",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"BMW",m:"iX1",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"BMW",m:"X2",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"BMW",m:"X3",c2:21000,c3:12000,wrap:60,film:22000},
+        {b:"BMW",m:"X4",c2:21000,c3:12000,wrap:60,film:22000},
+        {b:"BMW",m:"X5",c2:22000,c3:13000,wrap:70,film:22000},
+        {b:"BMW",m:"X6",c2:22000,c3:13000,wrap:70,film:22000},
+        {b:"BMW",m:"X7",c2:23000,c3:14000,wrap:80,film:null},
+        {b:"BMW",m:"1 Series",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"BMW",m:"2 Series",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"BMW",m:"3 Series",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"BMW",m:"Touring (旅行車)",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"BMW",m:"i4",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"BMW",m:"4 Series",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"BMW",m:"5 Series",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"BMW",m:"6 Series",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"BMW",m:"7 Series",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"BMW",m:"8 Series",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"BMW",m:"IX",c2:22000,c3:13000,wrap:70,film:null},
+        {b:"BMW",m:"M2",c2:19000,c3:10000,wrap:70,film:null},
+        {b:"BMW",m:"Z4",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"BMW",m:"2AT",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"AMG-GT",c2:21000,c3:12000,wrap:65,film:22000},
+        {b:"賓士 (Mercedes)",m:"C系列 (C-Class)",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"CLA",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"CLS",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"E系列 (E-Class)",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"G CAR (G-Class)",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"S350D (S-Class)",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"GLS",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"GLE",c2:22000,c3:13000,wrap:75,film:null},
+        {b:"賓士 (Mercedes)",m:"GLB",c2:22000,c3:13000,wrap:null,film:20000},
+        {b:"賓士 (Mercedes)",m:"GLA",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"賓士 (Mercedes)",m:"GLC",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"賓士 (Mercedes)",m:"ML400",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"V-250D (V-Class)",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQA",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQE",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQE SUV",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQS",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQB (五人座)",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"EQB (七人座)",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"A180 (A-Class)",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"賓士 (Mercedes)",m:"B180 (B-Class)",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Porsche",m:"Macan",c2:21000,c3:12000,wrap:85,film:null},
+        {b:"Porsche",m:"Cayenne",c2:22000,c3:13000,wrap:70,film:22000},
+        {b:"Porsche",m:"Taycan",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"Porsche",m:"718",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Porsche",m:"911",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Porsche",m:"Panamera",c2:21000,c3:12000,wrap:65,film:20000},
+        {b:"Audi",m:"Q5",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Audi",m:"Q3",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Audi",m:"Q2",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Audi",m:"Q7",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Audi",m:"E-Tron",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"Audi",m:"E-Tron GT",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Audi",m:"Q8",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Audi",m:"RS6",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Audi",m:"A1",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Audi",m:"A3",c2:19000,c3:10000,wrap:55,film:null},
+        {b:"Audi",m:"A4",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Audi",m:"A5",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"Audi",m:"A6",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Audi",m:"A7",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Audi",m:"A8",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Audi",m:"A6 Avant (Wagon)",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Toyota",m:"Corolla Cross",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Toyota",m:"RAV4",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Toyota",m:"CHR",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Toyota",m:"BZ4X",c2:21000,c3:12000,wrap:60,film:22000},
+        {b:"Toyota",m:"ALTIS",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"Toyota",m:"Auris",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"Toyota",m:"CAMRY",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Toyota",m:"VIOS",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Toyota",m:"Corolla Sport",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Toyota",m:"Prius PHV",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Toyota",m:"GR YARIS",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Toyota",m:"Fortis",c2:22000,c3:13000,wrap:60,film:null},
+        {b:"Toyota",m:"Alphard",c2:28000,c3:19000,wrap:75,film:null},
+        {b:"Toyota",m:"SIENNA",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Toyota",m:"Hiace",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"Toyota",m:"Granvia",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"Toyota",m:"GR86",c2:20000,c3:11000,wrap:60,film:null},
+        {b:"Toyota",m:"Supra",c2:20000,c3:11000,wrap:4,film:18000},
+        {b:"Toyota",m:"Hilux",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"Toyota",m:"Wish",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Toyota",m:"Previa",c2:30000,c3:21000,wrap:75,film:null},
+        {b:"Toyota",m:"Yaris Cross",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Infiniti",m:"Q50",c2:20000,c3:11000,wrap:60,film:null},
+        {b:"Infiniti",m:"Q60",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Infiniti",m:"Q30",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Infiniti",m:"QX50",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Infiniti",m:"QX55",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Infiniti",m:"QX60",c2:22000,c3:13000,wrap:null,film:20000},
+        {b:"Infiniti",m:"FX35",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"福特 Ford",m:"Kuga",c2:21000,c3:12000,wrap:65,film:20000},
+        {b:"福特 Ford",m:"Focus",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"福特 Ford",m:"Focus Wagon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"福特 Ford",m:"Focus Active",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"福特 Ford",m:"Mondeo wagon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"福特 Ford",m:"貨卡 Ranger",c2:30000,c3:21000,wrap:65,film:null},
+        {b:"福特 Ford",m:"野馬 Mustang",c2:21000,c3:12000,wrap:75,film:null},
+        {b:"福特 Ford",m:"Territory",c2:22000,c3:null,wrap:null,film:22000},
+        {b:"福特 Ford",m:"旅玩家 Tourneo",c2:null,c3:null,wrap:null,film:null},
+        {b:"Volkswagen",m:"T5",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Volkswagen",m:"T6",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Tiguan",c2:21000,c3:12000,wrap:65,film:20000},
+        {b:"Volkswagen",m:"Allspace",c2:22000,c3:13000,wrap:65,film:null},
+        {b:"Volkswagen",m:"T-ROC",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Volkswagen",m:"T-Cross",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Golf",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Golf GTI",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Variant",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"Volkswagen",m:"Arteon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Shooting Brake",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Polo",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Caddy",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Multivan",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"Volkswagen",m:"Touran",c2:23000,c3:14000,wrap:60,film:null},
+        {b:"Volkswagen",m:"California",c2:30000,c3:21000,wrap:70,film:null},
+        {b:"MAZDA",m:"CX-3",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"MAZDA",m:"MX-5",c2:20000,c3:11000,wrap:50,film:null},
+        {b:"MAZDA",m:"Mazda3",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"MAZDA",m:"Mazda6",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"MAZDA",m:"Mazda6 wagon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"MAZDA",m:"CX-5",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"MAZDA",m:"CX-9",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"MAZDA",m:"老款MAZDA5",c2:28000,c3:19000,wrap:65,film:null},
+        {b:"MAZDA",m:"mazda5",c2:28000,c3:19000,wrap:65,film:null},
+        {b:"MAZDA",m:"CX-60",c2:22000,c3:13000,wrap:65,film:null},
+        {b:"VOLVO",m:"V40",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"VOLVO",m:"V60",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"VOLVO",m:"V90",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"VOLVO",m:"S60",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"VOLVO",m:"S90",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"VOLVO",m:"XC40",c2:21000,c3:12000,wrap:55,film:null},
+        {b:"VOLVO",m:"XC60",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"VOLVO",m:"XC90",c2:22000,c3:13000,wrap:null,film:23000},
+        {b:"現代 Hyundai",m:"Santa fe",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"現代 Hyundai",m:"Tucson",c2:21000,c3:12000,wrap:65,film:20000},
+        {b:"現代 Hyundai",m:"Elantra",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"現代 Hyundai",m:"Venue",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"現代 Hyundai",m:"Kona",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"現代 Hyundai",m:"Ioniq5",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"現代 Hyundai",m:"Custin",c2:30000,c3:21000,wrap:75,film:null},
+        {b:"現代 Hyundai",m:"Staria",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"現代 Hyundai",m:"Ioniq6",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Honda",m:"CRZ",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Honda",m:"HRV",c2:21000,c3:12000,wrap:55,film:null},
+        {b:"Honda",m:"CRV",c2:21000,c3:12000,wrap:null,film:20000},
+        {b:"Honda",m:"FIT",c2:19000,c3:10000,wrap:50,film:null},
+        {b:"Honda",m:"Odyssey",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Honda",m:"Civic",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Peugeot",m:"5008",c2:22000,c3:13000,wrap:60,film:22000},
+        {b:"Peugeot",m:"3008",c2:21000,c3:12000,wrap:null,film:20000},
+        {b:"Peugeot",m:"508",c2:20000,c3:11000,wrap:70,film:null},
+        {b:"Fiat / Alfa",m:"Fiat",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Fiat / Alfa",m:"Stelvio",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Fiat / Alfa",m:"Giulia",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Fiat / Alfa",m:"Tonale",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"TESLA",m:"MODEL 3",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"TESLA",m:"MODEL Y",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"TESLA",m:"MODEL X",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"TESLA",m:"MODEL S",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Land Rover",m:"Defender 130",c2:32000,c3:null,wrap:null,film:null},
+        {b:"Land Rover",m:"Defender 90",c2:null,c3:null,wrap:null,film:null},
+        {b:"Land Rover",m:"Defender 110",c2:30000,c3:21000,wrap:70,film:22000},
+        {b:"Land Rover",m:"Evoque",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"Land Rover",m:"Discovery Sport",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Land Rover",m:"Range Rover",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Land Rover",m:"Range Rover Velar",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Land Rover",m:"Discovery",c2:null,c3:null,wrap:null,film:null},
+        {b:"Maserati",m:"Levante",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Maserati",m:"Grecale",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Maserati",m:"Ghibli",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Jaguar",m:"E-Pace",c2:21000,c3:12000,wrap:65,film:null},
+        {b:"Jaguar",m:"F-Pace",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Jaguar",m:"I-Pace",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Jaguar",m:"F-Type",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Jaguar",m:"XF",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Mini",m:"Countryman",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"Mini",m:"Mini Cooper",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Mini",m:"Clubman",c2:20000,c3:11000,wrap:70,film:null},
+        {b:"Mini",m:"GP",c2:null,c3:null,wrap:null,film:null},
+        {b:"Kia",m:"Sportage",c2:22000,c3:13000,wrap:60,film:null},
+        {b:"Kia",m:"EV6",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Kia",m:"Stonic",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Kia",m:"Sorento",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Kia",m:"Picanto",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Kia",m:"Sportswagon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Kia",m:"Carens",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Kia",m:"Carnival",c2:28000,c3:19000,wrap:null,film:null},
+        {b:"Kia",m:"KA4 Carnival",c2:30000,c3:21000,wrap:null,film:null},
+        {b:"Kia",m:"EV9",c2:23000,c3:null,wrap:null,film:null},
+        {b:"Kia",m:"Ceed",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"其他超跑/美系",m:"Lamborghini Urus",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"其他超跑/美系",m:"Ferrari 488",c2:null,c3:null,wrap:null,film:null},
+        {b:"其他超跑/美系",m:"Chevrolet Camaro",c2:null,c3:null,wrap:null,film:null},
+        {b:"其他超跑/美系",m:"McLaren",c2:null,c3:null,wrap:null,film:null},
+        {b:"Skoda",m:"Karoq",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Skoda",m:"Kamiq",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Skoda",m:"Kodiaq",c2:22000,c3:13000,wrap:65,film:22000},
+        {b:"Skoda",m:"Fabia",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Skoda",m:"Scala",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Skoda",m:"SuperB",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Skoda",m:"Octavia",c2:19000,c3:10000,wrap:65,film:null},
+        {b:"Skoda",m:"Octavia Combi",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"MG",m:"HS",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"MG",m:"ZS",c2:21000,c3:12000,wrap:60,film:null},
+        {b:"MG",m:"MG4",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"MG",m:"G50",c2:28000,c3:null,wrap:null,film:25000},
+        {b:"Subaru",m:"Levorg",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Subaru",m:"Forester",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Subaru",m:"XV",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Subaru",m:"Outback",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Subaru",m:"BRZ",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Subaru",m:"WRX",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Subaru",m:"WRX Wagon",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Subaru",m:"Crosstrek",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Suzuki",m:"Swift",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Suzuki",m:"SX4",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Suzuki",m:"Vitara",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Suzuki",m:"Jimny",c2:22000,c3:13000,wrap:null,film:null},
+        {b:"Suzuki",m:"Ignis",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"NISSAN",m:"Kicks",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"NISSAN",m:"X-trail",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"NISSAN",m:"Altima",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"NISSAN",m:"Sentra",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"NISSAN",m:"Juke",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"NISSAN",m:"TIIDA",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"NISSAN",m:"GTR",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"NISSAN",m:"LEAF",c2:20000,c3:11000,wrap:65,film:null},
+        {b:"NISSAN",m:"Ariya",c2:null,c3:null,wrap:null,film:20000},
+        {b:"NISSAN",m:"Livina",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Eclipse (日蝕)",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Outlander",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Fortis",c2:19000,c3:10000,wrap:60,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Colt plus",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Lancer",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Savrin",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"三菱 (Mitsubishi)",m:"Zinger",c2:22000,c3:null,wrap:null,film:null},
+        {b:"Luxgen",m:"U7",c2:22000,c3:null,wrap:null,film:null},
+        {b:"Luxgen",m:"U6 GT",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Luxgen",m:"URX",c2:23000,c3:14000,wrap:null,film:null},
+        {b:"Luxgen",m:"U5",c2:20000,c3:11000,wrap:null,film:null},
+        {b:"Luxgen",m:"S5",c2:19000,c3:10000,wrap:null,film:null},
+        {b:"Luxgen",m:"M7",c2:23000,c3:14000,wrap:null,film:200008000},
+        {b:"Luxgen",m:"N7",c2:22000,c3:13000,wrap:60,film:20000},
+        {b:"Citroen / Smart",m:"Berlingo",c2:23000,c3:14000,wrap:70,film:null},
+        {b:"Citroen / Smart",m:"C5",c2:21000,c3:12000,wrap:null,film:null},
+        {b:"Citroen / Smart",m:"Smart Fortwo",c2:null,c3:null,wrap:null,film:null}
     ]
-    var brands = ["Audi","BMW","Citroen / Smart","Fiat / Alfa","Honda","Infiniti","Jaguar","Kia","LEXUS","Land Rover","Luxgen","MAZDA","MG","Maserati","Mini","NISSAN","Peugeot","Porsche","Skoda","Subaru","Suzuki","TESLA","Toyota","VOLVO","Volkswagen","三菱 (Mitsubishi)","其他超跑/美系","現代 Hyundai","福特 Ford","賓士 (Mercedes)"];
+    var aliasMap = {
+        "c200":"C-Class","c260":"C-Class","c300":"C-Class","c350":"C-Class",
+        "e200":"E-Class","e300":"E-Class","e450":"E-Class",
+        "a200":"A-Class","a250":"A-Class",
+        "320":"3 Series","330":"3 Series","340":"3 Series",
+        "520":"5 Series","530":"5 Series","540":"5 Series","550":"5 Series",
+        "420":"4 Series","430":"4 Series",
+        "x3":"X3","x5":"X5","x1":"X1","x7":"X7",
+        "rx300":"RX","rx350":"RX","nx300":"NX",
+        "rav4":"RAV4","rav":"RAV4",
+        "model3":"Model 3","m3":"Model 3",
+        "model y":"Model Y","my":"Model Y"
+    };
+    var brands = ["Audi","BMW","Citroen / Smart","Fiat / Alfa","Honda","Infiniti","Jaguar","Kia","LEXUS","Land Rover","Luxgen","MAZDA","MG","Maserati","Mini","NISSAN","Peugeot","Porsche","Skoda","Subaru","Suzuki","TESLA","Toyota","VOLVO","Volkswagen","三菱 (Mitsubishi)","其他超跑/美系","現代 Hyundai","福特 Ford","賓士 (Mercedes)"]
     var car = null, svcs = [], color = null, film = null;
     var search = document.getElementById("search");
     var results = document.getElementById("results");
@@ -430,53 +447,72 @@
         for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
     }
     
+    
+    
+document.getElementById("carLists").addEventListener("click", function(e) {
+        var item = e.target.closest(".car-item");
+        if (item) {
+            selCar(item.dataset.b, item.dataset.m);
+        }
+    });
+
+    function showCarInfo(c) {
+        document.getElementById("carTitle").textContent = c.b + " " + c.m;
+        var specs = [];
+        if (c.l) specs.push({l:"車長",v:c.l+" mm"});
+        if (c.w) specs.push({l:"車寬",v:c.w+" mm"});
+        if (c.h) specs.push({l:"車高",v:c.h+" mm"});
+        if (c.wb) specs.push({l:"軸距",v:c.wb+" mm"});
+        document.getElementById("carSpecs").innerHTML = specs.map(function(s) {
+            return '<div class="spec-item"><div class="label">' + s.l + '</div><div class="value">' + s.v + '</div></div>';
+        }).join("");
+        carInfo.classList.add("show");
+    }
+    
     function selCar(b, m) {
         var c = db.find(function(x) { return x.b === b && x.m === m; });
         if (c) {
             car = c;
             showCarInfo(c);
             // 鍍膜
-            var coatingHtml = '';
-            if (c.c1) coatingHtml += '<div class="service-opt" data-t="coating" data-n="雙層石墨烯鍍膜" data-p="' + c.c1 + '"><span class="name">雙層石墨烯鍍膜</span><span class="price">$' + c.c1.toLocaleString() + '</span></div>';
-            if (c.c2) coatingHtml += '<div class="service-opt" data-t="coating" data-n="雙層陶瓷鍍膜" data-p="' + c.c2 + '"><span class="name">雙層陶瓷鍍膜</span><span class="price">$' + c.c2.toLocaleString() + '</span></div>';
-            if (c.c3) coatingHtml += '<div class="service-opt" data-t="coating" data-n="單層鍍膜" data-p="' + c.c3 + '"><span class="name">單層鍍膜</span><span class="price">$' + c.c3.toLocaleString() + '</span></div>';
-            document.getElementById("coatingList").innerHTML = coatingHtml;
+            document.getElementById("coatingList").innerHTML = 
+                '<div class="service-opt" data-t="coating" data-n="雙層石墨烯鍍膜" data-p="' + c.c1 + '"><span class="name">雙層石墨烯鍍膜</span><span class="price">$' + c.c1.toLocaleString() + '</span></div>' +
+                '<div class="service-opt" data-t="coating" data-n="雙層陶瓷鍍膜" data-p="' + c.c2 + '"><span class="name">雙層陶瓷鍍膜</span><span class="price">$' + c.c2.toLocaleString() + '</span></div>' +
+                '<div class="service-opt" data-t="coating" data-n="單層鍍膜" data-p="' + c.c3 + '"><span class="name">單層鍍膜</span><span class="price">$' + c.c3.toLocaleString() + '</span></div>';
             // 包膜
-            var wrapHtml = '';
-            if (c.wrap) {
-                wrapHtml += '<div class="service-opt" data-t="wrap" data-n="全車TPU透明膜" data-p="' + (c.wrap * 1000) + '"><span class="name">TPU透明膜</span><span class="price">$' + (c.wrap * 1000).toLocaleString() + '</span></div>';
-                wrapHtml += '<div class="service-opt" data-t="wrap" data-n="全車TPU消光膜" data-p="' + (c.wrap * 1000 + 5000) + '"><span class="name">TPU消光膜</span><span class="price">$' + (c.wrap * 1000 + 5000).toLocaleString() + '</span></div>';
-            } else {
-                wrapHtml = '<div style="color:#999;font-size:14px;">此車型暫無包膜報價</div>';
+            var wrapHtml = '<div class="service-opt" data-t="wrap" data-n="全車包膜" data-p="' + (c.wrap * 1000) + '"><span class="name">全車包膜</span><span class="price">$' + (c.wrap * 1000).toLocaleString() + '</span></div>';
+            if (c.wrapc) {
+                wrapHtml += '<div class="service-opt" data-t="wrapc" data-n="全車改色包膜" data-p="' + (c.wrapc * 1000) + '"><span class="name">全車改色包膜</span><span class="price">$' + (c.wrapc * 1000).toLocaleString() + '</span></div>';
             }
             document.getElementById("wrapList").innerHTML = wrapHtml;
-            // 改色膜
-            var colorHtml = '';
+            // 隔熱紙
+            var filmHtml = "";
+            if (c.film) {
+                filmHtml += '<div class="film-opt" data-t="film" data-n="3M極黑" data-p="' + c.film + '"><div class="name">3M 極黑</div><div class="desc">$' + c.film.toLocaleString() + '</div></div>';
+            }
+            if (c.film2) {
+                filmHtml += '<div class="film-opt" data-t="film2" data-n="3M極透" data-p="' + c.film2 + '"><div class="name">3M 極透</div><div class="desc">$' + c.film2.toLocaleString() + '</div></div>';
+            }
+            if (filmHtml === "") filmHtml = '<div style="color:#999;font-size:14px;">此車型暫無隔熱紙報價</div>';
+            document.getElementById("filmList").innerHTML = filmHtml;
+            // 改色
+            var colorHtml = "";
             if (c.wrapc) {
-                colorHtml = '<div class="service-opt" data-t="color" data-n="改色膜PVC" data-p="' + (c.wrapc * 1000) + '"><span class="name">PVC</span><span class="price">$' + (c.wrapc * 1000).toLocaleString() + '</span></div>';
-                colorHtml += '<div class="service-opt" data-t="color" data-n="改色膜PET" data-p="' + (c.wrapc * 1000 + 5000) + '"><span class="name">PET</span><span class="price">$' + (c.wrapc * 1000 + 5000).toLocaleString() + '</span></div>';
-                colorHtml += '<div class="service-opt" data-t="color" data-n="改色膜TPU" data-p="' + (c.wrapc * 1000 + 15000) + '"><span class="name">TPU</span><span class="price">$' + (c.wrapc * 1000 + 15000).toLocaleString() + '</span></div>';
-            } else {
-                colorHtml = '<div style="color:#999;font-size:14px;">此車型暫無改色膜報價</div>';
+                colorHtml = '<div class="color-opt" data-t="color" data-n="PVC改色膜" data-p="60000"><div class="name">PVC</div></div>' +
+                            '<div class="color-opt" data-t="color" data-n="PET改色膜" data-p="65000"><div class="name">PET</div></div>' +
+                            '<div class="color-opt" data-t="color" data-n="TPU改色膜" data-p="85000"><div class="name">TPU</div></div>';
             }
             document.getElementById("colorList").innerHTML = colorHtml;
-            // 隔熱紙
-            var filmHtml = '';
-            if (c.film) {
-                filmHtml += '<div class="film-opt" data-t="film" data-n="3M極黑隔熱紙" data-p="' + c.film + '"><div class="name">3M 極黑</div><div class="desc">$' + c.film.toLocaleString() + '</div></div>';
-            }
-            if (filmHtml === '') filmHtml = '<div style="color:#999;font-size:14px;">此車型暫無隔熱紙報價</div>';
-            document.getElementById("filmList").innerHTML = filmHtml;
-            // 事件
+            // 綁定事件
             document.querySelectorAll("#coatingList .service-opt").forEach(function(el) {
                 el.onclick = function() { toggleSvc(this, "coating"); };
             });
             document.querySelectorAll("#wrapList .service-opt").forEach(function(el) {
-                el.onclick = function() { toggleSvc(this, "wrap"); };
+                el.onclick = function() { toggleSvc(this, el.dataset.t); };
             });
-            document.querySelectorAll("#colorList .service-opt").forEach(function(el) {
+            document.querySelectorAll("#colorList .color-opt").forEach(function(el) {
                 el.onclick = function() { 
-                    document.querySelectorAll("#colorList .service-opt").forEach(function(x) { x.classList.remove("selected"); });
+                    document.querySelectorAll("#colorList .color-opt").forEach(function(x) { x.classList.remove("selected"); });
                     this.classList.add("selected");
                     color = {n:this.dataset.n, p:parseInt(this.dataset.p)};
                 };
@@ -496,7 +532,7 @@
         step2.style.display = "block";
         summary.style.display = "block";
         results.style.display = "none";
-        carInfo.scrollIntoView({behavior: "smooth"});
+        step2.scrollIntoView({behavior: "smooth"});
     }
     
     function toggleSvc(el, type) {
@@ -508,19 +544,22 @@
             el.classList.add("selected");
             svcs.push({t:type, n:n, p:p});
         }
+        document.getElementById("colorGroup").style.display = svcs.some(function(s) { return s.n === "全車改色包膜"; }) ? "block" : "none";
     }
     
     search.onkeyup = search.oninput = function() {
         var q = search.value.toLowerCase().trim();
         results.style.display = "none";
         if (!q) return;
+        var target = aliasMap[q] || q;
         var r = db.filter(function(c) {
             var s = (c.b + " " + c.m + " " + c.t).toLowerCase();
-            return s.indexOf(q) >= 0 || s.replace(/[^a-z0-9]/g, "").indexOf(q.replace(/[^a-z0-9]/g, "")) >= 0;
+            var t = target.toLowerCase();
+            return s.indexOf(t) >= 0 || s.replace(/[^a-z0-9]/g, "").indexOf(t.replace(/[^a-z0-9]/g, "")) >= 0;
         }).slice(0, 10);
         if (r.length > 0) {
             results.innerHTML = r.map(function(c) {
-                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div></div>';
+                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div>';
             }).join("");
             var items = results.querySelectorAll(".search-item");
             for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
@@ -544,17 +583,6 @@
     
     document.getElementById("closeModal").onclick = function() { document.getElementById("modal").classList.remove("show"); };
     document.getElementById("modal").onclick = function(e) { if (e.target.id === "modal") document.getElementById("modal").classList.remove("show"); };
-    
-    // 回到頂部按鈕
-    var backToTop = document.getElementById("backToTop");
-    window.onscroll = function() {
-        if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
-            backToTop.classList.add("show");
-        } else {
-            backToTop.classList.remove("show");
-        }
-    };
-    backToTop.onclick = function() { window.scrollTo({top:0, behavior:"smooth"}); };
     
     showCarList();
     </script>
