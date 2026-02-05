@@ -606,7 +606,7 @@ const carData = [
         "其他超跑/美系": "other"
     };
     
-    // 完整別名對照表 - 支援各種縮寫
+    // 完整別名對照表
     const aliasMap = {
         // C系列
         "c200": "C系列", "c20": "C系列", "c260": "C系列", "c26": "C系列",
@@ -726,6 +726,9 @@ const carData = [
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 
+                // 檢查是否為純數字搜尋 (如 "718", "520", "30")
+                var isNumberOnly = /^\d+$/.test(query);
+                
                 // 數字部分包含查詢
                 var numbers = model.match(/\d+/g) || [];
                 var hasNumberMatch = numbers.some(function(num) {
@@ -741,7 +744,16 @@ const carData = [
                     }
                 }
                 
-                var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || hasNumberMatch || aliasMatch;
+                // 搜尋條件
+                // - 如果是純數字搜尋，只看數字匹配
+                // - 如果是文字搜尋，看品牌和車款名稱
+                var visible = false;
+                if (isNumberOnly) {
+                    visible = hasNumberMatch || aliasMatch;
+                } else {
+                    visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || aliasMatch;
+                }
+                
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
             });
