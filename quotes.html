@@ -312,12 +312,14 @@
     }
     
     
-    document.getElementById(carLists).addEventListener(click, function(e) {
-        var item = e.target.closest(\.car-item);
+    
+document.getElementById("carLists").addEventListener("click", function(e) {
+        var item = e.target.closest(".car-item");
         if (item) {
             selCar(item.dataset.b, item.dataset.m);
         }
     });
+
     function showCarInfo(c) {
         document.getElementById("carTitle").textContent = c.b + " " + c.m;
         var specs = [];
