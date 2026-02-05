@@ -356,9 +356,16 @@ const carData = [
         "modely": "MODEL Y", "my": "MODEL Y", "modelx": "MODEL X", "models": "MODEL S"
     };
     
+    function createSpan(cls, text) {
+        var span = document.createElement("span");
+        span.className = cls;
+        span.textContent = text;
+        return span;
+    }
+    
     function formatPrice(val) {
         if (val === null) return "-";
-        return '<span class="price-value">NT$ " + val.toLocaleString() + "</span>";
+        return createSpan("price-value", "NT$ " + val.toLocaleString()).outerHTML;
     }
     
     function init() {
@@ -413,11 +420,16 @@ const carData = [
             ["3M 極透", car.m3Clear]
         ];
         
-        var tableHTML = "<tr><th>項目</th><th>價格</th></tr>";
         items.forEach(function(item) {
-            tableHTML += "<tr><td>" + item[0] + "</td><td>" + formatPrice(item[1]) + "</td></tr>";
+            var row = document.createElement("tr");
+            var th = document.createElement("th");
+            th.textContent = item[0];
+            row.appendChild(th);
+            var td = document.createElement("td");
+            td.innerHTML = formatPrice(item[1]);
+            row.appendChild(td);
+            table.appendChild(row);
         });
-        table.innerHTML = tableHTML;
         
         var priceTable = document.getElementById("priceTable");
         priceTable.innerHTML = "";
