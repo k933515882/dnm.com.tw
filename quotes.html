@@ -449,11 +449,12 @@ const carData = [
             var brandVisible = false;
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
-                // 數字必須前綴匹配
+                
+                // 數字部分包含查詢（不限制前綴）
                 var numbers = model.match(/\d+/g) || [];
-                var searchKey = numbers.join("");
-                // 檢查 query 是否是 searchKey 的前綴
-                var numberMatch = query.length > 0 && searchKey.length > 0 && searchKey.indexOf(query) === 0;
+                var hasNumberMatch = numbers.some(function(num) {
+                    return num.indexOf(query) !== -1 || query.indexOf(num) !== -1;
+                });
                 
                 // 別名對照檢查
                 var aliasMatch = false;
@@ -464,8 +465,8 @@ const carData = [
                     }
                 }
                 
-                // 搜尋條件：品牌包含查詢 OR 車款名稱包含查詢 OR 數字前綴匹配 OR 別名匹配
-                var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || numberMatch || aliasMatch;
+                // 搜尋條件：品牌包含 OR 車款名稱包含 OR 數字包含匹配 OR 別名匹配
+                var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || hasNumberMatch || aliasMatch;
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
             });
