@@ -17,24 +17,20 @@
         .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
         .step-num { background: var(--primary); color: var(--white); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
         .step-title { font-size: 18px; font-weight: 700; }
-        .search-box { position: relative; margin-bottom: 16px; }
-        .search-input { width: 100%; padding: 14px 20px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
+        .search-input { width: 100%; padding: 14px 20px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; margin-bottom: 16px; }
         .search-input:focus { border-color: var(--primary); }
         .search-results { position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
-        .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
+        .search-item { padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .search-item:hover { background: var(--light); }
-        .search-item .icon { width: 40px; height: 40px; background: var(--light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-        .search-item .info { flex: 1; }
         .search-item .name { font-weight: 600; font-size: 15px; }
         .search-item .type { font-size: 12px; color: var(--gray); }
         .car-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .car-item { display: flex; flex-direction: column; align-items: center; padding: 16px 12px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .car-item { padding: 16px 12px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; text-align: center; transition: all 0.2s; }
         .car-item:hover { border-color: var(--primary); }
         .car-item.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .car-item .icon { width: 48px; height: 48px; background: var(--white); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; }
-        .car-item .name { font-size: 13px; font-weight: 600; text-align: center; }
-        .car-item .type { font-size: 11px; color: var(--gray); margin-top: 4px; }
+        .car-item .name { font-size: 14px; font-weight: 600; }
+        .car-item .type { font-size: 12px; color: var(--gray); margin-top: 4px; }
         .service-group { margin-bottom: 18px; }
         .service-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid var(--primary); font-weight: 700; font-size: 15px; color: #555; }
         .service-options { display: grid; gap: 8px; }
@@ -44,7 +40,7 @@
         .service-opt .name { font-size: 14px; font-weight: 500; }
         .service-opt .price { font-weight: 700; color: var(--primary); font-size: 14px; }
         .color-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .color-opt { display: flex; flex-direction: column; align-items: center; padding: 10px; background: var(--light); border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+        .color-opt { padding: 10px; background: var(--light); border-radius: 8px; cursor: pointer; border: 2px solid transparent; text-align: center; }
         .color-opt:hover { border-color: var(--primary); }
         .color-opt.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
         .color-opt .name { font-size: 12px; font-weight: 600; }
@@ -82,19 +78,17 @@
                 <span class="step-num">1</span>
                 <span class="step-title">選擇車型</span>
             </div>
-            <div class="search-box">
-                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、Model 3、RAV4">
-                <div class="search-results" id="results"></div>
-            </div>
+            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、Model 3、RAV4">
+            <div class="search-results" id="results"></div>
             <div class="car-grid" id="grid">
-                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="icon">🚗</div><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="特斯拉" data-m="Model Y"><div class="icon">🚙</div><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="BMW" data-m="5 Series"><div class="icon">🚗</div><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="BMW" data-m="X5"><div class="icon">🚙</div><div class="name">BMW X5</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="賓士" data-m="C-Class"><div class="icon">🚗</div><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="賓士" data-m="GLC"><div class="icon">🚙</div><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="Lexus" data-m="NX"><div class="icon">🚙</div><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><div class="icon">🚙</div><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model Y"><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="BMW" data-m="5 Series"><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="BMW" data-m="X5"><div class="name">BMW X5</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="賓士" data-m="C-Class"><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="賓士" data-m="GLC"><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="Lexus" data-m="NX"><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
             </div>
         </div>
         <div class="step" id="step2" style="display:none;">
@@ -103,7 +97,7 @@
                 <span class="step-title">選擇服務</span>
             </div>
             <div class="service-group">
-                <div class="service-header">✨ 鍍膜服務</div>
+                <div class="service-header">鍍膜服務</div>
                 <div class="service-options">
                     <div class="service-opt" data-t="coating" data-n="單層陶瓷鍍膜"><span class="name">單層陶瓷鍍膜</span><span class="price">洽專員</span></div>
                     <div class="service-opt" data-t="coating" data-n="雙層套餐鍍膜"><span class="name">雙層套餐鍍膜</span><span class="price">洽專員</span></div>
@@ -112,14 +106,14 @@
                 </div>
             </div>
             <div class="service-group">
-                <div class="service-header">🎨 包膜服務</div>
+                <div class="service-header">包膜服務</div>
                 <div class="service-options">
                     <div class="service-opt" data-t="wrap" data-n="全車包膜"><span class="name">全車包膜</span><span class="price">洽專員</span></div>
                     <div class="service-opt" data-t="wrap" data-n="全車改色包膜"><span class="name">全車改色包膜</span><span class="price">洽專員</span></div>
                 </div>
             </div>
             <div class="service-group" id="colorGroup" style="display:none;">
-                <div class="service-header">📌 改色膜材質</div>
+                <div class="service-header">改色膜材質</div>
                 <div class="color-grid">
                     <div class="color-opt" data-t="color" data-n="PET改色膜"><div class="name">PET</div></div>
                     <div class="color-opt" data-t="color" data-n="PVC改色膜"><div class="name">PVC</div></div>
@@ -127,13 +121,13 @@
                 </div>
             </div>
             <div class="service-group">
-                <div class="service-header">🏁 迎風面包膜</div>
+                <div class="service-header">迎風面包膜</div>
                 <div class="service-options">
                     <div class="service-opt" data-t="front" data-n="迎風面包膜"><span class="name">迎風面包膜</span><span class="price">洽專員</span></div>
                 </div>
             </div>
             <div class="service-group">
-                <div class="service-header">🪟 隔熱紙</div>
+                <div class="service-header">隔熱紙</div>
                 <div class="film-grid">
                     <div class="film-opt" data-t="film" data-n="3M極黑"><div class="name">3M 極黑</div><div class="desc">隱密性極佳</div></div>
                     <div class="film-opt" data-t="film" data-n="3M極透"><div class="name">3M 極透</div><div class="desc">高透光度</div></div>
@@ -147,19 +141,19 @@
     <div class="modal" id="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>📋 報價單</h2>
+                <h2>報價單</h2>
                 <div class="modal-close" id="closeModal">✕</div>
             </div>
             <div id="items"></div>
             <div class="modal-total"><span>預估金額</span><span class="price">請洽專員報價</span></div>
             <div class="modal-actions">
-                <a href="https://line.me/R/ti/p/%40dmsense" class="modal-btn line" target="_blank">💬 LINE 專員報價</a>
-                <a href="tel:04-2452-3533" class="modal-btn phone">📞 電話諮詢</a>
+                <a href="https://line.me/R/ti/p/%40dmsense" class="modal-btn line" target="_blank">LINE 專員報價</a>
+                <a href="tel:04-2452-3533" class="modal-btn phone">電話諮詢</a>
             </div>
         </div>
     </div>
     <script>
-    const db = [
+    var db = [
         {"b":"特斯拉","m":"Model 3","t":"轎車"},{"b":"特斯拉","m":"Model Y","t":"休旅車"},{"b":"特斯拉","m":"Model S","t":"轎車"},{"b":"特斯拉","m":"Model X","t":"休旅車"},{"b":"特斯拉","m":"Cybertruck","t":"皮卡"},
         {"b":"BMW","m":"3 Series","t":"轎車"},{"b":"BMW","m":"3 Series Touring","t":"旅行車"},{"b":"BMW","m":"5 Series","t":"轎車"},{"b":"BMW","m":"5 Series Touring","t":"旅行車"},{"b":"BMW","m":"X3","t":"休旅車"},{"b":"BMW","m":"X5","t":"休旅車"},
         {"b":"賓士","m":"C-Class","t":"轎車"},{"b":"賓士","m":"C-Class Estate","t":"旅行車"},{"b":"賓士","m":"E-Class","t":"轎車"},{"b":"賓士","m":"E-Class Estate","t":"旅行車"},{"b":"賓士","m":"GLC","t":"休旅車"},{"b":"賓士","m":"GLE","t":"休旅車"},
@@ -181,30 +175,24 @@
         {"b":"其他","m":"其他車款","t":"轎車"}
     ];
     
-    let car = null, svcs = [], color = null, film = null;
-    const search = document.getElementById('search');
-    const results = document.getElementById('results');
-    const step2 = document.getElementById('step2');
-    const summary = document.getElementById('summary');
+    var car = null, svcs = [], color = null, film = null;
+    var search = document.getElementById('search');
+    var results = document.getElementById('results');
+    var step2 = document.getElementById('step2');
+    var summary = document.getElementById('summary');
     
     search.oninput = function() {
-        const q = search.value.toLowerCase().trim();
+        var q = search.value.toLowerCase().trim();
         if (!q) { results.classList.remove('show'); return; }
-        const r = db.filter(function(c) { return (c.b+c.m+c.t).toLowerCase().indexOf(q) >= 0; }).slice(0, 12);
-        results.innerHTML = r.map(function(c) { 
-            return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="icon">🚗</div><div class="info"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div></div>'; 
-        }).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
+        var r = db.filter(function(c) { return (c.b+c.m+c.t).toLowerCase().indexOf(q) >= 0; }).slice(0, 12);
+        results.innerHTML = r.map(function(c) { return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div>'; }).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
         var items = results.querySelectorAll('.search-item');
-        for (var i = 0; i < items.length; i++) {
-            items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
-        }
+        for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
         results.classList.add('show');
     };
     
     var carItems = document.querySelectorAll('.car-item');
-    for (var i = 0; i < carItems.length; i++) {
-        carItems[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
-    }
+    for (var i = 0; i < carItems.length; i++) { carItems[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
     
     function selCar(b, m) {
         car = {b:b, m:m};
@@ -228,7 +216,7 @@
                 this.classList.add('selected');
                 svcs.push({t:this.dataset.t, n:n});
             }
-            document.getElementById('colorGroup').style.display = (svcs.some(function(s) { return s.n === '全車改色包膜'; })) ? 'block' : 'none';
+            document.getElementById('colorGroup').style.display = svcs.some(function(s) { return s.n === '全車改色包膜'; }) ? 'block' : 'none';
         };
     }
     
@@ -262,7 +250,7 @@
     
     document.getElementById('closeModal').onclick = function() { document.getElementById('modal').classList.remove('show'); };
     document.getElementById('modal').onclick = function(e) { if (e.target.id === 'modal') document.getElementById('modal').classList.remove('show'); };
-    document.onclick = function(e) { if (!e.target.closest('.search-box')) results.classList.remove('show'); };
+    document.onclick = function(e) { if (!e.target.closest('.search-input')) results.classList.remove('show'); };
     </script>
 </body>
 </html>
