@@ -345,8 +345,9 @@ document.getElementById("carLists").addEventListener("click", function(e) {
                 '<div class="service-opt" data-t="coating" data-n="單層鍍膜" data-p="' + c.c3 + '"><span class="name">單層鍍膜</span><span class="price">$' + c.c3.toLocaleString() + '</span></div>';
             // 包膜
             var wrapHtml = '<div class="service-opt" data-t="wrap" data-n="全車包膜" data-p="' + (c.wrap * 1000) + '"><span class="name">全車包膜</span><span class="price">$' + (c.wrap * 1000).toLocaleString() + '</span></div>';
-            if (c.wrapc) {
-                wrapHtml += '<div class="service-opt" data-t="wrapc" data-n="全車改色包膜" data-p="' + (c.wrapc * 1000) + '"><span class="name">全車改色包膜</span><span class="price">$' + (c.wrapc * 1000).toLocaleString() + '</span></div>';
+            // 改色膜 - 支持 PVC/PET/TPU
+            if (c.wrap_pvc || c.wrap_pet || c.wrap_tpu) {
+                wrapHtml += '<div class="service-opt" data-t="wrapc" data-n="全車改色包膜"><span class="name">全車改色包膜</span><span class="price">洽專員</span></div>';
             }
             document.getElementById("wrapList").innerHTML = wrapHtml;
             // 隔熱紙
@@ -359,20 +360,32 @@ document.getElementById("carLists").addEventListener("click", function(e) {
             }
             if (filmHtml === "") filmHtml = '<div style="color:#999;font-size:14px;">此車型暫無隔熱紙報價</div>';
             document.getElementById("filmList").innerHTML = filmHtml;
-            // 改色
+            // 改色材质
             var colorHtml = "";
-            if (c.wrapc) {
-                colorHtml = '<div class="color-opt" data-t="color" data-n="PVC改色膜" data-p="60000"><div class="name">PVC</div></div>' +
-                            '<div class="color-opt" data-t="color" data-n="PET改色膜" data-p="65000"><div class="name">PET</div></div>' +
-                            '<div class="color-opt" data-t="color" data-n="TPU改色膜" data-p="85000"><div class="name">TPU</div></div>';
-            }
-            document.getElementById("colorList").innerHTML = colorHtml;
+            var colorPrices = [];
+            if (c.wrap_pvc) colorPrices.push({n:"PVC改色膜", p:c.wrap_pvc * 1000});
+            if (c.wrap_pet) colorPrices.push({n:"PET改色膜", p:c.wrap_pet * 1000});
+            if (c.wrap_tpu) colorPrices.push({n:"TPU改色膜", p:c.wrap_tpu * 1000});
+            
+            colorPrices.forEach(function(cp) {
+                colorHtml += '<div class="color-opt" data-t="color" data-n="' + cp.n + '" data-p="' + cp.p + '"><div class="name">' + cp.n.replace("改色膜","") + '</div></div>';
+            });
+            
+            document.getElementById("colorList").innerHTML = colorHtml || '<div style="color:#999;font-size:14px;">此車型暫無改色膜選項</div>';
             // 綁定事件
             document.querySelectorAll("#coatingList .service-opt").forEach(function(el) {
                 el.onclick = function() { toggleSvc(this, "coating"); };
             });
             document.querySelectorAll("#wrapList .service-opt").forEach(function(el) {
-                el.onclick = function() { toggleSvc(this, el.dataset.t); };
+                el.onclick = function() { 
+                    if (el.dataset.n === "全車改色包膜") {
+                        // 改色膜需要选择材质
+                        document.getElementById("colorGroup").style.display = "block";
+                        document.getElementById("colorGroup").scrollIntoView({behavior: "smooth"});
+                    } else {
+                        toggleSvc(this, el.dataset.t);
+                    }
+                };
             });
             document.querySelectorAll("#colorList .color-opt").forEach(function(el) {
                 el.onclick = function() { 
