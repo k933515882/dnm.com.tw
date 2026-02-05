@@ -417,7 +417,7 @@
         }).slice(0, 10);
         if (r.length > 0) {
             results.innerHTML = r.map(function(c) {
-                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div>';
+                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div></div>';
             }).join("");
             var items = results.querySelectorAll(".search-item");
             for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
