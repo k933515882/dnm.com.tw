@@ -448,7 +448,9 @@
         if (e.target === this) closeModal();
     };
     
-    init();
+    document.addEventListener('DOMContentLoaded', function() {
+        init();
+    });
     <\/script>
 </body>
 </html>
