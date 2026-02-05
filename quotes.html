@@ -3,71 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DM SENSE 報價系統</title>
+    <title>DM SENSE 專業報價系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; color: #1d1d1f; }
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 40px 20px; background: #fff; border-bottom: 1px solid #e5e5e5; margin-bottom: 30px; }
-        header h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 10px; }
-        header p { color: #86868b; font-size: 1.1rem; }
-        .search-box { max-width: 600px; margin: 0 auto 30px; padding: 0 20px; }
-        .search-box input { width: 100%; padding: 16px 20px; font-size: 1.1rem; border: none; border-radius: 12px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08); outline: none; }
-        .brand-section { margin-bottom: 20px; }
-        .brand-title { padding: 15px 20px; font-size: 1.3rem; font-weight: 600; color: #fff; border-radius: 12px; cursor: pointer; }
-        .brand-title.lexus { background: #1a1a1a; }
-        .brand-title.bmw { background: #0066b1; }
-        .brand-title.mercedes { background: #000; }
-        .brand-title.porsche { background: #d63031; }
-        .brand-title.audi { background: #c0392b; }
-        .brand-title.toyota { background: #eb0a1e; }
-        .brand-title.infiniti { background: #000; }
-        .brand-title.ford { background: #003478; }
-        .brand-title.volkswagen { background: #001e50; }
-        .brand-title.mazda { background: #c30c18; }
-        .brand-title.volvo { background: #003153; }
-        .brand-title.hyundai { background: #002c5f; }
-        .brand-title.honda { background: #cc0000; }
-        .brand-title.peugeot { background: #002395; }
-        .brand-title.fiat { background: #9e1b32; }
-        .brand-title.tesla { background: #e31937; }
-        .brand-title.landrover { background: #009647; }
-        .brand-title.maserati { background: #c62d3f; }
-        .brand-title.jaguar { background: #00965e; }
-        .brand-title.mini { background: #7c9096; }
-        .brand-title.kia { background: #c8102e; }
-        .brand-title.skoda { background: #008fd3; }
-        .brand-title.mg { background: #002652; }
-        .brand-title.subaru { background: #0646ad; }
-        .brand-title.suzuki { background: #f05323; }
-        .brand-title.nissan { background: #c61a09; }
-        .brand-title.mitsubishi { background: #e60012; }
-        .brand-title.luxgen { background: #0058a3; }
-        .brand-title.citroen { background: #6d2c91; }
-        .brand-title.other { background: #666; }
-        .car-grid { display: none; padding: 20px; background: #fff; border-radius: 0 0 12px 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: headerGlow 8s ease-in-out infinite;
+        }
+        @keyframes headerGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(5%, 5%); }
+        }
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+        header p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-box input::placeholder { color: rgba(255,255,255,0.4); }
+        .search-box input:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            background: rgba(255,255,255,0.12);
+        }
+        
+        .brand-section {
+            margin-bottom: 25px;
+            animation: fadeInUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .brand-title {
+            padding: 20px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .brand-title::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .brand-title:hover::before { left: 100%; }
+        .brand-title:hover { transform: scale(1.02); }
+        .brand-title span { position: relative; z-index: 1; }
+        .brand-title .arrow {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+        .brand-title.show .arrow { transform: rotate(180deg); }
+        
+        .brand-title.lexus { background: linear-gradient(135deg, #1a1a1a, #333); border-left: 4px solid #000; }
+        .brand-title.bmw { background: linear-gradient(135deg, #0066b1, #004080); border-left: 4px solid #0066b1; }
+        .brand-title.mercedes { background: linear-gradient(135deg, #000, #333); border-left: 4px solid #fff; }
+        .brand-title.porsche { background: linear-gradient(135deg, #d63031, #b71c1c); border-left: 4px solid #d63031; }
+        .brand-title.audi { background: linear-gradient(135deg, #c0392b, #922b21); border-left: 4px solid #c0392b; }
+        .brand-title.toyota { background: linear-gradient(135deg, #eb0a1e, #a50714); border-left: 4px solid #eb0a1e; }
+        .brand-title.infiniti { background: linear-gradient(135deg, #000, #333); border-left: 4px solid #666; }
+        .brand-title.ford { background: linear-gradient(135deg, #003478, #002055); border-left: 4px solid #003478; }
+        .brand-title.volkswagen { background: linear-gradient(135deg, #001e50, #001035); border-left: 4px solid #001e50; }
+        .brand-title.mazda { background: linear-gradient(135deg, #c30c18, #8a0911); border-left: 4px solid #c30c18; }
+        .brand-title.volvo { background: linear-gradient(135deg, #003153, #001e35); border-left: 4px solid #003153; }
+        .brand-title.hyundai { background: linear-gradient(135deg, #002c5f, #001a3a); border-left: 4px solid #002c5f; }
+        .brand-title.honda { background: linear-gradient(135deg, #cc0000, #8a0000); border-left: 4px solid #cc0000; }
+        .brand-title.peugeot { background: linear-gradient(135deg, #002395, #001468); border-left: 4px solid #002395; }
+        .brand-title.fiat { background: linear-gradient(135deg, #9e1b32, #6d1224); border-left: 4px solid #9e1b32; }
+        .brand-title.tesla { background: linear-gradient(135deg, #e31937, #a61026); border-left: 4px solid #e31937; }
+        .brand-title.landrover { background: linear-gradient(135deg, #009647, #006a32); border-left: 4px solid #009647; }
+        .brand-title.maserati { background: linear-gradient(135deg, #c62d3f, #8c1f2d); border-left: 4px solid #c62d3f; }
+        .brand-title.jaguar { background: linear-gradient(135deg, #00965e, #006a40); border-left: 4px solid #00965e; }
+        .brand-title.mini { background: linear-gradient(135deg, #7c9096, #54646b); border-left: 4px solid #7c9096; }
+        .brand-title.kia { background: linear-gradient(135deg, #c8102e, #8b0a20); border-left: 4px solid #c8102e; }
+        .brand-title.skoda { background: linear-gradient(135deg, #008fd3, #00649b); border-left: 4px solid #008fd3; }
+        .brand-title.mg { background: linear-gradient(135deg, #002652, #00182f); border-left: 4px solid #002652; }
+        .brand-title.subaru { background: linear-gradient(135deg, #0646ad, #04307a); border-left: 4px solid #0646ad; }
+        .brand-title.suzuki { background: linear-gradient(135deg, #f05323, #b03a19); border-left: 4px solid #f05323; }
+        .brand-title.nissan { background: linear-gradient(135deg, #c61a09, #8c1106); border-left: 4px solid #c61a09; }
+        .brand-title.mitsubishi { background: linear-gradient(135deg, #e60012, #a3000b); border-left: 4px solid #e60012; }
+        .brand-title.luxgen { background: linear-gradient(135deg, #0058a3, #003a6b); border-left: 4px solid #0058a3; }
+        .brand-title.citroen { background: linear-gradient(135deg, #6d2c91, #4d1d66); border-left: 4px solid #6d2c91; }
+        .brand-title.other { background: linear-gradient(135deg, #444, #222); border-left: 4px solid #666; }
+        
+        .car-grid {
+            display: none;
+            padding: 25px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .car-grid.show { display: flex; }
-        .car-btn { padding: 12px 24px; font-size: 1rem; border: 2px solid #e5e5e5; border-radius: 8px; background: #fff; cursor: pointer; }
-        .car-btn:hover { border-color: #0071e3; color: #0071e3; }
-        .price-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
-        .price-modal.show { display: block; }
-        .price-content { background: #fff; border-radius: 16px; max-width: 800px; width: 90%; max-height: 90vh; overflow: auto; margin: 50px auto; padding: 30px; }
-        .price-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e5e5; }
-        .close-btn { width: 40px; height: 40px; border: none; background: #f5f5f7; border-radius: 50%; font-size: 1.5rem; cursor: pointer; }
-        .price-table { width: 100%; border-collapse: collapse; }
-        .price-table th, .price-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e5e5e5; }
-        .price-table th { background: #f5f5f7; font-weight: 600; }
-        .price-value { font-weight: 600; color: #0071e3; }
-        @media (max-width: 768px) { header h1 { font-size: 1.8rem; } }
+        
+        .car-btn {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: 2px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .car-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .car-btn:hover {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+        }
+        .car-btn:hover::before { left: 100%; }
+        .car-btn:active { transform: translateY(0); }
+        
+        .price-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .price-modal.show { display: flex; align-items: center; justify-content: center; }
+        
+        .price-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 85vh;
+            overflow: auto;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            animation: scaleIn 0.3s ease;
+        }
+        
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .price-header h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .close-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .close-btn:hover {
+            background: rgba(255,100,100,0.3);
+            transform: rotate(90deg);
+        }
+        
+        .price-table { width: 100%; }
+        .price-table tr {
+            transition: all 0.3s ease;
+        }
+        .price-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        .price-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 500;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .price-table td {
+            padding: 16px;
+            text-align: right;
+        }
+        .price-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .no-price {
+            color: rgba(255,255,255,0.3);
+            font-style: italic;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .brand-title { font-size: 1rem; padding: 15px 20px; }
+            .car-btn { padding: 10px 18px; font-size: 0.9rem; }
+            .price-content { padding: 20px; }
+        }
     </style>
 </head>
 <body>
-    <header><h1>DM SENSE 報價系統</h1><p>選擇品牌和車款查看報價</p></header>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌或車款"></div>
-    <div id="brandList" class="container"></div>
-    <div id="priceModal" class="price-modal">
-        <div class="price-content"><div class="price-header"><h2 id="modalTitle">車款報價</h2><button class="close-btn" onclick="closeModal()">X</button></div><div id="priceTable"></div></div>
+    <header>
+        <h1>DM SENSE</h1>
+        <p>專業汽車貼膜報價系統</p>
+    </header>
+    
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: 賓士、C300、RAV4、Model 3)">
     </div>
+    
+    <div id="brandList" class="container"></div>
+    
+    <div id="priceModal" class="price-modal">
+        <div class="price-content">
+            <div class="price-header">
+                <h2 id="modalTitle">車款報價</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div id="priceTable"></div>
+        </div>
+    </div>
+    
     <script>
 const carData = [
     { brand: "LEXUS", model: "CT200H", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
@@ -364,7 +633,7 @@ const carData = [
     }
     
     function formatPrice(val) {
-        if (val === null) return "-";
+        if (val === null) return '<span class="no-price">-</span>';
         return createSpan("price-value", "NT$ " + val.toLocaleString()).outerHTML;
     }
     
@@ -375,30 +644,35 @@ const carData = [
             if (!grouped[car.brand]) grouped[car.brand] = [];
             grouped[car.brand].push(car);
         });
-        Object.keys(grouped).sort().forEach(function(brand) {
-            var section = document.createElement("div");
-            section.className = "brand-section";
-            var colorClass = brandColors[brand] || "other";
-            
-            var titleDiv = document.createElement("div");
-            titleDiv.className = "brand-title " + colorClass;
-            titleDiv.textContent = brand;
-            titleDiv.onclick = function() {
-                this.nextElementSibling.classList.toggle("show");
-            };
-            section.appendChild(titleDiv);
-            
-            var grid = document.createElement("div");
-            grid.className = "car-grid";
-            grouped[brand].forEach(function(car) {
-                var btn = document.createElement("button");
-                btn.className = "car-btn";
-                btn.textContent = car.model;
-                btn.onclick = function() { showPrices(car); };
-                grid.appendChild(btn);
-            });
-            section.appendChild(grid);
-            container.appendChild(section);
+        var brands = Object.keys(grouped).sort();
+        brands.forEach(function(brand, index) {
+            setTimeout(function() {
+                var section = document.createElement("div");
+                section.className = "brand-section";
+                section.style.animationDelay = (index * 0.1) + "s";
+                var colorClass = brandColors[brand] || "other";
+                
+                var titleDiv = document.createElement("div");
+                titleDiv.className = "brand-title " + colorClass;
+                titleDiv.innerHTML = '<span>' + brand + '</span><span class="arrow">▼</span>';
+                titleDiv.onclick = function() {
+                    this.classList.toggle("show");
+                    this.nextElementSibling.classList.toggle("show");
+                };
+                section.appendChild(titleDiv);
+                
+                var grid = document.createElement("div");
+                grid.className = "car-grid";
+                grouped[brand].forEach(function(car) {
+                    var btn = document.createElement("button");
+                    btn.className = "car-btn";
+                    btn.textContent = car.model;
+                    btn.onclick = function() { showPrices(car); };
+                    grid.appendChild(btn);
+                });
+                section.appendChild(grid);
+                container.appendChild(section);
+            }, index * 50);
         });
         document.getElementById("searchInput").addEventListener("input", searchCars);
     }
@@ -450,13 +724,11 @@ const carData = [
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 
-                // 數字部分包含查詢（不限制前綴）
                 var numbers = model.match(/\d+/g) || [];
                 var hasNumberMatch = numbers.some(function(num) {
                     return num.indexOf(query) !== -1 || query.indexOf(num) !== -1;
                 });
                 
-                // 別名對照檢查
                 var aliasMatch = false;
                 for (var key in aliasMap) {
                     if (query.indexOf(key) !== -1 && model.indexOf(aliasMap[key].toLowerCase().split(" ")[0]) !== -1) {
@@ -465,7 +737,6 @@ const carData = [
                     }
                 }
                 
-                // 搜尋條件：品牌包含 OR 車款名稱包含 OR 數字包含匹配 OR 別名匹配
                 var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || hasNumberMatch || aliasMatch;
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
