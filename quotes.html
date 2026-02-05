@@ -408,21 +408,8 @@
         {b:"賓士 (Mercedes)",m:"ML400",c2:21000,c3:12000,wrap:null,film:null},
         {b:"賓士 (Mercedes)",m:"S350D (S-Class)",c2:21000,c3:12000,wrap:null,film:null},
         {b:"賓士 (Mercedes)",m:"V-250D (V-Class)",c2:28000,c3:19000,wrap:null,film:null}
-    ]
-    var aliasMap = {
-        "c200":"C-Class","c260":"C-Class","c300":"C-Class","c350":"C-Class",
-        "e200":"E-Class","e300":"E-Class","e450":"E-Class",
-        "a200":"A-Class","a250":"A-Class",
-        "320":"3 Series","330":"3 Series","340":"3 Series",
-        "520":"5 Series","530":"5 Series","540":"5 Series","550":"5 Series",
-        "420":"4 Series","430":"4 Series",
-        "x3":"X3","x5":"X5","x1":"X1","x7":"X7",
-        "rx300":"RX","rx350":"RX","nx300":"NX",
-        "rav4":"RAV4","rav":"RAV4",
-        "model3":"Model 3","m3":"Model 3",
-        "model y":"Model Y","my":"Model Y"
-    };
-    var brands = ["Audi","BMW","Citroen / Smart","Fiat / Alfa","Honda","Infiniti","Jaguar","Kia","LEXUS","Land Rover","Luxgen","MAZDA","MG","Maserati","Mini","NISSAN","Peugeot","Porsche","Skoda","Subaru","Suzuki","TESLA","Toyota","VOLVO","Volkswagen","三菱 (Mitsubishi)","其他超跑/美系","現代 Hyundai","福特 Ford","賓士 (Mercedes)"]
+    ];
+    var brands = ["Audi","BMW","Citroen / Smart","Fiat / Alfa","Honda","Infiniti","Jaguar","Kia","LEXUS","Land Rover","Luxgen","MAZDA","MG","Maserati","Mini","NISSAN","Peugeot","Porsche","Skoda","Subaru","Suzuki","TESLA","Toyota","VOLVO","Volkswagen","三菱 (Mitsubishi)","其他超跑/美系","現代 Hyundai","福特 Ford","賓士 (Mercedes)"];
     var car = null, svcs = [], color = null, film = null;
     var search = document.getElementById("search");
     var results = document.getElementById("results");
@@ -437,7 +424,7 @@
             if (cars.length > 0) {
                 html += '<div class="brand-section"><div class="brand-title">' + b + '</div><div class="car-grid">';
                 cars.forEach(function(c) {
-                    html += '<div class="car-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.m + '</div><div class="type">' + c.t + '</div></div>';
+                    html += '<div class="car-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.m + '</div><div class="type">' + (c.t || '') + '</div></div>';
                 });
                 html += '</div></div>';
             }
@@ -447,83 +434,55 @@
         for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
     }
     
-    
-    
-document.getElementById("carLists").addEventListener("click", function(e) {
-        var item = e.target.closest(".car-item");
-        if (item) {
-            selCar(item.dataset.b, item.dataset.m);
-        }
-    });
-
-    function showCarInfo(c) {
-        document.getElementById("carTitle").textContent = c.b + " " + c.m;
-        var specs = [];
-        if (c.l) specs.push({l:"車長",v:c.l+" mm"});
-        if (c.w) specs.push({l:"車寬",v:c.w+" mm"});
-        if (c.h) specs.push({l:"車高",v:c.h+" mm"});
-        if (c.wb) specs.push({l:"軸距",v:c.wb+" mm"});
-        document.getElementById("carSpecs").innerHTML = specs.map(function(s) {
-            return '<div class="spec-item"><div class="label">' + s.l + '</div><div class="value">' + s.v + '</div></div>';
-        }).join("");
-        carInfo.classList.add("show");
-    }
-    
     function selCar(b, m) {
         var c = db.find(function(x) { return x.b === b && x.m === m; });
         if (c) {
             car = c;
-            showCarInfo(c);
             // 鍍膜
-            document.getElementById("coatingList").innerHTML = 
-                '<div class="service-opt" data-t="coating" data-n="雙層石墨烯鍍膜" data-p="' + c.c1 + '"><span class="name">雙層石墨烯鍍膜</span><span class="price">$' + c.c1.toLocaleString() + '</span></div>' +
-                '<div class="service-opt" data-t="coating" data-n="雙層陶瓷鍍膜" data-p="' + c.c2 + '"><span class="name">雙層陶瓷鍍膜</span><span class="price">$' + c.c2.toLocaleString() + '</span></div>' +
-                '<div class="service-opt" data-t="coating" data-n="單層鍍膜" data-p="' + c.c3 + '"><span class="name">單層鍍膜</span><span class="price">$' + c.c3.toLocaleString() + '</span></div>';
+            var coatingHtml = '';
+            if (c.c1) coatingHtml += '<div class="service-opt" data-t="coating" data-n="雙層石墨烯鍍膜" data-p="' + c.c1 + '"><span class="name">雙層石墨烯鍍膜</span><span class="price">$' + c.c1.toLocaleString() + '</span></div>';
+            if (c.c2) coatingHtml += '<div class="service-opt" data-t="coating" data-n="雙層陶瓷鍍膜" data-p="' + c.c2 + '"><span class="name">雙層陶瓷鍍膜</span><span class="price">$' + c.c2.toLocaleString() + '</span></div>';
+            if (c.c3) coatingHtml += '<div class="service-opt" data-t="coating" data-n="單層鍍膜" data-p="' + c.c3 + '"><span class="name">單層鍍膜</span><span class="price">$' + c.c3.toLocaleString() + '</span></div>';
+            document.getElementById("coatingList").innerHTML = coatingHtml;
             // 包膜
-            var wrapHtml = '<div class="service-opt" data-t="wrap" data-n="全車包膜" data-p="' + (c.wrap * 1000) + '"><span class="name">全車包膜</span><span class="price">$' + (c.wrap * 1000).toLocaleString() + '</span></div>';
-            if (c.wrapc) {
-                wrapHtml += '<div class="service-opt" data-t="wrapc" data-n="全車改色包膜" data-p="' + (c.wrapc * 1000) + '"><span class="name">全車改色包膜</span><span class="price">$' + (c.wrapc * 1000).toLocaleString() + '</span></div>';
+            var wrapHtml = '';
+            if (c.wrap) {
+                wrapHtml = '<div class="service-opt" data-t="wrap" data-n="TPU透明膜" data-p="' + (c.wrap * 1000) + '"><span class="name">TPU透明膜</span><span class="price">$' + (c.wrap * 1000).toLocaleString() + '</span></div>';
+                wrapHtml += '<div class="service-opt" data-t="wrap" data-n="TPU消光膜" data-p="' + (c.wrap * 1000 + 5000) + '"><span class="name">TPU消光膜</span><span class="price">$' + (c.wrap * 1000 + 5000).toLocaleString() + '</span></div>';
+            } else {
+                wrapHtml = '<div style="color:#999;font-size:14px;">此車型暫無包膜報價</div>';
             }
             document.getElementById("wrapList").innerHTML = wrapHtml;
-            // 隔熱紙
-            var filmHtml = "";
-            if (c.film) {
-                filmHtml += '<div class="film-opt" data-t="film" data-n="3M極黑" data-p="' + c.film + '"><div class="name">3M 極黑</div><div class="desc">$' + c.film.toLocaleString() + '</div></div>';
-            }
-            if (c.film2) {
-                filmHtml += '<div class="film-opt" data-t="film2" data-n="3M極透" data-p="' + c.film2 + '"><div class="name">3M 極透</div><div class="desc">$' + c.film2.toLocaleString() + '</div></div>';
-            }
-            if (filmHtml === "") filmHtml = '<div style="color:#999;font-size:14px;">此車型暫無隔熱紙報價</div>';
-            document.getElementById("filmList").innerHTML = filmHtml;
-            // 改色
-            var colorHtml = "";
+            // 改色膜
+            var colorHtml = '';
             if (c.wrapc) {
-                colorHtml = '<div class="color-opt" data-t="color" data-n="PVC改色膜" data-p="60000"><div class="name">PVC</div></div>' +
-                            '<div class="color-opt" data-t="color" data-n="PET改色膜" data-p="65000"><div class="name">PET</div></div>' +
-                            '<div class="color-opt" data-t="color" data-n="TPU改色膜" data-p="85000"><div class="name">TPU</div></div>';
+                colorHtml = '<div class="service-opt" data-t="color" data-n="改色膜PVC" data-p="' + (c.wrapc * 1000) + '"><span class="name">PVC</span><span class="price">$' + (c.wrapc * 1000).toLocaleString() + '</span></div>';
+                colorHtml += '<div class="service-opt" data-t="color" data-n="改色膜PET" data-p="' + (c.wrapc * 1000 + 5000) + '"><span class="name">PET</span><span class="price">$' + (c.wrapc * 1000 + 5000).toLocaleString() + '</span></div>';
+                colorHtml += '<div class="service-opt" data-t="color" data-n="改色膜TPU" data-p="' + (c.wrapc * 1000 + 15000) + '"><span class="name">TPU</span><span class="price">$' + (c.wrapc * 1000 + 15000).toLocaleString() + '</span></div>';
+            } else {
+                colorHtml = '<div style="color:#999;font-size:14px;">此車型暫無改色膜報價</div>';
             }
             document.getElementById("colorList").innerHTML = colorHtml;
+            // 隔熱紙
+            var filmHtml = '';
+            if (c.film) {
+                filmHtml += '<div class="film-opt" data-t="film" data-n="3M極黑隔熱紙" data-p="' + c.film + '"><div class="name">3M 極黑</div><div class="desc">$' + c.film.toLocaleString() + '</div></div>';
+            }
+            if (filmHtml === '') filmHtml = '<div style="color:#999;font-size:14px;">此車型暫無隔熱紙報價</div>';
+            document.getElementById("filmList").innerHTML = filmHtml;
             // 綁定事件
-            document.querySelectorAll("#coatingList .service-opt").forEach(function(el) {
-                el.onclick = function() { toggleSvc(this, "coating"); };
-            });
-            document.querySelectorAll("#wrapList .service-opt").forEach(function(el) {
-                el.onclick = function() { toggleSvc(this, el.dataset.t); };
-            });
-            document.querySelectorAll("#colorList .color-opt").forEach(function(el) {
-                el.onclick = function() { 
-                    document.querySelectorAll("#colorList .color-opt").forEach(function(x) { x.classList.remove("selected"); });
-                    this.classList.add("selected");
-                    color = {n:this.dataset.n, p:parseInt(this.dataset.p)};
-                };
-            });
-            document.querySelectorAll("#filmList .film-opt").forEach(function(el) {
-                el.onclick = function() { 
-                    document.querySelectorAll("#filmList .film-opt").forEach(function(x) { x.classList.remove("selected"); });
-                    this.classList.add("selected");
-                    film = {n:this.dataset.n, p:parseInt(this.dataset.p)};
-                };
-            });
+            document.querySelectorAll("#coatingList .service-opt").forEach(function(el) { el.onclick = function() { toggleSvc(this, "coating"); }; });
+            document.querySelectorAll("#wrapList .service-opt").forEach(function(el) { el.onclick = function() { toggleSvc(this, "wrap"); }; });
+            document.querySelectorAll("#colorList .service-opt").forEach(function(el) { el.onclick = function() { 
+                document.querySelectorAll("#colorList .service-opt").forEach(function(x) { x.classList.remove("selected"); });
+                this.classList.add("selected");
+                color = {n:this.dataset.n, p:parseInt(this.dataset.p)};
+            }; });
+            document.querySelectorAll("#filmList .film-opt").forEach(function(el) { el.onclick = function() { 
+                document.querySelectorAll("#filmList .film-opt").forEach(function(x) { x.classList.remove("selected"); });
+                this.classList.add("selected");
+                film = {n:this.dataset.n, p:parseInt(this.dataset.p)};
+            }; });
         }
         var items = document.querySelectorAll(".car-item");
         for (var i = 0; i < items.length; i++) { items[i].classList.remove("selected"); }
@@ -532,7 +491,7 @@ document.getElementById("carLists").addEventListener("click", function(e) {
         step2.style.display = "block";
         summary.style.display = "block";
         results.style.display = "none";
-        step2.scrollIntoView({behavior: "smooth"});
+        carInfo.scrollIntoView({behavior: "smooth"});
     }
     
     function toggleSvc(el, type) {
@@ -544,22 +503,19 @@ document.getElementById("carLists").addEventListener("click", function(e) {
             el.classList.add("selected");
             svcs.push({t:type, n:n, p:p});
         }
-        document.getElementById("colorGroup").style.display = svcs.some(function(s) { return s.n === "全車改色包膜"; }) ? "block" : "none";
     }
     
     search.onkeyup = search.oninput = function() {
         var q = search.value.toLowerCase().trim();
         results.style.display = "none";
         if (!q) return;
-        var target = aliasMap[q] || q;
         var r = db.filter(function(c) {
-            var s = (c.b + " " + c.m + " " + c.t).toLowerCase();
-            var t = target.toLowerCase();
-            return s.indexOf(t) >= 0 || s.replace(/[^a-z0-9]/g, "").indexOf(t.replace(/[^a-z0-9]/g, "")) >= 0;
+            var s = (c.b + " " + c.m).toLowerCase();
+            return s.indexOf(q) >= 0;
         }).slice(0, 10);
         if (r.length > 0) {
             results.innerHTML = r.map(function(c) {
-                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div>';
+                return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="name">' + c.b + ' ' + c.m + '</div></div>';
             }).join("");
             var items = results.querySelectorAll(".search-item");
             for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
@@ -584,7 +540,19 @@ document.getElementById("carLists").addEventListener("click", function(e) {
     document.getElementById("closeModal").onclick = function() { document.getElementById("modal").classList.remove("show"); };
     document.getElementById("modal").onclick = function(e) { if (e.target.id === "modal") document.getElementById("modal").classList.remove("show"); };
     
+    // 回到頂部按鈕
+    var backToTop = document.getElementById("backToTop");
+    window.onscroll = function() {
+        if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+            backToTop.classList.add("show");
+        } else {
+            backToTop.classList.remove("show");
+        }
+    };
+    backToTop.onclick = function() { window.scrollTo({top:0, behavior:"smooth"}); };
+    
     showCarList();
-    </script>
+
+</script>
 </body>
 </html>
