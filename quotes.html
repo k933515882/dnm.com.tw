@@ -417,15 +417,24 @@
     }
     
     function searchCars(e) {
-        const query = e.target.value.toLowerCase();
+        const query = e.target.value.toLowerCase().trim();
         document.querySelectorAll('.brand-section').forEach(section => {
             const brand = section.querySelector('.brand-title').textContent.toLowerCase();
             const cars = section.querySelectorAll('.car-btn');
             let brandVisible = false;
             cars.forEach(btn => {
                 const model = btn.textContent.toLowerCase();
-                const searchKey = model.replace(/\D/g, '');
-                const aliasMatch = Object.keys(aliasMap).some(k => query.includes(k) && aliasMap[k].toLowerCase() === model.toLowerCase().split(' ')[0]);
+                // 搜尋數字部分 (如 300, 520, 3, 4)
+                const numbers = model.match(/\d+/g) || [];
+                const searchKey = numbers.join('');
+                // 別名對照檢查
+                let aliasMatch = false;
+                for (const [key, value] of Object.entries(aliasMap)) {
+                    if (query.includes(key) && model.includes(value.toLowerCase().split(' ')[0])) {
+                        aliasMatch = true;
+                        break;
+                    }
+                }
                 const visible = brand.includes(query) || model.includes(query) || searchKey.includes(query) || aliasMatch;
                 btn.style.display = visible ? '' : 'none';
                 if (visible) brandVisible = true;
