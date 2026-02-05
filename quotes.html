@@ -606,13 +606,25 @@ const carData = [
         "其他超跑/美系": "other"
     };
     
+    // 完整別名對照表 - 支援各種縮寫
     const aliasMap = {
-        "c200": "C系列", "c260": "C系列", "c300": "C系列", "c350": "C系列",
-        "e200": "E系列", "e300": "E系列", "e450": "E系列",
-        "320": "3 Series", "330": "3 Series", "340": "3 Series",
-        "520": "5 Series", "530": "5 Series", "540": "5 Series",
-        "rav4": "RAV4", "rav": "RAV4", "model3": "MODEL 3", "m3": "MODEL 3",
-        "modely": "MODEL Y", "my": "MODEL Y", "modelx": "MODEL X", "models": "MODEL S"
+        // C系列
+        "c200": "C系列", "c20": "C系列", "c260": "C系列", "c26": "C系列",
+        "c300": "C系列", "c30": "C系列", "c350": "C系列", "c35": "C系列",
+        // E系列
+        "e200": "E系列", "e20": "E系列", "e300": "E系列", "e30": "E系列",
+        "e450": "E系列", "e45": "E系列",
+        // 3 Series
+        "320": "3 Series", "32": "3 Series", "330": "3 Series", "33": "3 Series",
+        "340": "3 Series", "34": "3 Series",
+        // 5 Series
+        "520": "5 Series", "52": "5 Series", "530": "5 Series", "53": "5 Series",
+        "540": "5 Series", "54": "5 Series",
+        // 其他
+        "rav4": "RAV4", "rav": "RAV4",
+        "model3": "MODEL 3", "m3": "MODEL 3",
+        "modely": "MODEL Y", "my": "MODEL Y",
+        "modelx": "MODEL X", "models": "MODEL S"
     };
     
     function createSpan(cls, text) {
@@ -714,11 +726,9 @@ const carData = [
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 
-                // 數字部分包含查詢（支援部分匹配）
+                // 數字部分包含查詢
                 var numbers = model.match(/\d+/g) || [];
                 var hasNumberMatch = numbers.some(function(num) {
-                    // query 包含在 num 中 (如 "18" 匹配 "180", "718")
-                    // 或者 num 包含在 query 中 (如 "180" 匹配 "18")
                     return num.indexOf(query) !== -1 || query.indexOf(num) !== -1;
                 });
                 
@@ -731,7 +741,6 @@ const carData = [
                     }
                 }
                 
-                // 搜尋條件：品牌包含 OR 車款名稱包含 OR 數字部分匹配 OR 別名匹配
                 var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || hasNumberMatch || aliasMatch;
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
