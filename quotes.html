@@ -7,35 +7,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; }
+        :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --white: #fff; --gray: #666; }
         body { font-family: 'Noto Sans TC', sans-serif; background: var(--light); color: #333; padding-bottom: 100px; }
-        header { background: var(--dark); color: #fff; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
+        header { background: var(--dark); color: var(--white); padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; }
         header h1 { font-size: 22px; font-weight: 700; }
         header p { font-size: 13px; opacity: 0.8; margin-top: 5px; }
         .container { max-width: 600px; margin: 0 auto; padding: 16px; }
-        .step { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .step { background: var(--white); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
         .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .step-num { background: var(--primary); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+        .step-num { background: var(--primary); color: var(--white); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
         .step-title { font-size: 18px; font-weight: 700; }
         .search-box { position: relative; margin-bottom: 16px; }
-        .search-input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
+        .search-input { width: 100%; padding: 14px 20px; border: 2px solid #eee; border-radius: 12px; font-size: 16px; outline: none; }
         .search-input:focus { border-color: var(--primary); }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%; font-size: 18px; }
-        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
+        .search-results { position: absolute; top: 100%; left: 0; right: 0; background: var(--white); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); max-height: 320px; overflow-y: auto; z-index: 50; display: none; }
         .search-results.show { display: block; }
         .search-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .search-item:hover { background: var(--light); }
-        .search-item .brand-tag { min-width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #fff; }
+        .search-item .icon { width: 40px; height: 40px; background: var(--light); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .search-item .info { flex: 1; }
         .search-item .name { font-weight: 600; font-size: 15px; }
-        .search-item .type { font-size: 12px; color: #888; }
+        .search-item .type { font-size: 12px; color: var(--gray); }
         .car-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .car-item { display: flex; flex-direction: column; align-items: center; padding: 14px 10px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
-        .car-item:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .car-item { display: flex; flex-direction: column; align-items: center; padding: 16px 12px; background: var(--light); border-radius: 12px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+        .car-item:hover { border-color: var(--primary); }
         .car-item.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
-        .car-item .brand-tag { width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 8px; }
+        .car-item .icon { width: 48px; height: 48px; background: var(--white); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; }
         .car-item .name { font-size: 13px; font-weight: 600; text-align: center; }
-        .car-item .type { font-size: 11px; color: #888; margin-top: 2px; }
+        .car-item .type { font-size: 11px; color: var(--gray); margin-top: 4px; }
         .service-group { margin-bottom: 18px; }
         .service-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-left: 10px; border-left: 3px solid var(--primary); font-weight: 700; font-size: 15px; color: #555; }
         .service-options { display: grid; gap: 8px; }
@@ -54,12 +53,12 @@
         .film-opt:hover { border-color: var(--primary); }
         .film-opt.selected { border-color: var(--primary); background: rgba(255,107,53,0.1); }
         .film-opt .name { font-weight: 700; font-size: 14px; }
-        .film-opt .desc { font-size: 11px; color: #888; margin-top: 3px; }
-        .summary { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 14px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 100; }
-        .summary-btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .film-opt .desc { font-size: 11px; color: var(--gray); margin-top: 3px; }
+        .summary { position: fixed; bottom: 0; left: 0; right: 0; background: var(--white); padding: 14px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); z-index: 100; }
+        .summary-btn { width: 100%; padding: 14px; background: var(--primary); color: var(--white); border: none; border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: flex-end; z-index: 200; }
         .modal.show { display: flex; }
-        .modal-content { background: #fff; border-radius: 20px 20px 0 0; width: 100%; max-height: 80vh; overflow-y: auto; padding: 20px; }
+        .modal-content { background: var(--white); border-radius: 20px 20px 0 0; width: 100%; max-height: 80vh; overflow-y: auto; padding: 20px; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .modal-header h2 { font-size: 18px; font-weight: 700; }
         .modal-close { width: 32px; height: 32px; background: var(--light); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -68,8 +67,8 @@
         .modal-total .price { color: var(--primary); }
         .modal-actions { display: grid; gap: 10px; }
         .modal-btn { display: block; padding: 14px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 600; }
-        .modal-btn.line { background: #06c755; color: #fff; }
-        .modal-btn.phone { background: var(--dark); color: #fff; }
+        .modal-btn.line { background: #06c755; color: var(--white); }
+        .modal-btn.phone { background: var(--dark); color: var(--white); }
     </style>
 </head>
 <body>
@@ -84,19 +83,18 @@
                 <span class="step-title">選擇車型</span>
             </div>
             <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、C63、Model 3、Touring">
+                <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：520、V60、Model 3、RAV4">
                 <div class="search-results" id="results"></div>
             </div>
             <div class="car-grid" id="grid">
-                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="brand-tag" style="background:#e82127;">Tesla</div><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="特斯拉" data-m="Model Y"><div class="brand-tag" style="background:#e82127;">Tesla</div><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="BMW" data-m="5 Series"><div class="brand-tag" style="background:#0066b1;width:56px;font-size:14px;">BMW</div><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="BMW" data-m="X5"><div class="brand-tag" style="background:#0066b1;width:56px;font-size:14px;">BMW</div><div class="name">BMW X5</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="賓士" data-m="C-Class"><div class="brand-tag" style="background:#000;width:56px;font-size:14px;">M.Benz</div><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
-                <div class="car-item" data-b="賓士" data-m="GLC"><div class="brand-tag" style="background:#000;width:56px;font-size:14px;">M.Benz</div><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="Lexus" data-m="NX"><div class="brand-tag" style="background:#000;width:56px;font-size:14px;">Lexus</div><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
-                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><div class="brand-tag" style="background:#eb0a1e;width:56px;font-size:14px;">Toyota</div><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model 3"><div class="icon">🚗</div><div class="name">Tesla Model 3</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="特斯拉" data-m="Model Y"><div class="icon">🚙</div><div class="name">Tesla Model Y</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="BMW" data-m="5 Series"><div class="icon">🚗</div><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="BMW" data-m="X5"><div class="icon">🚙</div><div class="name">BMW X5</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="賓士" data-m="C-Class"><div class="icon">🚗</div><div class="name">賓士 C-Class</div><div class="type">轎車</div></div>
+                <div class="car-item" data-b="賓士" data-m="GLC"><div class="icon">🚙</div><div class="name">賓士 GLC</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="Lexus" data-m="NX"><div class="icon">🚙</div><div class="name">Lexus NX</div><div class="type">休旅車</div></div>
+                <div class="car-item" data-b="豐田" data-m="Corolla Cross"><div class="icon">🚙</div><div class="name">Toyota Corolla Cross</div><div class="type">休旅車</div></div>
             </div>
         </div>
         <div class="step" id="step2" style="display:none;">
@@ -161,36 +159,6 @@
         </div>
     </div>
     <script>
-    const brandColors = {
-        '特斯拉':'#e82127','Tesla':'#e82127',
-        'BMW':'#0066b1','bmw':'#0066b1',
-        '賓士':'#000000','Mercedes':'#000000',
-        'Lexus':'#000000','lexus':'#000000',
-        '豐田':'#eb0a1e','Toyota':'#eb0a1e',
-        '本田':'#c00c1f','Honda':'#c00c1f',
-        '福特':'#003478','Ford':'#003478',
-        'VW':'#001e50','Volkswagen':'#001e50',
-        '福斯':'#001e50',
-        '奧迪':'#8f0f1f','Audi':'#8f0f1f',
-        'Volvo':'#00365d',
-        '保時捷':'#d6301f','Porsche':'#d6301f',
-        'Kia':'#c8102e',
-        '現代':'#002c5f','Hyundai':'#002c5f',
-        'MG':'#003366',
-        'Subaru':'#003696','速霸陸':'#003696',
-        'Mazda':'#c30c1e','馬自達':'#c30c1e',
-        'Suzuki':'#e60012','鈴木':'#e60012',
-        'Nissan':'#c61d2e','日產':'#c61d2e',
-        'Skoda':'#11457e',
-        'Peugeot':'#002395',
-        'Land Rover':'#003d29',
-        'Jaguar':'#503615',
-        'Genesis':'#000',
-        'Cadillac':'#943900',
-        'Lincoln':'#003399',
-        '其他':'#666666'
-    };
-    
     const db = [
         {"b":"特斯拉","m":"Model 3","t":"轎車"},{"b":"特斯拉","m":"Model Y","t":"休旅車"},{"b":"特斯拉","m":"Model S","t":"轎車"},{"b":"特斯拉","m":"Model X","t":"休旅車"},{"b":"特斯拉","m":"Cybertruck","t":"皮卡"},
         {"b":"BMW","m":"3 Series","t":"轎車"},{"b":"BMW","m":"3 Series Touring","t":"旅行車"},{"b":"BMW","m":"5 Series","t":"轎車"},{"b":"BMW","m":"5 Series Touring","t":"旅行車"},{"b":"BMW","m":"X3","t":"休旅車"},{"b":"BMW","m":"X5","t":"休旅車"},
@@ -210,52 +178,91 @@
         {"b":"馬自達","m":"CX-5","t":"休旅車"},{"b":"馬自達","m":"CX-60","t":"休旅車"},
         {"b":"Skoda","m":"Octavia Combi","t":"旅行車"},{"b":"Skoda","m":"Superb Combi","t":"旅行車"},{"b":"Skoda","m":"Kodiaq","t":"休旅車"},
         {"b":"Peugeot","m":"308 SW","t":"旅行車"},{"b":"Peugeot","m":"508 SW","t":"旅行車"},{"b":"Peugeot","m":"3008","t":"休旅車"},
-        {"b":"Land Rover","m":"Range Rover Evoque","t":"跨界"},{"b":"Land Rover","m":"Discovery","t":"休旅車"},{"b":"Land Rover","m":"Defender","t":"越野"},
-        {"b":"Jaguar","m":"XF Sportbrake","t":"旅行車"},{"b":"Jaguar","m":"F-PACE","t":"休旅車"},
-        {"b":"Genesis","m":"GV70","t":"休旅車"},{"b":"Genesis","m":"GV80","t":"休旅車"},
-        {"b":"Nissan","m":"X-Trail","t":"休旅車"},{"b":"Nissan","m":"Kicks","t":"休旅車"},
-        {"b":"Suzuki","m":"Vitara","t":"休旅車"},{"b":"Suzuki","m":"Jimny","t":"越野"},
         {"b":"其他","m":"其他車款","t":"轎車"}
     ];
     
     let car = null, svcs = [], color = null, film = null;
-    const search = document.getElementById('search'), results = document.getElementById('results');
+    const search = document.getElementById('search');
+    const results = document.getElementById('results');
+    const step2 = document.getElementById('step2');
+    const summary = document.getElementById('summary');
     
-    function getBrandTag(brand) {
-        const color = brandColors[brand] || '#666';
-        const short = brand.length > 5 ? brand.substring(0,4)+'.' : brand;
-        return `<div class="brand-tag" style="background:${color};width:48px;font-size:13px;">${short}</div>`;
-    }
-    
-    search.oninput = () => {
+    search.oninput = function() {
         const q = search.value.toLowerCase().trim();
         if (!q) { results.classList.remove('show'); return; }
-        const r = db.filter(c => (c.b+c.m+c.t).toLowerCase().includes(q)).slice(0, 12);
-        results.innerHTML = r.map(c => `<div class="search-item" data-b="${c.b}" data-m="${c.m}">${getBrandTag(c.b)}<div class="info"><div class="name">${c.b} ${c.m}</div><div class="type">${c.t}</div></div></div>`).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
-        document.querySelectorAll('.search-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
+        const r = db.filter(function(c) { return (c.b+c.m+c.t).toLowerCase().indexOf(q) >= 0; }).slice(0, 12);
+        results.innerHTML = r.map(function(c) { 
+            return '<div class="search-item" data-b="' + c.b + '" data-m="' + c.m + '"><div class="icon">🚗</div><div class="info"><div class="name">' + c.b + ' ' + c.m + '</div><div class="type">' + c.t + '</div></div></div>'; 
+        }).join('') || '<div style="padding:20px;text-align:center;color:#999;">找不到車型</div>';
+        var items = results.querySelectorAll('.search-item');
+        for (var i = 0; i < items.length; i++) {
+            items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
+        }
         results.classList.add('show');
     };
     
-    document.querySelectorAll('.car-item').forEach(i => i.onclick = () => selCar(i.dataset.b, i.dataset.m));
-    
-    function selCar(b, m) { 
-        car = {b,m}; 
-        document.querySelectorAll('.car-item').forEach(i => i.classList.remove('selected')); 
-        const el = document.querySelector(`.car-item[data-m="${m}"]`); 
-        if(el) el.classList.add('selected'); 
-        document.getElementById('step2').style.display = 'block'; 
-        document.getElementById('summary').style.display = 'block'; 
-        document.getElementById('step2').scrollIntoView({behavior:'smooth'}); 
-        results.classList.remove('show'); 
+    var carItems = document.querySelectorAll('.car-item');
+    for (var i = 0; i < carItems.length; i++) {
+        carItems[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
     }
     
-    document.querySelectorAll('.service-opt').forEach(o => o.onclick = () => { const n = o.dataset.n; if (o.classList.contains('selected')) { o.classList.remove('selected'); svcs = svcs.filter(s => s.n !== n); } else { o.classList.add('selected'); svcs.push({t:o.dataset.t,n}); } document.getElementById('colorGroup').style.display = svcs.some(s => s.n === '全車改色包膜') ? 'block' : 'none'; });
-    document.querySelectorAll('.color-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.color-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); color = o.dataset.n; });
-    document.querySelectorAll('.film-opt').forEach(o => o.onclick = () => { document.querySelectorAll('.film-opt').forEach(x => x.classList.remove('selected')); o.classList.add('selected'); film = o.dataset.n; });
-    document.getElementById('showQuote').onclick = () => { if (!car) return alert('請選擇車型'); if (svcs.length === 0) return alert('請選擇服務'); const items = [...svcs]; if(color) items.push({t:'color',n:color}); if(film) items.push({t:'film',n:film}); document.getElementById('items').innerHTML = items.map(i => `<div class="modal-item"><span>${i.n}</span><span>洽專員</span></div>`).join(''); document.getElementById('modal').classList.add('show'); };
-    document.getElementById('closeModal').onclick = () => document.getElementById('modal').classList.remove('show');
-    document.getElementById('modal').onclick = (e) => { if(e.target.id === 'modal') document.getElementById('modal').classList.remove('show'); };
-    document.onclick = (e) => { if(!e.target.closest('.search-box')) results.classList.remove('show'); };
+    function selCar(b, m) {
+        car = {b:b, m:m};
+        for (var i = 0; i < carItems.length; i++) { carItems[i].classList.remove('selected'); }
+        var el = document.querySelector('.car-item[data-m="' + m + '"]');
+        if (el) el.classList.add('selected');
+        step2.style.display = 'block';
+        summary.style.display = 'block';
+        step2.scrollIntoView({behavior: 'smooth'});
+        results.classList.remove('show');
+    }
+    
+    var serviceOpts = document.querySelectorAll('.service-opt');
+    for (var i = 0; i < serviceOpts.length; i++) {
+        serviceOpts[i].onclick = function() {
+            var n = this.dataset.n;
+            if (this.classList.contains('selected')) {
+                this.classList.remove('selected');
+                svcs = svcs.filter(function(s) { return s.n !== n; });
+            } else {
+                this.classList.add('selected');
+                svcs.push({t:this.dataset.t, n:n});
+            }
+            document.getElementById('colorGroup').style.display = (svcs.some(function(s) { return s.n === '全車改色包膜'; })) ? 'block' : 'none';
+        };
+    }
+    
+    var colorOpts = document.querySelectorAll('.color-opt');
+    for (var i = 0; i < colorOpts.length; i++) {
+        colorOpts[i].onclick = function() {
+            for (var j = 0; j < colorOpts.length; j++) { colorOpts[j].classList.remove('selected'); }
+            this.classList.add('selected');
+            color = this.dataset.n;
+        };
+    }
+    
+    var filmOpts = document.querySelectorAll('.film-opt');
+    for (var i = 0; i < filmOpts.length; i++) {
+        filmOpts[i].onclick = function() {
+            for (var j = 0; j < filmOpts.length; j++) { filmOpts[j].classList.remove('selected'); }
+            this.classList.add('selected');
+            film = this.dataset.n;
+        };
+    }
+    
+    document.getElementById('showQuote').onclick = function() {
+        if (!car) { alert('請選擇車型'); return; }
+        if (svcs.length === 0) { alert('請選擇服務'); return; }
+        var items = svcs.slice();
+        if (color) items.push({t:'color', n:color});
+        if (film) items.push({t:'film', n:film});
+        document.getElementById('items').innerHTML = items.map(function(i) { return '<div class="modal-item"><span>' + i.n + '</span><span>洽專員</span></div>'; }).join('');
+        document.getElementById('modal').classList.add('show');
+    };
+    
+    document.getElementById('closeModal').onclick = function() { document.getElementById('modal').classList.remove('show'); };
+    document.getElementById('modal').onclick = function(e) { if (e.target.id === 'modal') document.getElementById('modal').classList.remove('show'); };
+    document.onclick = function(e) { if (!e.target.closest('.search-box')) results.classList.remove('show'); };
     </script>
 </body>
 </html>
