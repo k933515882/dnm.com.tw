@@ -357,40 +357,35 @@ const carData = [
     };
     
     function formatPrice(val) {
-        if (val === null) return '-';
-        var span = document.createElement('span');
-        span.className = 'price-value';
-        span.textContent = 'NT$ ' + val.toLocaleString();
-        var div = document.createElement('div');
-        div.appendChild(span);
-        return div.innerHTML;
+        if (val === null) return "-";
+        return '<span class="price-value">NT$ " + val.toLocaleString() + "</span>";
     }
     
     function init() {
-        var container = document.getElementById('brandList');
+        var container = document.getElementById("brandList");
         var grouped = {};
         carData.forEach(function(car) {
             if (!grouped[car.brand]) grouped[car.brand] = [];
             grouped[car.brand].push(car);
         });
         Object.keys(grouped).sort().forEach(function(brand) {
-            var section = document.createElement('div');
-            section.className = 'brand-section';
-            var colorClass = brandColors[brand] || 'other';
+            var section = document.createElement("div");
+            section.className = "brand-section";
+            var colorClass = brandColors[brand] || "other";
             
-            var titleDiv = document.createElement('div');
-            titleDiv.className = 'brand-title ' + colorClass;
+            var titleDiv = document.createElement("div");
+            titleDiv.className = "brand-title " + colorClass;
             titleDiv.textContent = brand;
             titleDiv.onclick = function() {
-                this.nextElementSibling.classList.toggle('show');
+                this.nextElementSibling.classList.toggle("show");
             };
             section.appendChild(titleDiv);
             
-            var grid = document.createElement('div');
-            grid.className = 'car-grid';
+            var grid = document.createElement("div");
+            grid.className = "car-grid";
             grouped[brand].forEach(function(car) {
-                var btn = document.createElement('button');
-                btn.className = 'car-btn';
+                var btn = document.createElement("button");
+                btn.className = "car-btn";
                 btn.textContent = car.model;
                 btn.onclick = function() { showPrices(car); };
                 grid.appendChild(btn);
@@ -398,80 +393,75 @@ const carData = [
             section.appendChild(grid);
             container.appendChild(section);
         });
-        document.getElementById('searchInput').addEventListener('input', searchCars);
+        document.getElementById("searchInput").addEventListener("input", searchCars);
     }
     
     function showPrices(car) {
-        document.getElementById('modalTitle').textContent = car.brand + ' ' + car.model;
-        var table = document.createElement('table');
-        table.className = 'price-table';
+        document.getElementById("modalTitle").textContent = car.brand + " " + car.model;
+        var table = document.createElement("table");
+        table.className = "price-table";
         
         var items = [
-            ['雙層陶瓷', car.ceramic],
-            ['單層鍍膜', car.coating],
-            ['TPU 透明', car.tpuClear],
-            ['TPU 消光', car.tpuMatte],
-            ['改色膜 PVC', car.pvc],
-            ['改色膜 PET', car.pet],
-            ['改色膜 TPU', car.tpuColor],
-            ['3M 極黑', car.m3Black],
-            ['3M 極透', car.m3Clear]
+            ["雙層陶瓷", car.ceramic],
+            ["單層鍍膜", car.coating],
+            ["TPU 透明", car.tpuClear],
+            ["TPU 消光", car.tpuMatte],
+            ["改色膜 PVC", car.pvc],
+            ["改色膜 PET", car.pet],
+            ["改色膜 TPU", car.tpuColor],
+            ["3M 極黑", car.m3Black],
+            ["3M 極透", car.m3Clear]
         ];
         
+        var tableHTML = "<tr><th>項目</th><th>價格</th></tr>";
         items.forEach(function(item) {
-            var row = document.createElement('tr');
-            var th = document.createElement('th');
-            th.textContent = item[0];
-            row.appendChild(th);
-            var td = document.createElement('td');
-            td.innerHTML = formatPrice(item[1]);
-            row.appendChild(td);
-            table.appendChild(row);
+            tableHTML += "<tr><td>" + item[0] + "</td><td>" + formatPrice(item[1]) + "</td></tr>";
         });
+        table.innerHTML = tableHTML;
         
-        var priceTable = document.getElementById('priceTable');
-        priceTable.innerHTML = '';
+        var priceTable = document.getElementById("priceTable");
+        priceTable.innerHTML = "";
         priceTable.appendChild(table);
-        document.getElementById('priceModal').classList.add('show');
+        document.getElementById("priceModal").classList.add("show");
     }
     
     function closeModal() {
-        document.getElementById('priceModal').classList.remove('show');
+        document.getElementById("priceModal").classList.remove("show");
     }
     
     function searchCars(e) {
         var query = e.target.value.toLowerCase().trim();
-        document.querySelectorAll('.brand-section').forEach(function(section) {
-            var brand = section.querySelector('.brand-title').textContent.toLowerCase();
-            var cars = section.querySelectorAll('.car-btn');
+        document.querySelectorAll(".brand-section").forEach(function(section) {
+            var brand = section.querySelector(".brand-title").textContent.toLowerCase();
+            var cars = section.querySelectorAll(".car-btn");
             var brandVisible = false;
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 var numbers = model.match(/\d+/g) || [];
-                var searchKey = numbers.join('');
+                var searchKey = numbers.join("");
                 var aliasMatch = false;
                 for (var key in aliasMap) {
-                    if (query.indexOf(key) !== -1 && model.indexOf(aliasMap[key].toLowerCase().split(' ')[0]) !== -1) {
+                    if (query.indexOf(key) !== -1 && model.indexOf(aliasMap[key].toLowerCase().split(" ")[0]) !== -1) {
                         aliasMatch = true;
                         break;
                     }
                 }
                 var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || searchKey.indexOf(query) !== -1 || aliasMatch;
-                btn.style.display = visible ? '' : 'none';
+                btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
             });
-            section.querySelector('.car-grid').classList.toggle('show', brandVisible);
-            section.style.display = brandVisible ? '' : 'none';
+            section.querySelector(".car-grid").classList.toggle("show", brandVisible);
+            section.style.display = brandVisible ? "" : "none";
         });
     }
     
-    document.getElementById('priceModal').onclick = function(e) {
+    document.getElementById("priceModal").onclick = function(e) {
         if (e.target === this) closeModal();
     };
     
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener("DOMContentLoaded", function() {
         init();
     });
-    \x3c/script>
+</script>
 </body>
 </html>
