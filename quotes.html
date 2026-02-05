@@ -318,7 +318,7 @@
             selCar(item.dataset.b, item.dataset.m);
         }
     });
-function showCarInfo(c) {
+    function showCarInfo(c) {
         document.getElementById("carTitle").textContent = c.b + " " + c.m;
         var specs = [];
         if (c.l) specs.push({l:"車長",v:c.l+" mm"});
