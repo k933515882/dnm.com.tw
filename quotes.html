@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DM SENSE 報價系統</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f7; color: #1d1d1f; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 40px 20px; background: #fff; border-bottom: 1px solid #e5e5e5; margin-bottom: 30px; }
+        header h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 10px; }
+        header p { color: #86868b; font-size: 1.1rem; }
+        .search-box { max-width: 600px; margin: 0 auto 30px; padding: 0 20px; }
+        .search-box input { width: 100%; padding: 16px 20px; font-size: 1.1rem; border: none; border-radius: 12px; background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.08); outline: none; }
+        .search-box input:focus { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+        .brand-section { margin-bottom: 20px; }
+        .brand-title { padding: 15px 20px; font-size: 1.3rem; font-weight: 600; color: #fff; border-radius: 12px; cursor: pointer; transition: transform 0.2s; }
+        .brand-title:hover { transform: scale(1.01); }
+        .brand-title.lexus { background: #1a1a1a; }
+        .brand-title.bmw { background: #0066b1; }
+        .brand-title.mercedes { background: #000; }
+        .brand-title.porsche { background: #d63031; }
+        .brand-title.audi { background: #c0392b; }
+        .brand-title.toyota { background: #eb0a1e; }
+        .brand-title.infiniti { background: #000; }
+        .brand-title.ford { background: #003478; }
+        .brand-title.volkswagen { background: #001e50; }
+        .brand-title.mazda { background: #c30c18; }
+        .brand-title.volvo { background: #003153; }
+        .brand-title.hyundai { background: #002c5f; }
+        .brand-title.honda { background: #cc0000; }
+        .brand-title.peugeot { background: #002395; }
+        .brand-title.fiat { background: #9e1b32; }
+        .brand-title.tesla { background: #e31937; }
+        .brand-title.landrover { background: #009647; }
+        .brand-title.maserati { background: #c62d3f; }
+        .brand-title.jaguar { background: #00965e; }
+        .brand-title.mini { background: #7c9096; }
+        .brand-title.kia { background: #c8102e; }
+        .brand-title.skoda { background: #008fd3; }
+        .brand-title.mg { background: #002652; }
+        .brand-title.subaru { background: #0646ad; }
+        .brand-title.suzuki { background: #f05323; }
+        .brand-title.nissan { background: #c61a09; }
+        .brand-title.mitsubishi { background: #e60012; }
+        .brand-title.luxgen { background: #0058a3; }
+        .brand-title.citroen { background: #6d2c91; }
+        .brand-title.other { background: #666; }
+        .car-grid { display: none; padding: 20px; background: #fff; border-radius: 0 0 12px 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .car-grid.show { display: flex; }
+        .car-btn { padding: 12px 24px; font-size: 1rem; font-weight: 500; border: 2px solid #e5e5e5; border-radius: 8px; background: #fff; cursor: pointer; transition: all 0.2s; }
+        .car-btn:hover { border-color: #0071e3; color: #0071e3; }
+        .car-btn.active { background: #0071e3; border-color: #0071e3; color: #fff; }
+        .price-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .price-modal.show { display: flex; }
+        .price-content { background: #fff; border-radius: 16px; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; padding: 30px; }
+        .price-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #e5e5e5; }
+        .price-header h2 { font-size: 1.8rem; font-weight: 600; }
+        .close-btn { width: 40px; height: 40px; border: none; background: #f5f5f7; border-radius: 50%; font-size: 1.5rem; cursor: pointer; }
+        .price-table { width: 100%; border-collapse: collapse; }
+        .price-table th, .price-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e5e5e5; }
+        .price-table th { background: #f5f5f7; font-weight: 600; }
+        .price-value { font-weight: 600; color: #0071e3; }
+        @media (max-width: 768px) { header h1 { font-size: 1.8rem; } .car-btn { padding: 10px 16px; font-size: 0.9rem; } }
+    </style>
+</head>
+<body>
+    <header><h1>DM SENSE 報價系統</h1><p>選擇品牌和車款查看報價</p></header>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌或車款 (例如: 賓士、C300、RAV4、Model 3)"></div>
+    <div id="brandList" class="container"></div>
+    <div id="priceModal" class="price-modal">
+        <div class="price-content"><div class="price-header"><h2 id="modalTitle">車款報價</h2><button class="close-btn" onclick="closeModal()">×</button></div><div id="priceTable"></div></div>
+    </div>
+    <script>
+    const carData = [
+        { brand: "LEXUS", model: "CT200H", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "RX", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: 22000, m3Clear: 32000 },
+        { brand: "LEXUS", model: "NX", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "RZ", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "UX200", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "IS", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "ES", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "RC300", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "LC", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "LS", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "LBX", ceramic: 20000, coating: null, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "LEXUS", model: "LM", ceramic: 28000, coating: 19000, tpuClear: 83000, tpuMatte: 93000, pvc: null, pet: null, tpuColor: null, m3Black: 28000, m3Clear: 38000 },
+        { brand: "BMW", model: "X1", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "iX1", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "X2", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 60000, pet: 65000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "X3", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: 60000, pet: 65000, tpuColor: 90000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "BMW", model: "X4", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: 60000, pet: 65000, tpuColor: 90000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "BMW", model: "X5", ceramic: 22000, coating: 13000, tpuClear: 78000, tpuMatte: 88000, pvc: 70000, pet: 75000, tpuColor: null, m3Black: 22000, m3Clear: 32000 },
+        { brand: "BMW", model: "X6", ceramic: 22000, coating: 13000, tpuClear: 78000, tpuMatte: 88000, pvc: 70000, pet: 75000, tpuColor: null, m3Black: 22000, m3Clear: 32000 },
+        { brand: "BMW", model: "X7", ceramic: 23000, coating: 14000, tpuClear: 78000, tpuMatte: 88000, pvc: 80000, pet: 85000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "1 Series", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "2 Series", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "3 Series", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "Touring (旅行車)", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "i4", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "4 Series", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "5 Series", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "6 Series", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "7 Series", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "8 Series", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "IX", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: 70000, pet: 75000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "M2", ceramic: 19000, coating: 10000, tpuClear: 73000, tpuMatte: 83000, pvc: 70000, pet: 80000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "Z4", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "BMW", model: "2AT", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "AMG-GT", ceramic: 21000, coating: 12000, tpuClear: 70000, tpuMatte: 80000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "賓士 (Mercedes)", model: "C系列 (C-Class)", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "CLA", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "CLS", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "E系列 (E-Class)", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "G CAR (G-Class)", ceramic: 30000, coating: 21000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "S350D (S-Class)", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "GLS", ceramic: 23000, coating: 14000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "GLE", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: 75000, pet: 80000, tpuColor: 99000, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "GLB", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "賓士 (Mercedes)", model: "GLA", ceramic: 21000, coating: 12000, tpuClear: 58000, tpuMatte: 68000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "GLC", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "ML400", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "V-250D (V-Class)", ceramic: 28000, coating: 19000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQA", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQE", ceramic: 19000, coating: 10000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQE SUV", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQS", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQB (五人座)", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "EQB (七人座)", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "A180 (A-Class)", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "賓士 (Mercedes)", model: "B180 (B-Class)", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Porsche", model: "Macan", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 85000, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Porsche", model: "Cayenne", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: 70000, pet: 75000, tpuColor: null, m3Black: 22000, m3Clear: 32000 },
+        { brand: "Porsche", model: "Taycan", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Porsche", model: "718", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Porsche", model: "911", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Porsche", model: "Panamera", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "Audi", model: "Q5", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "Q3", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "Q2", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "Q7", ceramic: 23000, coating: 14000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "E-Tron", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "E-Tron GT", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "Q8", ceramic: 23000, coating: 14000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "RS6", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A1", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A3", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 55000, pet: 60000, tpuColor: 75000, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A4", ceramic: 19000, coating: 10000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A5", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A6", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A7", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A8", ceramic: 21000, coating: 12000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Audi", model: "A6 Avant (Wagon)", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Corolla Cross", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "RAV4", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "CHR", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "BZ4X", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "Toyota", model: "ALTIS", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Auris", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "CAMRY", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "VIOS", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Corolla Sport", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Prius PHV", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "GR YARIS", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Fortis", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: 60000, pet: 65000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Alphard", ceramic: 28000, coating: 19000, tpuClear: 75000, tpuMatte: 85000, pvc: 75000, pet: 85000, tpuColor: 115000, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "SIENNA", ceramic: 28000, coating: 19000, tpuClear: 83000, tpuMatte: 93000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Hiace", ceramic: 30000, coating: 21000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Granvia", ceramic: 30000, coating: 21000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "GR86", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: 60000, pet: 65000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Supra", ceramic: 20000, coating: 11000, tpuClear: 60000, tpuMatte: 70000, pvc: 4000, pet: null, tpuColor: null, m3Black: 18000, m3Clear: 28000 },
+        { brand: "Toyota", model: "Hilux", ceramic: 30000, coating: 21000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Wish", ceramic: 23000, coating: 14000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Previa", ceramic: 30000, coating: 21000, tpuClear: 73000, tpuMatte: 83000, pvc: 75000, pet: 80000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Toyota", model: "Yaris Cross", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "Q50", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "Q60", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "Q30", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "QX50", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "QX55", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Infiniti", model: "QX60", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "Infiniti", model: "FX35", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "Kuga", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: 20000, m3Clear: 32000 },
+        { brand: "福特 Ford", model: "Focus", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "Focus Wagon", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "Focus Active", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "Mondeo wagon", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "貨卡 Ranger", ceramic: 30000, coating: 21000, tpuClear: null, tpuMatte: null, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "野馬 Mustang", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 75000, pet: 85000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "福特 Ford", model: "Territory", ceramic: 22000, coating: null, tpuClear: 65000, tpuMatte: 75000, pvc: null, pet: null, tpuColor: null, m3Black: 22000, m3Clear: 32000 },
+        { brand: "福特 Ford", model: "旅玩家 Tourneo", ceramic: null, coating: null, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "T5", ceramic: 28000, coating: 19000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "T6", ceramic: 28000, coating: 19000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Tiguan", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "Volkswagen", model: "Allspace", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "T-ROC", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "T-Cross", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Golf", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Golf GTI", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Variant", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Arteon", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Shooting Brake", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Polo", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Caddy", ceramic: 28000, coating: 19000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Multivan", ceramic: 30000, coating: 21000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "Touran", ceramic: 23000, coating: 14000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Volkswagen", model: "California", ceramic: 30000, coating: 21000, tpuClear: 78000, tpuMatte: 88000, pvc: 70000, pet: 75000, tpuColor: 100000, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "CX-3", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "MX-5", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: 50000, pet: 55000, tpuColor: 80000, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "Mazda3", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "Mazda6", ceramic: 19000, coating: 10000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "Mazda6 wagon", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "CX-5", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "CX-9", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "老款MAZDA5", ceramic: 28000, coating: 19000, tpuClear: 73000, tpuMatte: 83000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "mazda5", ceramic: 28000, coating: 19000, tpuClear: 73000, tpuMatte: 83000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MAZDA", model: "CX-60", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "V40", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "V60", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "V90", ceramic: 20000, coating: 11000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "S60", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "S90", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "XC40", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 55000, pet: 60000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "XC60", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "VOLVO", model: "XC90", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: 23000, m3Clear: 35000 },
+        { brand: "現代 Hyundai", model: "Santa fe", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Tucson", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: 20000, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Elantra", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Venue", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Kona", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Ioniq5", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Custin", ceramic: 30000, coating: 21000, tpuClear: 78000, tpuMatte: 88000, pvc: 75000, pet: 80000, tpuColor: 110000, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Staria", ceramic: 30000, coating: 21000, tpuClear: 80000, tpuMatte: 90000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "現代 Hyundai", model: "Ioniq6", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Honda", model: "CRZ", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Honda", model: "HRV", ceramic: 21000, coating: 12000, tpuClear: 58000, tpuMatte: 68000, pvc: 55000, pet: 60000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Honda", model: "CRV", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "Honda", model: "FIT", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: 50000, pet: 55000, tpuColor: 75000, m3Black: null, m3Clear: null },
+        { brand: "Honda", model: "Odyssey", ceramic: 23000, coating: 14000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Honda", model: "Civic", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Peugeot", model: "5008", ceramic: 22000, coating: 13000, tpuClear: 65000, tpuMatte: 75000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "Peugeot", model: "3008", ceramic: 21000, coating: 12000, tpuClear: 65000, tpuMatte: 75000, pvc: null, pet: null, tpuColor: null, m3Black: 20000, m3Clear: null },
+        { brand: "Peugeot", model: "508", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: 70000, pet: 75000, tpuColor: 5000000, m3Black: null, m3Clear: null },
+        { brand: "Fiat / Alfa", model: "Fiat", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Fiat / Alfa", model: "Stelvio", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Fiat / Alfa", model: "Giulia", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Fiat / Alfa", model: "Tonale", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "TESLA", model: "MODEL 3", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "TESLA", model: "MODEL Y", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "TESLA", model: "MODEL X", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "TESLA", model: "MODEL S", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Defender 130", ceramic: 32000, coating: null, tpuClear: 83000, tpuMatte: 93000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Defender 90", ceramic: null, coating: null, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Defender 110", ceramic: 30000, coating: 21000, tpuClear: 78000, tpuMatte: 88000, pvc: 70000, pet: 75000, tpuColor: 95000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "Land Rover", model: "Evoque", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 60000, pet: 75000, tpuColor: 90000, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Discovery Sport", ceramic: 23000, coating: 14000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Range Rover", ceramic: 28000, coating: 19000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Range Rover Velar", ceramic: 23000, coating: 14000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Land Rover", model: "Discovery", ceramic: null, coating: null, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Maserati", model: "Levante", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Maserati", model: "Grecale", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Maserati", model: "Ghibli", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Jaguar", model: "E-Pace", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Jaguar", model: "F-Pace", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Jaguar", model: "I-Pace", ceramic: 22000, coating: 13000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Jaguar", model: "F-Type", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Jaguar", model: "XF", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Mini", model: "Countryman", ceramic: 21000, coating: 12000, tpuClear: 60000, tpuMatte: 70000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Mini", model: "Mini Cooper", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Mini", model: "Clubman", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: 70000, pet: 75000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Mini", model: "GP", ceramic: null, coating: null, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Sportage", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "EV6", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Stonic", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Sorento", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Picanto", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Sportswagon", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Carens", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Carnival", ceramic: 28000, coating: 19000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "KA4 Carnival", ceramic: 30000, coating: 21000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "EV9", ceramic: 23000, coating: null, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Kia", model: "Ceed", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "其他超跑/美系", model: "Lamborghini Urus", ceramic: 22000, coating: 13000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "其他超跑/美系", model: "Ferrari 488", ceramic: null, coating: null, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "其他超跑/美系", model: "Chevrolet Camaro", ceramic: null, coating: null, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "其他超跑/美系", model: "McLaren", ceramic: null, coating: null, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Karoq", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Kamiq", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Kodiaq", ceramic: 22000, coating: 13000, tpuClear: 73000, tpuMatte: 83000, pvc: 65000, pet: 70000, tpuColor: 90000, m3Black: 22000, m3Clear: 32000 },
+        { brand: "Skoda", model: "Fabia", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Scala", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "SuperB", ceramic: 20000, coating: 11000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Octavia", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Skoda", model: "Octavia Combi", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MG", model: "HS", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MG", model: "ZS", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: null, m3Clear: null },
+        { brand: "MG", model: "MG4", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "MG", model: "G50", ceramic: 28000, coating: null, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: 25000, m3Clear: 35000 },
+        { brand: "Subaru", model: "Levorg", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "Forester", ceramic: 21000, coating: 12000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "XV", ceramic: 21000, coating: 12000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "Outback", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "BRZ", ceramic: 19000, coating: 10000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "WRX", ceramic: 19000, coating: 10000, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "WRX Wagon", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Subaru", model: "Crosstrek", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Suzuki", model: "Swift", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Suzuki", model: "SX4", ceramic: 21000, coating: 12000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Suzuki", model: "Vitara", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Suzuki", model: "Jimny", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Suzuki", model: "Ignis", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "Kicks", ceramic: 20000, coating: 11000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "X-trail", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "Altima", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "Sentra", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "Juke", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "TIIDA", ceramic: 19000, coating: 10000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "GTR", ceramic: 19000, coating: 10000, tpuClear: 73000, tpuMatte: 83000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "LEAF", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: 65000, pet: 70000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "NISSAN", model: "Ariya", ceramic: null, coating: null, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: 20000, m3Clear: 32000 },
+        { brand: "NISSAN", model: "Livina", ceramic: 23000, coating: 14000, tpuClear: 58000, tpuMatte: 68000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Eclipse (日蝕)", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Outlander", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Fortis", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: 60000, pet: 65000, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Colt plus", ceramic: 20000, coating: 11000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Lancer", ceramic: 19000, coating: 10000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Savrin", ceramic: 23000, coating: 14000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "三菱 (Mitsubishi)", model: "Zinger", ceramic: 22000, coating: null, tpuClear: 65000, tpuMatte: 75000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "U7", ceramic: 22000, coating: null, tpuClear: 68000, tpuMatte: 78000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "U6 GT", ceramic: 21000, coating: 12000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "URX", ceramic: 23000, coating: 14000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "U5", ceramic: 20000, coating: 11000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "S5", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Luxgen", model: "M7", ceramic: 23000, coating: 14000, tpuClear: 78000, tpuMatte: 88000, pvc: null, pet: null, tpuColor: null, m3Black: 200008000, m3Clear: 32000 },
+        { brand: "Luxgen", model: "N7", ceramic: 22000, coating: 13000, tpuClear: 63000, tpuMatte: 73000, pvc: 60000, pet: 65000, tpuColor: 85000, m3Black: 20000, m3Clear: 32000 },
+        { brand: "Citroen / Smart", model: "Berlingo", ceramic: 23000, coating: 14000, tpuClear: 73000, tpuMatte: 83000, pvc: 70000, pet: 75000, tpuColor: 105000, m3Black: null, m3Clear: null },
+        { brand: "Citroen / Smart", model: "C5", ceramic: 21000, coating: 12000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+        { brand: "Citroen / Smart", model: "Smart Fortwo", ceramic: null, coating: null, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
+    ];
+    
+    const brandColors = {
+        "LEXUS": "lexus", "BMW": "bmw", "賓士 (Mercedes)": "mercedes", "Porsche": "porsche", "Audi": "audi", 
+        "Toyota": "toyota", "Infiniti": "infiniti", "福特 Ford": "ford", "Volkswagen": "volkswagen", 
+        "MAZDA": "mazda", "VOLVO": "volvo", "現代 Hyundai": "hyundai", "Honda": "honda", 
+        "Peugeot": "peugeot", "Fiat / Alfa": "fiat", "TESLA": "tesla", "Land Rover": "landrover", 
+        "Maserati": "maserati", "Jaguar": "jaguar", "Mini": "mini", "Kia": "kia", 
+        "Skoda": "skoda", "MG": "mg", "Subaru": "subaru", "Suzuki": "suzuki", 
+        "NISSAN": "nissan", "三菱 (Mitsubishi)": "mitsubishi", "Luxgen": "luxgen", "Citroen / Smart": "citroen", 
+        "其他超跑/美系": "other"
+    };
+    
+    const aliasMap = {
+        "c200": "C系列", "c260": "C系列", "c300": "C系列", "c350": "C系列",
+        "e200": "E系列", "e300": "E系列", "e450": "E系列",
+        "320": "3 Series", "330": "3 Series", "340": "3 Series",
+        "520": "5 Series", "530": "5 Series", "540": "5 Series",
+        "rav4": "RAV4", "rav": "RAV4", "model3": "MODEL 3", "m3": "MODEL 3",
+        "modely": "MODEL Y", "my": "MODEL Y", "modelx": "MODEL X", "models": "MODEL S"
+    };
+    
+    function init() {
+        const container = document.getElementById('brandList');
+        const grouped = {};
+        carData.forEach(car => {
+            if (!grouped[car.brand]) grouped[car.brand] = [];
+            grouped[car.brand].push(car);
+        });
+        Object.keys(grouped).sort().forEach(brand => {
+            const section = document.createElement('div');
+            section.className = 'brand-section';
+            const colorClass = brandColors[brand] || 'other';
+            section.innerHTML = `<div class="brand-title ${colorClass}" onclick="toggleBrand(this)">${brand}</div>`;
+            const grid = document.createElement('div');
+            grid.className = 'car-grid';
+            grouped[brand].forEach(car => {
+                const btn = document.createElement('button');
+                btn.className = 'car-btn';
+                btn.textContent = car.model;
+                btn.onclick = () => showPrices(car);
+                grid.appendChild(btn);
+            });
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
+        document.getElementById('searchInput').addEventListener('input', searchCars);
+    }
+    
+    function toggleBrand(el) {
+        el.nextElementSibling.classList.toggle('show');
+    }
+    
+    function formatPrice(val) {
+        return val !== null ? `<span class="price-value">NT$ ${val.toLocaleString()}</span>` : '-';
+    }
+    
+    function showPrices(car) {
+        document.getElementById('modalTitle').textContent = `${car.brand} ${car.model}`;
+        document.getElementById('priceTable').innerHTML = `
+            <table class="price-table">
+                <tr><th>項目</th><th>價格</th></tr>
+                <tr><td>雙層陶瓷</td><td>${formatPrice(car.ceramic)}</td></tr>
+                <tr><td>單層鍍膜</td><td>${formatPrice(car.coating)}</td></tr>
+                <tr><td>TPU 透明</td><td>${formatPrice(car.tpuClear)}</td></tr>
+                <tr><td>TPU 消光</td><td>${formatPrice(car.tpuMatte)}</td></tr>
+                <tr><td>改色膜 PVC</td><td>${formatPrice(car.pvc)}</td></tr>
+                <tr><td>改色膜 PET</td><td>${formatPrice(car.pet)}</td></tr>
+                <tr><td>改色膜 TPU</td><td>${formatPrice(car.tpuColor)}</td></tr>
+                <tr><td>3M 極黑</td><td>${formatPrice(car.m3Black)}</td></tr>
+                <tr><td>3M 極透</td><td>${formatPrice(car.m3Clear)}</td></tr>
+            </table>`;
+        document.getElementById('priceModal').classList.add('show');
+    }
+    
+    function closeModal() {
+        document.getElementById('priceModal').classList.remove('show');
+    }
+    
+    function searchCars(e) {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.brand-section').forEach(section => {
+            const brand = section.querySelector('.brand-title').textContent.toLowerCase();
+            const cars = section.querySelectorAll('.car-btn');
+            let brandVisible = false;
+            cars.forEach(btn => {
+                const model = btn.textContent.toLowerCase();
+                const searchKey = model.replace(/\D/g, '');
+                const aliasMatch = Object.keys(aliasMap).some(k => query.includes(k) && aliasMap[k].toLowerCase() === model.toLowerCase().split(' ')[0]);
+                const visible = brand.includes(query) || model.includes(query) || searchKey.includes(query) || aliasMatch;
+                btn.style.display = visible ? '' : 'none';
+                if (visible) brandVisible = true;
+            });
+            section.querySelector('.car-grid').classList.toggle('show', brandVisible);
+            section.style.display = brandVisible ? '' : 'none';
+        });
+    }
+    
+    document.getElementById('priceModal').onclick = function(e) {
+        if (e.target === this) closeModal();
+    };
+    
+    init();
+    <\/script>
+</body>
+</html>
