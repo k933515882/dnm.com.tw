@@ -370,7 +370,11 @@
             const section = document.createElement('div');
             section.className = 'brand-section';
             const colorClass = brandColors[brand] || 'other';
-            section.innerHTML = `<div class="brand-title ${colorClass}" onclick="toggleBrand(this)">${brand}</div>`;
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'brand-title ' + colorClass;
+            titleDiv.textContent = brand;
+            titleDiv.onclick = function() { toggleBrand(this); };
+            section.appendChild(titleDiv);
             const grid = document.createElement('div');
             grid.className = 'car-grid';
             grouped[brand].forEach(car => {
@@ -396,19 +400,20 @@
     
     function showPrices(car) {
         document.getElementById('modalTitle').textContent = `${car.brand} ${car.model}`;
-        document.getElementById('priceTable').innerHTML = `
-            <table class="price-table">
-                <tr><th>項目</th><th>價格</th></tr>
-                <tr><td>雙層陶瓷</td><td>${formatPrice(car.ceramic)}</td></tr>
-                <tr><td>單層鍍膜</td><td>${formatPrice(car.coating)}</td></tr>
-                <tr><td>TPU 透明</td><td>${formatPrice(car.tpuClear)}</td></tr>
-                <tr><td>TPU 消光</td><td>${formatPrice(car.tpuMatte)}</td></tr>
-                <tr><td>改色膜 PVC</td><td>${formatPrice(car.pvc)}</td></tr>
-                <tr><td>改色膜 PET</td><td>${formatPrice(car.pet)}</td></tr>
-                <tr><td>改色膜 TPU</td><td>${formatPrice(car.tpuColor)}</td></tr>
-                <tr><td>3M 極黑</td><td>${formatPrice(car.m3Black)}</td></tr>
-                <tr><td>3M 極透</td><td>${formatPrice(car.m3Clear)}</td></tr>
-            </table>`;
+        const table = document.createElement('table');
+            table.className = 'price-table';
+            let tableHTML = '<tr><th>項目</th><th>價格</th></tr>';
+            tableHTML += '<tr><td>雙層陶瓷</td><td>' + formatPrice(car.ceramic) + '</td></tr>';
+            tableHTML += '<tr><td>單層鍍膜</td><td>' + formatPrice(car.coating) + '</td></tr>';
+            tableHTML += '<tr><td>TPU 透明</td><td>' + formatPrice(car.tpuClear) + '</td></tr>';
+            tableHTML += '<tr><td>TPU 消光</td><td>' + formatPrice(car.tpuMatte) + '</td></tr>';
+            tableHTML += '<tr><td>改色膜 PVC</td><td>' + formatPrice(car.pvc) + '</td></tr>';
+            tableHTML += '<tr><td>改色膜 PET</td><td>' + formatPrice(car.pet) + '</td></tr>';
+            tableHTML += '<tr><td>改色膜 TPU</td><td>' + formatPrice(car.tpuColor) + '</td></tr>';
+            tableHTML += '<tr><td>3M 極黑</td><td>' + formatPrice(car.m3Black) + '</td></tr>';
+            tableHTML += '<tr><td>3M 極透</td><td>' + formatPrice(car.m3Clear) + '</td></tr>';
+            table.innerHTML = tableHTML;
+            document.getElementById('priceTable').appendChild(table);
         document.getElementById('priceModal').classList.add('show');
     }
     
