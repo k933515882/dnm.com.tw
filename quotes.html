@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DM SENSE | 線上報價系統</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --primary: #ff6b35; --dark: #1a1a2e; --light: #f8f9fa; --white: #fff; --gray: #666; }
@@ -78,7 +78,7 @@
                 <span class="step-num">1</span>
                 <span class="step-title">選擇車型</span>
             </div>
-            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60、Model 3、RAV4">
+            <input type="text" class="search-input" id="search" placeholder="搜尋車款，如：C300、520、V60">
             <div class="search-results" id="results"></div>
             <div class="car-grid">
                 <div class="car-item" data-b="BMW" data-m="5 Series"><div class="name">BMW 5 Series</div><div class="type">轎車</div></div>
@@ -151,22 +151,19 @@
         </div>
     </div>
     <script>
-    // 車款別名對照表
     var aliasMap = {
         "c200":"C-Class","c260":"C-Class","c300":"C-Class","c350":"C-Class",
-        "e200":"E-Class","e260":"E-Class","e300":"E-Class","e350":"E-Class","e450":"E-Class",
-        "a180":"A-Class","a200":"A-Class","a250":"A-Class",
-        "s350":"S-Class","s450":"S-Class","s500":"S-Class",
+        "e200":"E-Class","e300":"E-Class","e450":"E-Class",
+        "a200":"A-Class","a250":"A-Class",
         "320":"3 Series","330":"3 Series","340":"3 Series",
         "520":"5 Series","530":"5 Series","540":"5 Series","550":"5 Series",
-        "420":"4 Series","430":"4 Series","440":"4 Series",
-        "220":"2 Series","230":"2 Series",
-        "x3":"X3","x5":"X5","x1":"X1","x7":"X7",
-        "rx300":"RX","rx350":"RX","nx300":"NX",
+        "420":"4 Series","430":"4 Series",
+        "x3":"X3","x5":"X5","x1":"X1",
+        "rx300":"RX","nx300":"NX",
         "rav4":"RAV4","rav":"RAV4",
-        "model3":"Model 3","model y":"Model Y","m3":"Model 3","my":"Model Y"
+        "model3":"Model 3","m3":"Model 3",
+        "model y":"Model Y","my":"Model Y"
     };
-    
     var db = [
         {b:"BMW",m:"5 Series",t:"轎車"},{b:"BMW",m:"3 Series",t:"轎車"},{b:"BMW",m:"X3",t:"休旅車"},{b:"BMW",m:"X5",t:"休旅車"},
         {b:"賓士",m:"C-Class",t:"轎車"},{b:"賓士",m:"E-Class",t:"轎車"},{b:"賓士",m:"GLC",t:"休旅車"},{b:"賓士",m:"GLE",t:"休旅車"},
@@ -182,47 +179,34 @@
         {b:"Mazda",m:"CX-5",t:"休旅車"},{b:"Mazda",m:"CX-60",t:"休旅車"},
         {b:"Nissan",m:"X-Trail",t:"休旅車"},{b:"Nissan",m:"Kicks",t:"休旅車"},
         {b:"Suzuki",m:"Vitara",t:"休旅車"},{b:"Suzuki",m:"Jimny",t:"越野"},
-        {b:"Subaru",m:"Forester",t:"休旅車"},{b:"Subaru",m:"Outback",t:"旅行車"}
+        {b:"速霸陸",m:"Forester",t:"休旅車"},{b:"速霸陸",m:"Outback",t:"旅行車"}
     ];
-    
     var car = null, svcs = [], color = null, film = null;
     var search = document.getElementById("search");
     var results = document.getElementById("results");
     var step2 = document.getElementById("step2");
     var summary = document.getElementById("summary");
-    
     search.onkeyup = search.oninput = function() {
         var q = search.value.toLowerCase().trim();
         results.style.display = "none";
         if (!q) return;
-        
-        // 先查別名表
         var target = aliasMap[q] || q;
-        
         var r = db.filter(function(c) {
             var s = (c.b + " " + c.m + " " + c.t).toLowerCase();
             var t = target.toLowerCase();
-            // 完全匹配或部分匹配
             return s.indexOf(t) >= 0 || s.replace(/[^a-z0-9]/g, "").indexOf(t.replace(/[^a-z0-9]/g, "")) >= 0;
         }).slice(0, 10);
-        
         if (r.length > 0) {
             results.innerHTML = r.map(function(c) {
                 return "<div class="search-item" data-b="" + c.b + "" data-m="" + c.m + ""><div class="name">" + c.b + " " + c.m + "</div><div class="type">" + c.t + "</div></div>";
             }).join("");
             var items = results.querySelectorAll(".search-item");
-            for (var i = 0; i < items.length; i++) {
-                items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
-            }
+            for (var i = 0; i < items.length; i++) { items[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
             results.style.display = "block";
         }
     };
-    
     var carItems = document.querySelectorAll(".car-item");
-    for (var i = 0; i < carItems.length; i++) {
-        carItems[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); };
-    }
-    
+    for (var i = 0; i < carItems.length; i++) { carItems[i].onclick = function() { selCar(this.dataset.b, this.dataset.m); }; }
     function selCar(b, m) {
         car = {b: b, m: m};
         for (var i = 0; i < carItems.length; i++) { carItems[i].classList.remove("selected"); }
@@ -233,7 +217,6 @@
         results.style.display = "none";
         step2.scrollIntoView({behavior: "smooth"});
     }
-    
     var serviceOpts = document.querySelectorAll(".service-opt");
     for (var i = 0; i < serviceOpts.length; i++) {
         serviceOpts[i].onclick = function() {
@@ -248,7 +231,6 @@
             document.getElementById("colorGroup").style.display = svcs.some(function(s) { return s.n === "全車改色包膜"; }) ? "block" : "none";
         };
     }
-    
     var colorOpts = document.querySelectorAll(".color-opt");
     for (var i = 0; i < colorOpts.length; i++) {
         colorOpts[i].onclick = function() {
@@ -257,7 +239,6 @@
             color = this.dataset.n;
         };
     }
-    
     var filmOpts = document.querySelectorAll(".film-opt");
     for (var i = 0; i < filmOpts.length; i++) {
         filmOpts[i].onclick = function() {
@@ -266,7 +247,6 @@
             film = this.dataset.n;
         };
     }
-    
     document.getElementById("showQuote").onclick = function() {
         if (!car) { alert("請選擇車型"); return; }
         if (svcs.length === 0) { alert("請選擇服務"); return; }
@@ -276,7 +256,6 @@
         document.getElementById("items").innerHTML = items.map(function(i) { return "<div class="modal-item"><span>" + i.n + "</span><span>洽專員</span></div>"; }).join("");
         document.getElementById("modal").classList.add("show");
     };
-    
     document.getElementById("closeModal").onclick = function() { document.getElementById("modal").classList.remove("show"); };
     document.getElementById("modal").onclick = function(e) { if (e.target.id === "modal") document.getElementById("modal").classList.remove("show"); };
     </script>
