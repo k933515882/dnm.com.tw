@@ -608,16 +608,21 @@ const carData = [
     
     // 完整別名對照表
     const aliasMap = {
-        // C系列
+        // C系列 - 所有可能縮寫
+        "c": "C系列", "c-class": "C系列", "c class": "C系列", "cclass": "C系列",
         "c200": "C系列", "c20": "C系列", "c260": "C系列", "c26": "C系列",
         "c300": "C系列", "c30": "C系列", "c350": "C系列", "c35": "C系列",
+        "c3": "C系列", "c2": "C系列",
         // E系列
+        "e": "E系列", "e-class": "E系列", "e class": "E系列", "eclass": "E系列",
         "e200": "E系列", "e20": "E系列", "e300": "E系列", "e30": "E系列",
-        "e450": "E系列", "e45": "E系列",
+        "e450": "E系列", "e45": "E系列", "e4": "E系列", "e3": "E系列",
         // 3 Series
+        "3": "3 Series", "3s": "3 Series", "3s": "3 Series",
         "320": "3 Series", "32": "3 Series", "330": "3 Series", "33": "3 Series",
         "340": "3 Series", "34": "3 Series",
         // 5 Series
+        "5": "5 Series", "5s": "5 Series", "5s": "5 Series",
         "520": "5 Series", "52": "5 Series", "530": "5 Series", "53": "5 Series",
         "540": "5 Series", "54": "5 Series",
         // 其他
@@ -726,7 +731,7 @@ const carData = [
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
                 
-                // 檢查是否為純數字搜尋 (如 "718", "520", "30")
+                // 檢查是否為純數字搜尋
                 var isNumberOnly = /^\d+$/.test(query);
                 
                 // 數字部分包含查詢
@@ -745,12 +750,11 @@ const carData = [
                 }
                 
                 // 搜尋條件
-                // - 如果是純數字搜尋，只看數字匹配
-                // - 如果是文字搜尋，看品牌和車款名稱
                 var visible = false;
                 if (isNumberOnly) {
-                    visible = hasNumberMatch || aliasMatch;
+                    visible = hasNumberMatch;
                 } else {
+                    // 品牌包含 OR 車款名稱包含 OR 別名匹配
                     visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || aliasMatch;
                 }
                 
