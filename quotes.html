@@ -718,46 +718,9 @@ const carData = [
             
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
-                var visible = false;
                 
-                // 1. 直接匹配：品牌或車款名稱包含搜尋詞
-                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) {
-                    visible = true;
-                }
-                
-                // 2. 數字匹配：提取車款中的數字，檢查是否匹配
-                // 例如：搜 "1" 匹配 "1 Series", "X1", "A1"
-                // 例如：搜 "18" 匹配 "A180", "B180", "718"
-                if (!visible) {
-                    var modelNumbers = model.match(/\d+/g) || [];
-                    for (var i = 0; i < modelNumbers.length; i++) {
-                        var num = modelNumbers[i];
-                        // 車款數字包含搜尋詞，或搜尋詞包含車款數字
-                        if (num.indexOf(query) !== -1 || query.indexOf(num) !== -1) {
-                            visible = true;
-                            break;
-                        }
-                    }
-                }
-                
-                // 3. 特殊別名匹配
-                if (!visible) {
-                    // 賓士 C 系列
-                    if (/^c\d*$/.test(query) && model.indexOf("c系列") !== -1) visible = true;
-                    // 賓士 E 系列
-                    if (/^e\d*$/.test(query) && model.indexOf("e系列") !== -1) visible = true;
-                    // BMW Series
-                    if (/^\d$/.test(query) && model.indexOf(query + " series") !== -1) visible = true;
-                    // RAV4
-                    if (query === "rav" && model.indexOf("rav4") !== -1) visible = true;
-                    // Tesla Model
-                    if (query === "model3" || query === "m3") {
-                        if (model.indexOf("model 3") !== -1) visible = true;
-                    }
-                    if (query === "modely" || query === "my") {
-                        if (model.indexOf("model y") !== -1) visible = true;
-                    }
-                }
+                // 簡單直接：品牌或車款名稱包含搜尋詞
+                var visible = (brand.indexOf(query) !== -1) || (model.indexOf(query) !== -1);
                 
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
