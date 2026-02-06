@@ -86,7 +86,7 @@
 </head>
 <body>
     <header><h1>DM SENSE</h1><p>專業汽車貼膜報價系統</p></header>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: BMW、M3、C300、520)"></div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: BMW、C300、520、RAV4)"></div>
     <div id="brandList" class="container"></div>
     <div id="priceModal" class="price-modal"><div class="price-content"><div class="price-header"><h2 id="modalTitle">車款報價</h2><button class="close-btn" onclick="closeModal()">✕</button></div><div id="priceTable"></div></div></div>
     <script>
@@ -393,9 +393,6 @@ const carData = [
     }
     function closeModal() { document.getElementById("priceModal").classList.remove("show"); }
     
-    // BMW M系列對應
-    var bmwMSeries = { "m1": "1 series", "m2": "m2", "m3": "3 series", "m4": "4 series", "m5": "5 series", "m6": "6 series", "m8": "8 series" };
-    
     function getSeriesFromNumber(query) {
         var num = parseInt(query);
         if (isNaN(num)) return null;
@@ -451,12 +448,7 @@ const carData = [
                     }
                 }
                 
-                // 3. BMW M系列匹配 (m3→3 series, m4→4 series, m5→5 series...)
-                if (!visible && brand.indexOf("bmw") !== -1 && bmwMSeries[query]) {
-                    if (model.indexOf(bmwMSeries[query]) !== -1) visible = true;
-                }
-                
-                // 4. 字母+數字格式
+                // 3. 字母+數字格式
                 if (!visible) {
                     var match = query.match(/^([a-z]+)(\d*)$/);
                     if (match) {
@@ -468,11 +460,6 @@ const carData = [
                             if (prefix === "x" && num && model.indexOf("x" + num) !== -1) visible = true;
                             if (prefix === "i" && num && (model.indexOf("i" + num) !== -1 || model.indexOf("ix") !== -1)) visible = true;
                             if (prefix === "z" && num && model.indexOf("z" + num) !== -1) visible = true;
-                            // M + 數字 → 對應 Series
-                            if (prefix === "m" && num) {
-                                var targetSeries = num + " series";
-                                if (model.indexOf(targetSeries) !== -1 || model.indexOf("m" + num) !== -1) visible = true;
-                            }
                         }
                         
                         // 賓士
