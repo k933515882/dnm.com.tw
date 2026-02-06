@@ -606,30 +606,28 @@ const carData = [
         "其他超跑/美系": "other"
     };
     
-    // 完整別名對照表
+    // 別名對照表 - key 是搜尋詞，value 是車款名稱關鍵字
     const aliasMap = {
-        // C系列 - 所有可能縮寫
-        "c": "C系列", "c-class": "C系列", "c class": "C系列", "cclass": "C系列",
-        "c200": "C系列", "c20": "C系列", "c260": "C系列", "c26": "C系列",
-        "c300": "C系列", "c30": "C系列", "c350": "C系列", "c35": "C系列",
-        "c3": "C系列", "c2": "C系列",
+        // C系列 - 各種縮寫都對應到 "c系列"
+        "c": "c系列", "c-class": "c系列", "c class": "c系列", "cclass": "c系列",
+        "c2": "c系列", "c20": "c系列", "c200": "c系列", "c260": "c系列", "c26": "c系列",
+        "c3": "c系列", "c30": "c系列", "c300": "c系列", "c35": "c系列", "c350": "c系列",
         // E系列
-        "e": "E系列", "e-class": "E系列", "e class": "E系列", "eclass": "E系列",
-        "e200": "E系列", "e20": "E系列", "e300": "E系列", "e30": "E系列",
-        "e450": "E系列", "e45": "E系列", "e4": "E系列", "e3": "E系列",
-        // 3 Series
-        "3": "3 Series", "3s": "3 Series", "3s": "3 Series",
-        "320": "3 Series", "32": "3 Series", "330": "3 Series", "33": "3 Series",
-        "340": "3 Series", "34": "3 Series",
-        // 5 Series
-        "5": "5 Series", "5s": "5 Series", "5s": "5 Series",
-        "520": "5 Series", "52": "5 Series", "530": "5 Series", "53": "5 Series",
-        "540": "5 Series", "54": "5 Series",
+        "e": "e系列", "e-class": "e系列", "e class": "e系列", "eclass": "e系列",
+        "e2": "e系列", "e20": "e系列", "e200": "e系列",
+        "e3": "e系列", "e30": "e系列", "e300": "e系列",
+        "e4": "e系列", "e45": "e系列", "e450": "e系列",
+        // BMW 3 Series
+        "3series": "3 series", "3 series": "3 series",
+        "32": "3 series", "320": "3 series", "33": "3 series", "330": "3 series", "34": "3 series", "340": "3 series",
+        // BMW 5 Series
+        "5series": "5 series", "5 series": "5 series",
+        "52": "5 series", "520": "5 series", "53": "5 series", "530": "5 series", "54": "5 series", "540": "5 series",
         // 其他
-        "rav4": "RAV4", "rav": "RAV4",
-        "model3": "MODEL 3", "m3": "MODEL 3",
-        "modely": "MODEL Y", "my": "MODEL Y",
-        "modelx": "MODEL X", "models": "MODEL S"
+        "rav": "rav4", "rav4": "rav4",
+        "model3": "model 3", "m3": "model 3", "model 3": "model 3",
+        "modely": "model y", "my": "model y", "model y": "model y",
+        "modelx": "model x", "models": "model s"
     };
     
     function createSpan(cls, text) {
@@ -724,44 +722,59 @@ const carData = [
     
     function searchCars(e) {
         var query = e.target.value.toLowerCase().trim();
+        if (!query) {
+            // 空白時顯示所有品牌（收合狀態）
+            document.querySelectorAll(".brand-section").forEach(function(section) {
+                section.style.display = "";
+                section.querySelector(".car-grid").classList.remove("show");
+                section.querySelector(".brand-title").classList.remove("show");
+                section.querySelectorAll(".car-btn").forEach(function(btn) {
+                    btn.style.display = "";
+                });
+            });
+            return;
+        }
+        
         document.querySelectorAll(".brand-section").forEach(function(section) {
             var brand = section.querySelector(".brand-title").textContent.toLowerCase();
             var cars = section.querySelectorAll(".car-btn");
             var brandVisible = false;
+            
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
+                var visible = false;
                 
-                // 檢查是否為純數字搜尋
-                var isNumberOnly = /^\d+$/.test(query);
+                // 1. 直接匹配：品牌或車款名稱包含搜尋詞
+                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) {
+                    visible = true;
+                }
                 
-                // 數字部分包含查詢
-                var numbers = model.match(/\d+/g) || [];
-                var hasNumberMatch = numbers.some(function(num) {
-                    return num.indexOf(query) !== -1 || query.indexOf(num) !== -1;
-                });
-                
-                // 別名對照檢查
-                var aliasMatch = false;
-                for (var key in aliasMap) {
-                    if (query.indexOf(key) !== -1 && model.indexOf(aliasMap[key].toLowerCase().split(" ")[0]) !== -1) {
-                        aliasMatch = true;
-                        break;
+                // 2. 別名匹配：搜尋詞在別名表中，且車款包含對應關鍵字
+                if (!visible && aliasMap[query]) {
+                    var target = aliasMap[query];
+                    if (model.indexOf(target) !== -1) {
+                        visible = true;
                     }
                 }
                 
-                // 搜尋條件
-                var visible = false;
-                if (isNumberOnly) {
-                    visible = hasNumberMatch;
-                } else {
-                    // 品牌包含 OR 車款名稱包含 OR 別名匹配
-                    visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1 || aliasMatch;
+                // 3. 數字匹配（純數字搜尋）：車款數字包含搜尋數字
+                if (!visible) {
+                    var isNumberOnly = /^\d+$/.test(query);
+                    if (isNumberOnly) {
+                        var numbers = model.match(/\d+/g) || [];
+                        var hasNumberMatch = numbers.some(function(num) {
+                            return num.indexOf(query) !== -1;
+                        });
+                        if (hasNumberMatch) visible = true;
+                    }
                 }
                 
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
             });
+            
             section.querySelector(".car-grid").classList.toggle("show", brandVisible);
+            section.querySelector(".brand-title").classList.toggle("show", brandVisible);
             section.style.display = brandVisible ? "" : "none";
         });
     }
