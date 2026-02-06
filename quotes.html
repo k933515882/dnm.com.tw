@@ -699,7 +699,6 @@ const carData = [
     function searchCars(e) {
         var query = e.target.value.toLowerCase().trim();
         if (!query) {
-            // 空白時顯示所有品牌（收合狀態）
             document.querySelectorAll(".brand-section").forEach(function(section) {
                 section.style.display = "";
                 section.querySelector(".car-grid").classList.remove("show");
@@ -718,9 +717,58 @@ const carData = [
             
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
+                var visible = false;
                 
-                // 簡單直接：品牌或車款名稱包含搜尋詞
-                var visible = (brand.indexOf(query) !== -1) || (model.indexOf(query) !== -1);
+                // 1. 直接匹配：品牌或車款名稱包含搜尋詞
+                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) {
+                    visible = true;
+                }
+                
+                // 2. 特殊處理：賓士 C+數字 → C系列
+                // 例如 c1, c2, c200, c260, c300, c350 都匹配 C系列
+                if (!visible && /^c\d+$/.test(query)) {
+                    if (model.indexOf("c系列") !== -1 || model.indexOf("c-class") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 3. 特殊處理：賓士 E+數字 → E系列
+                if (!visible && /^e\d+$/.test(query)) {
+                    if (model.indexOf("e系列") !== -1 || model.indexOf("e-class") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 4. 特殊處理：賓士 S+數字 → S系列
+                if (!visible && /^s\d+$/.test(query)) {
+                    if (model.indexOf("s-class") !== -1 || model.indexOf("s350") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 5. 特殊處理：賓士 A+數字 → A系列
+                if (!visible && /^a\d+$/.test(query)) {
+                    if (model.indexOf("a-class") !== -1 || model.indexOf("a180") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 6. 特殊處理：賓士 B+數字 → B系列
+                if (!visible && /^b\d+$/.test(query)) {
+                    if (model.indexOf("b-class") !== -1 || model.indexOf("b180") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 7. 特殊處理：賓士 G+數字 → G系列
+                if (!visible && /^g\d+$/.test(query)) {
+                    if (model.indexOf("g-class") !== -1 || model.indexOf("g car") !== -1) {
+                        visible = true;
+                    }
+                }
+                
+                // 8. 特殊處理：BMW 純數字 → X系列 (如 1→1 Series, 但也要包含 X1)
+                // 這個已經被直接匹配處理了
                 
                 btn.style.display = visible ? "" : "none";
                 if (visible) brandVisible = true;
