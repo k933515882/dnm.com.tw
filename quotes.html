@@ -11,6 +11,22 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; background: var(--bg-secondary); color: var(--text); line-height: 1.5; padding-bottom: env(safe-area-inset-bottom); }
+        
+        /* 密碼頁面 */
+        .login-page { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .login-box { background: var(--card-bg); padding: 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; max-width: 360px; width: 100%; }
+        .login-logo { font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .login-subtitle { color: var(--text-secondary); margin-bottom: 30px; font-size: 0.95rem; }
+        .login-input { width: 100%; padding: 16px; font-size: 17px; border: 2px solid var(--border); border-radius: 12px; outline: none; text-align: center; font-family: inherit; margin-bottom: 16px; }
+        .login-input:focus { border-color: var(--accent); }
+        .login-btn { width: 100%; padding: 16px; font-size: 17px; font-weight: 600; border: none; border-radius: 12px; background: var(--text); color: var(--bg); cursor: pointer; font-family: inherit; }
+        .login-btn:hover { opacity: 0.9; }
+        .login-error { color: #e53935; font-size: 14px; margin-top: 12px; display: none; }
+        
+        /* 主頁面 */
+        .main-app { display: none; }
+        .main-app.show { display: block; }
+        
         header { background: var(--bg); padding: 24px 20px 20px; text-align: center; border-bottom: 1px solid var(--border); }
         .logo { font-size: 1.75rem; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
         .stats { display: flex; justify-content: center; gap: 24px; margin-top: 12px; font-size: 0.875rem; color: var(--text-secondary); }
@@ -71,14 +87,52 @@
     </style>
 </head>
 <body>
-    <header><div class="logo">DM SENSE</div><div class="stats"><span id="totalCars">0</span> 車款 · <span id="totalBrands">0</span> 品牌</div></header>
-    <div class="search-section"><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="搜尋品牌或車款..." enterkeyhint="search"><button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button></div><div class="quick-filters" id="quickFilters"></div></div>
-    <div class="results-info" id="resultsInfo">找到 <span id="resultCount">0</span> 款車</div>
-    <div id="brandList" class="container"></div>
-    <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="modalTitle">報價</h2><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
-    <div class="toast" id="toast">✓ 已複製</div>
-    <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
+    <!-- 密碼頁面 -->
+    <div class="login-page" id="loginPage">
+        <div class="login-box">
+            <div class="login-logo">DM SENSE</div>
+            <div class="login-subtitle">內部報價系統</div>
+            <input type="password" class="login-input" id="passwordInput" placeholder="請輸入密碼" onkeypress="if(event.key==='Enter')checkPassword()">
+            <button class="login-btn" onclick="checkPassword()">進入系統</button>
+            <div class="login-error" id="loginError">密碼錯誤</div>
+        </div>
+    </div>
+    
+    <!-- 主頁面 -->
+    <div class="main-app" id="mainApp">
+        <header><div class="logo">DM SENSE</div><div class="stats"><span id="totalCars">0</span> 車款 · <span id="totalBrands">0</span> 品牌</div></header>
+        <div class="search-section"><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="搜尋品牌或車款..." enterkeyhint="search"><button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button></div><div class="quick-filters" id="quickFilters"></div></div>
+        <div class="results-info" id="resultsInfo">找到 <span id="resultCount">0</span> 款車</div>
+        <div id="brandList" class="container"></div>
+        <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="modalTitle">報價</h2><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
+        <div class="toast" id="toast">✓ 已複製</div>
+        <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
+    </div>
+    
     <script>
+    const CORRECT_PWD = "1688888888";
+    
+    function checkPassword() {
+        var pwd = document.getElementById("passwordInput").value;
+        if (pwd === CORRECT_PWD) {
+            localStorage.setItem("dmsense_auth", "true");
+            showMainApp();
+        } else {
+            document.getElementById("loginError").style.display = "block";
+            document.getElementById("passwordInput").value = "";
+        }
+    }
+    
+    function showMainApp() {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("mainApp").classList.add("show");
+        init();
+    }
+    
+    // 檢查是否已登入
+    if (localStorage.getItem("dmsense_auth") === "true") {
+        showMainApp();
+    }
 const carData = [
     { brand: "Audi", model: "A1", singleCeramic: 10999, doubleCeramic: 13999, graphene: 16999, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null, length: null, width: null, height: null, wheelbase: null },
     { brand: "Audi", model: "A3", singleCeramic: 10999, doubleCeramic: 13999, graphene: 16999, tpuClear: 63000, tpuMatte: 73000, pvc: 55000, pet: 60000, tpuColor: 75000, m3Black: null, m3Clear: null, length: null, width: null, height: null, wheelbase: null },
@@ -338,6 +392,7 @@ const carData = [
     function getSortKey(text) { var eng = text.match(/([A-Za-z][A-Za-z0-9\s\-]*)/); if (eng) return eng[1].toLowerCase().trim(); var num = text.match(/(\d+)/); if (num) return num[1]; return text.toLowerCase(); }
     function init() {
         var container = document.getElementById("brandList");
+        if (!container) return;
         var grouped = {};
         carData.forEach(function(car) { if (!grouped[car.brand]) grouped[car.brand] = []; grouped[car.brand].push(car); });
         Object.keys(grouped).forEach(function(brand) { grouped[brand].sort(function(a, b) { return getSortKey(a.model).localeCompare(getSortKey(b.model)); }); });
@@ -409,7 +464,6 @@ const carData = [
         });
         resultsInfo.style.display = ""; document.getElementById("resultCount").textContent = total;
     }
-    document.addEventListener("DOMContentLoaded", init);
     </script>
 </body>
 </html>
