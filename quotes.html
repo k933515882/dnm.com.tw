@@ -2,95 +2,395 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DM SENSE 專業報價系統</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DM SENSE 報價系統</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 50px 20px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 40px; position: relative; overflow: hidden; }
-        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); animation: headerGlow 8s ease-in-out infinite; }
-        @keyframes headerGlow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5%, 5%); } }
-        header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; background: linear-gradient(135deg, #00d4ff, #7c3aed, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1; }
-        header p { color: rgba(255,255,255,0.7); font-size: 1.1rem; font-weight: 300; position: relative; z-index: 1; }
-        .search-box { max-width: 600px; margin: 0 auto 40px; padding: 0 20px; position: relative; }
-        .search-box input { width: 100%; padding: 18px 25px; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.1); border-radius: 50px; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); color: #fff; outline: none; transition: all 0.3s ease; }
-        .search-box input::placeholder { color: rgba(255,255,255,0.4); }
-        .search-box input:focus { border-color: #00d4ff; box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); background: rgba(255,255,255,0.12); }
-        .brand-section { margin-bottom: 25px; animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .brand-title { padding: 20px 30px; font-size: 1.2rem; font-weight: 600; color: #fff; border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .brand-title::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
-        .brand-title:hover::before { left: 100%; }
-        .brand-title:hover { transform: scale(1.02); }
-        .brand-title span { position: relative; z-index: 1; }
-        .brand-title .arrow { position: relative; z-index: 1; transition: transform 0.3s ease; }
-        .brand-title.show .arrow { transform: rotate(180deg); }
-        .brand-title.lexus { background: linear-gradient(135deg, #1a1a1a, #333); border-left: 4px solid #000; }
-        .brand-title.bmw { background: linear-gradient(135deg, #0066b1, #004080); border-left: 4px solid #0066b1; }
-        .brand-title.mercedes { background: linear-gradient(135deg, #000, #333); border-left: 4px solid #fff; }
-        .brand-title.porsche { background: linear-gradient(135deg, #d63031, #b71c1c); border-left: 4px solid #d63031; }
-        .brand-title.audi { background: linear-gradient(135deg, #c0392b, #922b21); border-left: 4px solid #c0392b; }
-        .brand-title.toyota { background: linear-gradient(135deg, #eb0a1e, #a50714); border-left: 4px solid #eb0a1e; }
-        .brand-title.infiniti { background: linear-gradient(135deg, #000, #333); border-left: 4px solid #666; }
-        .brand-title.ford { background: linear-gradient(135deg, #003478, #002055); border-left: 4px solid #003478; }
-        .brand-title.volkswagen { background: linear-gradient(135deg, #001e50, #001035); border-left: 4px solid #001e50; }
-        .brand-title.mazda { background: linear-gradient(135deg, #c30c18, #8a0911); border-left: 4px solid #c30c18; }
-        .brand-title.volvo { background: linear-gradient(135deg, #003153, #001e35); border-left: 4px solid #003153; }
-        .brand-title.hyundai { background: linear-gradient(135deg, #002c5f, #001a3a); border-left: 4px solid #002c5f; }
-        .brand-title.honda { background: linear-gradient(135deg, #cc0000, #8a0000); border-left: 4px solid #cc0000; }
-        .brand-title.peugeot { background: linear-gradient(135deg, #002395, #001468); border-left: 4px solid #002395; }
-        .brand-title.fiat { background: linear-gradient(135deg, #9e1b32, #6d1224); border-left: 4px solid #9e1b32; }
-        .brand-title.tesla { background: linear-gradient(135deg, #e31937, #a61026); border-left: 4px solid #e31937; }
-        .brand-title.landrover { background: linear-gradient(135deg, #009647, #006a32); border-left: 4px solid #009647; }
-        .brand-title.maserati { background: linear-gradient(135deg, #c62d3f, #8c1f2d); border-left: 4px solid #c62d3f; }
-        .brand-title.jaguar { background: linear-gradient(135deg, #00965e, #006a40); border-left: 4px solid #00965e; }
-        .brand-title.mini { background: linear-gradient(135deg, #7c9096, #54646b); border-left: 4px solid #7c9096; }
-        .brand-title.kia { background: linear-gradient(135deg, #c8102e, #8b0a20); border-left: 4px solid #c8102e; }
-        .brand-title.skoda { background: linear-gradient(135deg, #008fd3, #00649b); border-left: 4px solid #008fd3; }
-        .brand-title.mg { background: linear-gradient(135deg, #002652, #00182f); border-left: 4px solid #002652; }
-        .brand-title.subaru { background: linear-gradient(135deg, #0646ad, #04307a); border-left: 4px solid #0646ad; }
-        .brand-title.suzuki { background: linear-gradient(135deg, #f05323, #b03a19); border-left: 4px solid #f05323; }
-        .brand-title.nissan { background: linear-gradient(135deg, #c61a09, #8c1106); border-left: 4px solid #c61a09; }
-        .brand-title.mitsubishi { background: linear-gradient(135deg, #e60012, #a3000b); border-left: 4px solid #e60012; }
-        .brand-title.luxgen { background: linear-gradient(135deg, #0058a3, #003a6b); border-left: 4px solid #0058a3; }
-        .brand-title.citroen { background: linear-gradient(135deg, #6d2c91, #4d1d66); border-left: 4px solid #6d2c91; }
-        .brand-title.ferrari { background: linear-gradient(135deg, #dc0000, #8b0000); border-left: 4px solid #dc0000; }
-        .brand-title.lamborghini { background: linear-gradient(135deg, #ddb321, #a68a1a); border-left: 4px solid #ddb321; }
-        .brand-title.other { background: linear-gradient(135deg, #444, #222); border-left: 4px solid #666; }
-        .car-grid { display: none; padding: 25px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 0 0 16px 16px; margin-bottom: 25px; flex-wrap: wrap; gap: 12px; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .car-grid.show { display: flex; }
-        .car-btn { padding: 14px 28px; font-size: 1rem; font-weight: 500; border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; background: rgba(255,255,255,0.08); color: #fff; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .car-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
-        .car-btn:hover { border-color: #00d4ff; background: rgba(0, 212, 255, 0.2); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3); }
-        .car-btn:hover::before { left: 100%; }
-        .car-btn:active { transform: translateY(0); }
-        .price-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        .price-modal.show { display: flex; align-items: center; justify-content: center; }
-        .price-content { background: linear-gradient(135deg, #1a1a2e, #16213e); border-radius: 24px; max-width: 600px; width: 90%; max-height: 85vh; overflow: auto; padding: 35px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 80px rgba(0,0,0,0.5); animation: scaleIn 0.3s ease; }
-        .price-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .price-header h2 { font-size: 1.8rem; font-weight: 600; background: linear-gradient(135deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .close-btn { width: 45px; height: 45px; border: none; background: rgba(255,255,255,0.1); border-radius: 50%; font-size: 1.5rem; color: #fff; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
-        .close-btn:hover { background: rgba(255,100,100,0.3); transform: rotate(90deg); }
-        .price-table { width: 100%; }
-        .price-table tr { transition: all 0.3s ease; }
-        .price-table tr:hover { background: rgba(255,255,255,0.05); }
-        .price-table th { padding: 16px; text-align: left; font-weight: 500; color: rgba(255,255,255,0.7); font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
-        .price-table td { padding: 16px; text-align: right; }
-        .price-value { font-weight: 700; font-size: 1.2rem; background: linear-gradient(135deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .no-price { color: rgba(255,255,255,0.3); font-style: italic; }
-        @media (max-width: 768px) { header h1 { font-size: 2rem; } .brand-title { font-size: 1rem; padding: 15px 20px; } .car-btn { padding: 10px 18px; font-size: 0.9rem; } .price-content { padding: 20px; } }
+        :root {
+            --bg: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --border: #d2d2d7;
+            --accent: #0071e3;
+            --card-bg: #ffffff;
+            --shadow: 0 2px 12px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif; 
+            background: var(--bg-secondary);
+            color: var(--text);
+            line-height: 1.5;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        
+        /* Header - 簡潔 */
+        header {
+            background: var(--bg);
+            padding: 24px 20px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { 
+            font-size: 1.75rem; 
+            font-weight: 700; 
+            color: var(--text);
+            letter-spacing: -0.5px;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        .stats span { color: var(--text); font-weight: 600; }
+        
+        /* 搜索區 - 不置頂，避免鍵盤遮擋 */
+        .search-section {
+            background: var(--bg);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 16px 14px 44px;
+            font-size: 17px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text);
+            outline: none;
+            font-family: inherit;
+        }
+        .search-box input::placeholder { color: var(--text-secondary); }
+        .search-box input:focus { 
+            box-shadow: 0 0 0 4px rgba(0,113,227,0.2);
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+        .clear-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: var(--border);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .clear-btn.show { display: flex; }
+        
+        /* 快捷篩選 */
+        .quick-filters {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .quick-filters::-webkit-scrollbar { display: none; }
+        .filter-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            color: var(--text);
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover, .filter-btn.active { 
+            background: var(--text); 
+            color: var(--bg); 
+        }
+        
+        /* 結果提示 */
+        .results-info {
+            padding: 12px 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            display: none;
+        }
+        .results-info span { color: var(--accent); font-weight: 600; }
+        
+        /* 主內容 */
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 16px; 
+        }
+        
+        /* 品牌區塊 */
+        .brand-section { margin-bottom: 12px; }
+        
+        .brand-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .brand-header:active { transform: scale(0.98); }
+        .brand-header.open { 
+            border-radius: var(--radius) var(--radius) 0 0;
+            box-shadow: none;
+        }
+        
+        .brand-info { display: flex; align-items: center; gap: 10px; }
+        .brand-name { font-size: 17px; font-weight: 600; }
+        .brand-count {
+            padding: 2px 10px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .brand-arrow {
+            color: var(--text-secondary);
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+        .brand-header.open .brand-arrow { transform: rotate(180deg); }
+        
+        /* 車款列表 */
+        .car-grid {
+            display: none;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .car-grid.open { display: flex; }
+        
+        .car-btn {
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+        .car-btn:hover { 
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+        
+        /* Modal - 從底部彈出 */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0.4);
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal.open { display: flex; }
+        
+        .modal-content {
+            background: var(--bg);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp { 
+            from { transform: translateY(100%); } 
+            to { transform: translateY(0); } 
+        }
+        
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-title { font-size: 20px; font-weight: 600; }
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-body { 
+            padding: 20px; 
+            overflow-y: auto; 
+            max-height: calc(80vh - 80px);
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+        }
+        
+        /* 價格分組 */
+        .price-group { margin-bottom: 20px; }
+        .price-group:last-child { margin-bottom: 0; }
+        .price-group-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding-left: 4px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .price-row:hover { background: #e8e8ed; }
+        .price-row:active { background: #d8d8dc; }
+        .price-label { font-size: 15px; color: var(--text); }
+        .price-value { 
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .price-value.empty { color: var(--text-secondary); font-weight: 400; }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: calc(100px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 12px 24px;
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 2000;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        
+        /* 返回頂部 */
+        .back-top {
+            position: fixed;
+            bottom: calc(30px + env(safe-area-inset-bottom));
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            background: var(--card-bg);
+            border-radius: 50%;
+            box-shadow: var(--shadow);
+            color: var(--text);
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .back-top.show { opacity: 1; visibility: visible; }
+        
+        /* Mobile */
+        @media (max-width: 500px) {
+            .logo { font-size: 1.5rem; }
+            .modal-content { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
-    <header><h1>DM SENSE</h1><p>專業汽車貼膜報價系統</p></header>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: BMW、C300、520、RAV4)"></div>
+    <header>
+        <div class="logo">DM SENSE</div>
+        <div class="stats">
+            <span id="totalCars">0</span> 車款 · <span id="totalBrands">0</span> 品牌
+        </div>
+    </header>
+    
+    <div class="search-section">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="搜尋品牌或車款..." enterkeyhint="search">
+            <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+        </div>
+        <div class="quick-filters" id="quickFilters"></div>
+    </div>
+    
+    <div class="results-info" id="resultsInfo">找到 <span id="resultCount">0</span> 款車</div>
+    
     <div id="brandList" class="container"></div>
-    <div id="priceModal" class="price-modal"><div class="price-content"><div class="price-header"><h2 id="modalTitle">車款報價</h2><button class="close-btn" onclick="closeModal()">✕</button></div><div id="priceTable"></div></div></div>
+    
+    <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">報價</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">✓ 已複製</div>
+    <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
+    
     <script>
 const carData = [
     { brand: "Audi", model: "A1", ceramic: 19000, coating: 10000, tpuClear: 63000, tpuMatte: 73000, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
@@ -415,92 +715,189 @@ const carData = [
     { brand: "賓士 (Mercedes)", model: "V-250D (V-Class)", ceramic: 28000, coating: 19000, tpuClear: null, tpuMatte: null, pvc: null, pet: null, tpuColor: null, m3Black: null, m3Clear: null },
 ];
 
-
-    const brandColors = {"LEXUS":"lexus","BMW":"bmw","賓士 (Mercedes)":"mercedes","賓士":"mercedes","Porsche":"porsche","Audi":"audi","Toyota":"toyota","Infiniti":"infiniti","福特 Ford":"ford","Volkswagen":"volkswagen","MAZDA":"mazda","VOLVO":"volvo","現代 Hyundai":"hyundai","現代Hyundai":"hyundai","Honda":"honda","Peugeot":"peugeot","Fiat / Alfa":"fiat","TESLA":"tesla","Land Rover":"landrover","Maserati":"maserati","Jaguar":"jaguar","Mini":"mini","Kia":"kia","Skoda":"skoda","MG":"mg","Subaru":"subaru","Suzuki":"suzuki","NISSAN":"nissan","三菱 (Mitsubishi)":"mitsubishi","三菱":"mitsubishi","Luxgen":"luxgen","Citroen / Smart":"citroen","Smart ":"citroen","Ferrari法拉利":"ferrari","Lamborghini":"lamborghini","其他超跑/美系":"other","MPV":"other","Wagon":"other"};
-    
-    function formatPrice(val) { if (val === null) return '<span class="no-price">-</span>'; var span = document.createElement("span"); span.className = "price-value"; span.textContent = "NT$ " + val.toLocaleString(); return span.outerHTML; }
+    const hotBrands = ["BMW", "賓士", "LEXUS", "Toyota", "Porsche", "TESLA"];
     
     function init() {
         var container = document.getElementById("brandList");
         var grouped = {};
-        carData.forEach(function(car) { if (!grouped[car.brand]) grouped[car.brand] = []; grouped[car.brand].push(car); });
-        var brands = Object.keys(grouped).sort();
-        brands.forEach(function(brand, index) {
-            setTimeout(function() {
-                var section = document.createElement("div"); section.className = "brand-section"; section.style.animationDelay = (index * 0.1) + "s";
-                var colorClass = brandColors[brand] || "other";
-                var titleDiv = document.createElement("div"); titleDiv.className = "brand-title " + colorClass;
-                titleDiv.innerHTML = '<span>' + brand + '</span><span class="arrow">▼</span>';
-                titleDiv.onclick = function() { this.classList.toggle("show"); this.nextElementSibling.classList.toggle("show"); };
-                section.appendChild(titleDiv);
-                var grid = document.createElement("div"); grid.className = "car-grid";
-                grouped[brand].forEach(function(car) { var btn = document.createElement("button"); btn.className = "car-btn"; btn.textContent = car.model; btn.onclick = function() { showPrices(car); }; grid.appendChild(btn); });
-                section.appendChild(grid); container.appendChild(section);
-            }, index * 50);
+        carData.forEach(function(car) { 
+            if (!grouped[car.brand]) grouped[car.brand] = []; 
+            grouped[car.brand].push(car); 
         });
+        
+        var brands = Object.keys(grouped).sort();
+        document.getElementById("totalCars").textContent = carData.length;
+        document.getElementById("totalBrands").textContent = brands.length;
+        
+        // Quick filters
+        var filtersHtml = "";
+        hotBrands.forEach(function(b) {
+            var found = brands.find(function(br) { return br.indexOf(b) !== -1; });
+            if (found) {
+                filtersHtml += '<button class="filter-btn" onclick="quickFilter(\'' + found + '\')">' + b + '</button>';
+            }
+        });
+        document.getElementById("quickFilters").innerHTML = filtersHtml;
+        
+        // Render brands
+        brands.forEach(function(brand) {
+            var section = document.createElement("div");
+            section.className = "brand-section";
+            section.setAttribute("data-brand", brand);
+            
+            var header = document.createElement("div");
+            header.className = "brand-header";
+            header.innerHTML = '<div class="brand-info"><span class="brand-name">' + brand + '</span><span class="brand-count">' + grouped[brand].length + '</span></div><span class="brand-arrow">▼</span>';
+            header.onclick = function() { 
+                this.classList.toggle("open"); 
+                this.nextElementSibling.classList.toggle("open"); 
+            };
+            section.appendChild(header);
+            
+            var grid = document.createElement("div");
+            grid.className = "car-grid";
+            grouped[brand].forEach(function(car) {
+                var btn = document.createElement("button");
+                btn.className = "car-btn";
+                btn.textContent = car.model;
+                btn.onclick = function(e) { e.stopPropagation(); showPrices(car); };
+                grid.appendChild(btn);
+            });
+            section.appendChild(grid);
+            container.appendChild(section);
+        });
+        
         document.getElementById("searchInput").addEventListener("input", searchCars);
+        window.addEventListener("scroll", handleScroll);
+    }
+    
+    function handleScroll() {
+        document.getElementById("backTop").classList.toggle("show", window.scrollY > 300);
+    }
+    
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+    
+    function quickFilter(brand) {
+        document.getElementById("searchInput").value = brand;
+        searchCars({ target: { value: brand } });
+        document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
+        event.target.classList.add("active");
+    }
+    
+    function clearSearch() {
+        document.getElementById("searchInput").value = "";
+        document.getElementById("searchInput").focus();
+        searchCars({ target: { value: "" } });
+        document.querySelectorAll(".filter-btn").forEach(function(b) { b.classList.remove("active"); });
     }
     
     function showPrices(car) {
         document.getElementById("modalTitle").textContent = car.brand + " " + car.model;
-        var table = document.createElement("table"); table.className = "price-table";
-        var items = [["雙層陶瓷", car.ceramic], ["單層鍍膜", car.coating], ["TPU 透明", car.tpuClear], ["TPU 消光", car.tpuMatte], ["改色膜 PVC", car.pvc], ["改色膜 PET", car.pet], ["改色膜 TPU", car.tpuColor], ["3M 極黑", car.m3Black], ["3M 極透", car.m3Clear]];
-        items.forEach(function(item) { var row = document.createElement("tr"); var th = document.createElement("th"); th.textContent = item[0]; row.appendChild(th); var td = document.createElement("td"); td.innerHTML = formatPrice(item[1]); row.appendChild(td); table.appendChild(row); });
-        document.getElementById("priceTable").innerHTML = ""; document.getElementById("priceTable").appendChild(table);
-        document.getElementById("priceModal").classList.add("show");
+        
+        var groups = [
+            { title: "鍍膜", items: [["雙層陶瓷", car.ceramic], ["單層鍍膜", car.coating]] },
+            { title: "TPU 犀牛皮", items: [["TPU 透明", car.tpuClear], ["TPU 消光", car.tpuMatte]] },
+            { title: "改色膜", items: [["PVC", car.pvc], ["PET", car.pet], ["TPU", car.tpuColor]] },
+            { title: "3M 隔熱紙", items: [["極黑", car.m3Black], ["極透", car.m3Clear]] }
+        ];
+        
+        var html = "";
+        groups.forEach(function(g) {
+            var hasValue = g.items.some(function(i) { return i[1] !== null; });
+            if (!hasValue) return;
+            
+            html += '<div class="price-group">';
+            html += '<div class="price-group-title">' + g.title + '</div>';
+            g.items.forEach(function(item) {
+                var label = item[0];
+                var value = item[1];
+                if (value === null) return;
+                var valueText = "NT$ " + value.toLocaleString();
+                html += '<div class="price-row" onclick="copyPrice(\'' + label + '\', ' + value + ')">';
+                html += '<span class="price-label">' + label + '</span>';
+                html += '<span class="price-value">' + valueText + '</span>';
+                html += '</div>';
+            });
+            html += '</div>';
+        });
+        
+        document.getElementById("modalBody").innerHTML = html;
+        document.getElementById("modal").classList.add("open");
+        document.body.style.overflow = "hidden";
     }
-    function closeModal() { document.getElementById("priceModal").classList.remove("show"); }
+    
+    function closeModal() {
+        document.getElementById("modal").classList.remove("open");
+        document.body.style.overflow = "";
+    }
+    
+    function copyPrice(label, value) {
+        var text = label + ": NT$ " + value.toLocaleString();
+        navigator.clipboard.writeText(text).then(function() {
+            var toast = document.getElementById("toast");
+            toast.classList.add("show");
+            setTimeout(function() { toast.classList.remove("show"); }, 1500);
+        });
+    }
     
     function getSeriesFromNumber(query) {
         var num = parseInt(query);
         if (isNaN(num)) return null;
         var results = { bmw: [], benz: [] };
         if (num >= 100 && num < 200) results.bmw.push("1 series");
-        if (num >= 200 && num < 300) results.bmw.push("2 series", "2at", "m2");
+        if (num >= 200 && num < 300) results.bmw.push("2 series", "m2");
         if (num >= 300 && num < 400) results.bmw.push("3 series");
         if (num >= 400 && num < 500) results.bmw.push("4 series", "i4");
         if (num >= 500 && num < 600) results.bmw.push("5 series");
         if (num >= 600 && num < 700) results.bmw.push("6 series");
         if (num >= 700 && num < 800) results.bmw.push("7 series");
         if (num >= 800 && num < 900) results.bmw.push("8 series");
-        if (num >= 180 && num < 200) results.benz.push("a180", "b180", "a-class", "b-class");
-        if (num >= 200 && num < 300) results.benz.push("c系列", "e系列", "c-class", "e-class");
-        if (num >= 300 && num < 400) results.benz.push("c系列", "e系列", "s350", "c-class", "e-class", "s-class");
-        if (num >= 400 && num < 500) results.benz.push("e系列", "ml400", "e-class", "s-class");
-        if (num >= 500 && num < 600) results.benz.push("s-class", "g car");
-        if (num === 63) results.benz.push("amg-gt", "g car");
+        if (num >= 180 && num < 200) results.benz.push("a180", "b180");
+        if (num >= 200 && num < 300) results.benz.push("c系列", "e系列");
+        if (num >= 300 && num < 400) results.benz.push("c系列", "e系列", "s350");
         return results;
     }
     
     function searchCars(e) {
         var query = e.target.value.toLowerCase().trim();
+        var clearBtn = document.getElementById("clearBtn");
+        var resultsInfo = document.getElementById("resultsInfo");
+        
+        clearBtn.classList.toggle("show", query.length > 0);
+        
         if (!query) {
+            resultsInfo.style.display = "none";
             document.querySelectorAll(".brand-section").forEach(function(section) {
-                section.style.display = ""; section.querySelector(".car-grid").classList.remove("show"); section.querySelector(".brand-title").classList.remove("show");
+                section.style.display = "";
+                section.querySelector(".car-grid").classList.remove("open");
+                section.querySelector(".brand-header").classList.remove("open");
                 section.querySelectorAll(".car-btn").forEach(function(btn) { btn.style.display = ""; });
             });
             return;
         }
         
         var seriesMatch = /^\d+$/.test(query) ? getSeriesFromNumber(query) : null;
+        var totalResults = 0;
         
         document.querySelectorAll(".brand-section").forEach(function(section) {
-            var brand = section.querySelector(".brand-title").textContent.toLowerCase();
+            var brand = section.getAttribute("data-brand").toLowerCase();
             var cars = section.querySelectorAll(".car-btn");
             var brandVisible = false;
             
             cars.forEach(function(btn) {
                 var model = btn.textContent.toLowerCase();
-                var visible = false;
-                
-                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) visible = true;
+                var visible = brand.indexOf(query) !== -1 || model.indexOf(query) !== -1;
                 
                 if (!visible && seriesMatch) {
                     if (brand.indexOf("bmw") !== -1) {
-                        for (var i = 0; i < seriesMatch.bmw.length; i++) { if (model.indexOf(seriesMatch.bmw[i]) !== -1) { visible = true; break; } }
+                        for (var i = 0; i < seriesMatch.bmw.length; i++) { 
+                            if (model.indexOf(seriesMatch.bmw[i]) !== -1) { visible = true; break; } 
+                        }
                     }
                     if (brand.indexOf("賓士") !== -1) {
-                        for (var i = 0; i < seriesMatch.benz.length; i++) { if (model.indexOf(seriesMatch.benz[i]) !== -1) { visible = true; break; } }
+                        for (var i = 0; i < seriesMatch.benz.length; i++) { 
+                            if (model.indexOf(seriesMatch.benz[i]) !== -1) { visible = true; break; } 
+                        }
                     }
                 }
                 
@@ -508,46 +905,31 @@ const carData = [
                     var match = query.match(/^([a-z]+)(\d*)$/);
                     if (match) {
                         var prefix = match[1];
-                        var num = match[2];
                         if (brand.indexOf("bmw") !== -1) {
-                            if (prefix === "x" && num && model.indexOf("x" + num) !== -1) visible = true;
-                            if (prefix === "i" && num && (model.indexOf("i" + num) !== -1 || model.indexOf("ix") !== -1)) visible = true;
-                            if (prefix === "z" && num && model.indexOf("z" + num) !== -1) visible = true;
+                            if ((prefix === "x" || prefix === "i" || prefix === "z") && model.indexOf(query) !== -1) visible = true;
                         }
                         if (brand.indexOf("賓士") !== -1) {
                             if (prefix === "c" && model.indexOf("c系列") !== -1) visible = true;
                             if (prefix === "e" && model.indexOf("e系列") !== -1) visible = true;
-                            if (prefix === "s" && (model.indexOf("s350") !== -1 || model.indexOf("s-class") !== -1)) visible = true;
-                            if (prefix === "a" && model.indexOf("a180") !== -1) visible = true;
-                            if (prefix === "b" && model.indexOf("b180") !== -1) visible = true;
-                            if (prefix === "g" && model.indexOf("g car") !== -1) visible = true;
-                            if (prefix === "v" && model.indexOf("v-250") !== -1) visible = true;
-                            if (prefix === "ml" && model.indexOf("ml400") !== -1) visible = true;
-                            if ((prefix === "amg" || prefix === "gt") && model.indexOf("amg-gt") !== -1) visible = true;
-                            if (prefix === "gla" && model.indexOf("gla") !== -1) visible = true;
-                            if (prefix === "glb" && model.indexOf("glb") !== -1) visible = true;
-                            if (prefix === "glc" && model.indexOf("glc") !== -1) visible = true;
-                            if (prefix === "gle" && model.indexOf("gle") !== -1) visible = true;
-                            if (prefix === "gls" && model.indexOf("gls") !== -1) visible = true;
-                            if (prefix === "cla" && model.indexOf("cla") !== -1) visible = true;
-                            if (prefix === "cls" && model.indexOf("cls") !== -1) visible = true;
-                            if (prefix.indexOf("eq") === 0 && model.indexOf("eq") !== -1) visible = true;
+                            if ((prefix === "gla" || prefix === "glb" || prefix === "glc" || prefix === "gle" || prefix === "gls") && model.indexOf(prefix) !== -1) visible = true;
                         }
                     }
                 }
                 
                 btn.style.display = visible ? "" : "none";
-                if (visible) brandVisible = true;
+                if (visible) { brandVisible = true; totalResults++; }
             });
             
-            section.querySelector(".car-grid").classList.toggle("show", brandVisible);
-            section.querySelector(".brand-title").classList.toggle("show", brandVisible);
+            section.querySelector(".car-grid").classList.toggle("open", brandVisible);
+            section.querySelector(".brand-header").classList.toggle("open", brandVisible);
             section.style.display = brandVisible ? "" : "none";
         });
+        
+        resultsInfo.style.display = "";
+        document.getElementById("resultCount").textContent = totalResults;
     }
     
-    document.getElementById("priceModal").onclick = function(e) { if (e.target === this) closeModal(); };
-    document.addEventListener("DOMContentLoaded", function() { init(); });
-</script>
+    document.addEventListener("DOMContentLoaded", init);
+    </script>
 </body>
 </html>
