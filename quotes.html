@@ -606,30 +606,46 @@ const carData = [
         "其他超跑/美系": "other"
     };
     
-    // 賓士系列對照表：搜尋詞前綴 → 匹配的車款關鍵字
+    // 賓士系列對照表
     var benzAliases = {
-        "c": ["c系列", "c-class"],      // C180, C200, C250, C300, C350...
-        "e": ["e系列", "e-class"],      // E200, E250, E300, E350, E450...
-        "s": ["s350", "s-class"],       // S350, S400, S450, S500...
-        "a": ["a180", "a-class"],       // A180, A200, A250...
-        "b": ["b180", "b-class"],       // B180, B200...
-        "g": ["g car", "g-class"],      // G350, G500, G63...
-        "v": ["v-250", "v-class"],      // V250, V300...
-        "ml": ["ml400"],                // ML400
-        "amg": ["amg-gt", "amg"],       // AMG GT
-        "gt": ["amg-gt"],               // GT
-        "cla": ["cla"],                 // CLA
-        "cls": ["cls"],                 // CLS
-        "gla": ["gla"],                 // GLA
-        "glb": ["glb"],                 // GLB
-        "glc": ["glc"],                 // GLC
-        "gle": ["gle"],                 // GLE
-        "gls": ["gls"],                 // GLS
-        "eq": ["eq"],                   // EQA, EQB, EQE, EQS
+        "c": ["c系列", "c-class"],
+        "e": ["e系列", "e-class"],
+        "s": ["s350", "s-class"],
+        "a": ["a180", "a-class"],
+        "b": ["b180", "b-class"],
+        "g": ["g car", "g-class"],
+        "v": ["v-250", "v-class"],
+        "ml": ["ml400"],
+        "amg": ["amg-gt", "amg"],
+        "gt": ["amg-gt"],
+        "cla": ["cla"],
+        "cls": ["cls"],
+        "gla": ["gla"],
+        "glb": ["glb"],
+        "glc": ["glc"],
+        "gle": ["gle"],
+        "gls": ["gls"],
+        "eq": ["eq"],
         "eqa": ["eqa"],
         "eqb": ["eqb"],
         "eqe": ["eqe"],
         "eqs": ["eqs"]
+    };
+    
+    // 賓士常見車型編號對應系列
+    // 例如：200, 250, 300, 350, 450 可能是 C/E/S 系列
+    var benzNumbers = {
+        "180": ["a180", "b180", "a-class", "b-class"],
+        "200": ["c系列", "e系列", "c-class", "e-class"],
+        "250": ["c系列", "e系列", "c-class", "e-class", "v-250"],
+        "260": ["c系列", "c-class"],
+        "300": ["c系列", "e系列", "c-class", "e-class"],
+        "350": ["c系列", "e系列", "s350", "c-class", "e-class", "s-class"],
+        "400": ["ml400", "s-class"],
+        "450": ["e系列", "e-class", "s-class"],
+        "500": ["s-class", "g car"],
+        "560": ["s-class"],
+        "63": ["amg-gt", "g car"]
     };
     
     function createSpan(cls, text) {
@@ -723,19 +739,40 @@ const carData = [
     }
     
     function checkBenzAlias(query, model) {
-        // 檢查 c+數字, e+數字 等格式
+        // 1. 檢查 字母+數字 格式 (如 c300, e200)
         var match = query.match(/^([a-z]+)(\d*)$/);
-        if (!match) return false;
+        if (match) {
+            var prefix = match[1];
+            if (benzAliases[prefix]) {
+                var targets = benzAliases[prefix];
+                for (var i = 0; i < targets.length; i++) {
+                    if (model.indexOf(targets[i]) !== -1) {
+                        return true;
+                    }
+                }
+            }
+        }
         
-        var prefix = match[1];  // 字母部分 (如 c, e, gla)
-        var number = match[2];  // 數字部分 (如 300, 200) 可為空
-        
-        // 查找別名表
-        if (benzAliases[prefix]) {
-            var targets = benzAliases[prefix];
-            for (var i = 0; i < targets.length; i++) {
-                if (model.indexOf(targets[i]) !== -1) {
-                    return true;
+        // 2. 檢查純數字格式 (如 300, 200, 180)
+        // 例如搜 300 應該找到 C系列、E系列
+        if (/^\d+$/.test(query)) {
+            if (benzNumbers[query]) {
+                var targets = benzNumbers[query];
+                for (var i = 0; i < targets.length; i++) {
+                    if (model.indexOf(targets[i]) !== -1) {
+                        return true;
+                    }
+                }
+            }
+            // 也檢查部分匹配，如 30 匹配 300 系列
+            for (var num in benzNumbers) {
+                if (num.indexOf(query) === 0 || query.indexOf(num) === 0) {
+                    var targets = benzNumbers[num];
+                    for (var i = 0; i < targets.length; i++) {
+                        if (model.indexOf(targets[i]) !== -1) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
