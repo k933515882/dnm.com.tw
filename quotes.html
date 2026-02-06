@@ -7,54 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            color: #fff;
-            min-height: 100vh;
-        }
+        body { font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header {
-            text-align: center;
-            padding: 50px 20px;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: headerGlow 8s ease-in-out infinite;
-        }
+        header { text-align: center; padding: 50px 20px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 40px; position: relative; overflow: hidden; }
+        header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); animation: headerGlow 8s ease-in-out infinite; }
         @keyframes headerGlow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5%, 5%); } }
-        header h1 {
-            font-size: 3rem; font-weight: 700; margin-bottom: 10px;
-            background: linear-gradient(135deg, #00d4ff, #7c3aed, #f472b6);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; position: relative; z-index: 1;
-        }
+        header h1 { font-size: 3rem; font-weight: 700; margin-bottom: 10px; background: linear-gradient(135deg, #00d4ff, #7c3aed, #f472b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1; }
         header p { color: rgba(255,255,255,0.7); font-size: 1.1rem; font-weight: 300; position: relative; z-index: 1; }
         .search-box { max-width: 600px; margin: 0 auto 40px; padding: 0 20px; position: relative; }
-        .search-box input {
-            width: 100%; padding: 18px 25px; font-size: 1.1rem;
-            border: 2px solid rgba(255,255,255,0.1); border-radius: 50px;
-            background: rgba(255,255,255,0.08); backdrop-filter: blur(10px);
-            color: #fff; outline: none; transition: all 0.3s ease;
-        }
+        .search-box input { width: 100%; padding: 18px 25px; font-size: 1.1rem; border: 2px solid rgba(255,255,255,0.1); border-radius: 50px; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); color: #fff; outline: none; transition: all 0.3s ease; }
         .search-box input::placeholder { color: rgba(255,255,255,0.4); }
         .search-box input:focus { border-color: #00d4ff; box-shadow: 0 0 30px rgba(0, 212, 255, 0.3); background: rgba(255,255,255,0.12); }
         .brand-section { margin-bottom: 25px; animation: fadeInUp 0.5s ease forwards; opacity: 0; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .brand-title {
-            padding: 20px 30px; font-size: 1.2rem; font-weight: 600; color: #fff;
-            border-radius: 16px; cursor: pointer; display: flex; align-items: center;
-            justify-content: space-between; transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
+        .brand-title { padding: 20px 30px; font-size: 1.2rem; font-weight: 600; color: #fff; border-radius: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .brand-title::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
         .brand-title:hover::before { left: 100%; }
         .brand-title:hover { transform: scale(1.02); }
@@ -91,19 +57,10 @@
         .brand-title.luxgen { background: linear-gradient(135deg, #0058a3, #003a6b); border-left: 4px solid #0058a3; }
         .brand-title.citroen { background: linear-gradient(135deg, #6d2c91, #4d1d66); border-left: 4px solid #6d2c91; }
         .brand-title.other { background: linear-gradient(135deg, #444, #222); border-left: 4px solid #666; }
-        .car-grid {
-            display: none; padding: 25px; background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px); border-radius: 0 0 16px 16px;
-            margin-bottom: 25px; flex-wrap: wrap; gap: 12px; animation: slideDown 0.3s ease;
-        }
+        .car-grid { display: none; padding: 25px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 0 0 16px 16px; margin-bottom: 25px; flex-wrap: wrap; gap: 12px; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .car-grid.show { display: flex; }
-        .car-btn {
-            padding: 14px 28px; font-size: 1rem; font-weight: 500;
-            border: 2px solid rgba(255,255,255,0.15); border-radius: 12px;
-            background: rgba(255,255,255,0.08); color: #fff; cursor: pointer;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
+        .car-btn { padding: 14px 28px; font-size: 1rem; font-weight: 500; border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; background: rgba(255,255,255,0.08); color: #fff; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
         .car-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
         .car-btn:hover { border-color: #00d4ff; background: rgba(0, 212, 255, 0.2); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3); }
         .car-btn:hover::before { left: 100%; }
@@ -129,7 +86,7 @@
 </head>
 <body>
     <header><h1>DM SENSE</h1><p>專業汽車貼膜報價系統</p></header>
-    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: 賓士、C300、520、RAV4)"></div>
+    <div class="search-box"><input type="text" id="searchInput" placeholder="搜尋品牌、車款或編號 (例如: BMW、M3、C300、520)"></div>
     <div id="brandList" class="container"></div>
     <div id="priceModal" class="price-modal"><div class="price-content"><div class="price-header"><h2 id="modalTitle">車款報價</h2><button class="close-btn" onclick="closeModal()">✕</button></div><div id="priceTable"></div></div></div>
     <script>
@@ -400,16 +357,7 @@ const carData = [
 ];
 
 
-    const brandColors = {
-        "LEXUS": "lexus", "BMW": "bmw", "賓士 (Mercedes)": "mercedes", "Porsche": "porsche", "Audi": "audi", 
-        "Toyota": "toyota", "Infiniti": "infiniti", "福特 Ford": "ford", "Volkswagen": "volkswagen", 
-        "MAZDA": "mazda", "VOLVO": "volvo", "現代 Hyundai": "hyundai", "Honda": "honda", 
-        "Peugeot": "peugeot", "Fiat / Alfa": "fiat", "TESLA": "tesla", "Land Rover": "landrover", 
-        "Maserati": "maserati", "Jaguar": "jaguar", "Mini": "mini", "Kia": "kia", 
-        "Skoda": "skoda", "MG": "mg", "Subaru": "subaru", "Suzuki": "suzuki", 
-        "NISSAN": "nissan", "三菱 (Mitsubishi)": "mitsubishi", "Luxgen": "luxgen", "Citroen / Smart": "citroen", 
-        "其他超跑/美系": "other"
-    };
+    const brandColors = {"LEXUS":"lexus","BMW":"bmw","賓士 (Mercedes)":"mercedes","Porsche":"porsche","Audi":"audi","Toyota":"toyota","Infiniti":"infiniti","福特 Ford":"ford","Volkswagen":"volkswagen","MAZDA":"mazda","VOLVO":"volvo","現代 Hyundai":"hyundai","Honda":"honda","Peugeot":"peugeot","Fiat / Alfa":"fiat","TESLA":"tesla","Land Rover":"landrover","Maserati":"maserati","Jaguar":"jaguar","Mini":"mini","Kia":"kia","Skoda":"skoda","MG":"mg","Subaru":"subaru","Suzuki":"suzuki","NISSAN":"nissan","三菱 (Mitsubishi)":"mitsubishi","Luxgen":"luxgen","Citroen / Smart":"citroen","其他超跑/美系":"other"};
     
     function createSpan(cls, text) { var span = document.createElement("span"); span.className = cls; span.textContent = text; return span; }
     function formatPrice(val) { if (val === null) return '<span class="no-price">-</span>'; return createSpan("price-value", "NT$ " + val.toLocaleString()).outerHTML; }
@@ -428,10 +376,7 @@ const carData = [
                 titleDiv.onclick = function() { this.classList.toggle("show"); this.nextElementSibling.classList.toggle("show"); };
                 section.appendChild(titleDiv);
                 var grid = document.createElement("div"); grid.className = "car-grid";
-                grouped[brand].forEach(function(car) {
-                    var btn = document.createElement("button"); btn.className = "car-btn"; btn.textContent = car.model;
-                    btn.onclick = function() { showPrices(car); }; grid.appendChild(btn);
-                });
+                grouped[brand].forEach(function(car) { var btn = document.createElement("button"); btn.className = "car-btn"; btn.textContent = car.model; btn.onclick = function() { showPrices(car); }; grid.appendChild(btn); });
                 section.appendChild(grid); container.appendChild(section);
             }, index * 50);
         });
@@ -443,21 +388,18 @@ const carData = [
         var table = document.createElement("table"); table.className = "price-table";
         var items = [["雙層陶瓷", car.ceramic], ["單層鍍膜", car.coating], ["TPU 透明", car.tpuClear], ["TPU 消光", car.tpuMatte], ["改色膜 PVC", car.pvc], ["改色膜 PET", car.pet], ["改色膜 TPU", car.tpuColor], ["3M 極黑", car.m3Black], ["3M 極透", car.m3Clear]];
         items.forEach(function(item) { var row = document.createElement("tr"); var th = document.createElement("th"); th.textContent = item[0]; row.appendChild(th); var td = document.createElement("td"); td.innerHTML = formatPrice(item[1]); row.appendChild(td); table.appendChild(row); });
-        var priceTable = document.getElementById("priceTable"); priceTable.innerHTML = ""; priceTable.appendChild(table);
+        document.getElementById("priceTable").innerHTML = ""; document.getElementById("priceTable").appendChild(table);
         document.getElementById("priceModal").classList.add("show");
     }
     function closeModal() { document.getElementById("priceModal").classList.remove("show"); }
     
-    // 智能搜尋：根據數字前綴判斷系列
+    // BMW M系列對應
+    var bmwMSeries = { "m1": "1 series", "m2": "m2", "m3": "3 series", "m4": "4 series", "m5": "5 series", "m6": "6 series", "m8": "8 series" };
+    
     function getSeriesFromNumber(query) {
-        // BMW: 1xx=1系, 2xx=2系, 3xx=3系, 4xx=4系, 5xx=5系, 6xx=6系, 7xx=7系, 8xx=8系
-        // 賓士: 1xx=A/B系, 2xx=C/E系, 3xx=C/E/S系, 4xx=E/S/ML系, 5xx=S/G系
         var num = parseInt(query);
         if (isNaN(num)) return null;
-        
         var results = { bmw: [], benz: [] };
-        
-        // BMW 系列判斷
         if (num >= 100 && num < 200) results.bmw.push("1 series");
         if (num >= 200 && num < 300) results.bmw.push("2 series", "2at", "m2");
         if (num >= 300 && num < 400) results.bmw.push("3 series");
@@ -466,15 +408,12 @@ const carData = [
         if (num >= 600 && num < 700) results.bmw.push("6 series");
         if (num >= 700 && num < 800) results.bmw.push("7 series");
         if (num >= 800 && num < 900) results.bmw.push("8 series");
-        
-        // 賓士 系列判斷
         if (num >= 180 && num < 200) results.benz.push("a180", "b180", "a-class", "b-class");
         if (num >= 200 && num < 300) results.benz.push("c系列", "e系列", "c-class", "e-class");
         if (num >= 300 && num < 400) results.benz.push("c系列", "e系列", "s350", "c-class", "e-class", "s-class");
         if (num >= 400 && num < 500) results.benz.push("e系列", "ml400", "e-class", "s-class");
         if (num >= 500 && num < 600) results.benz.push("s-class", "g car");
         if (num === 63) results.benz.push("amg-gt", "g car");
-        
         return results;
     }
     
@@ -482,19 +421,13 @@ const carData = [
         var query = e.target.value.toLowerCase().trim();
         if (!query) {
             document.querySelectorAll(".brand-section").forEach(function(section) {
-                section.style.display = "";
-                section.querySelector(".car-grid").classList.remove("show");
-                section.querySelector(".brand-title").classList.remove("show");
+                section.style.display = ""; section.querySelector(".car-grid").classList.remove("show"); section.querySelector(".brand-title").classList.remove("show");
                 section.querySelectorAll(".car-btn").forEach(function(btn) { btn.style.display = ""; });
             });
             return;
         }
         
-        // 預先計算數字對應的系列
-        var seriesMatch = null;
-        if (/^\d+$/.test(query)) {
-            seriesMatch = getSeriesFromNumber(query);
-        }
+        var seriesMatch = /^\d+$/.test(query) ? getSeriesFromNumber(query) : null;
         
         document.querySelectorAll(".brand-section").forEach(function(section) {
             var brand = section.querySelector(".brand-title").textContent.toLowerCase();
@@ -505,33 +438,42 @@ const carData = [
                 var model = btn.textContent.toLowerCase();
                 var visible = false;
                 
-                // 1. 直接匹配：品牌或車款名稱包含搜尋詞
-                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) {
-                    visible = true;
-                }
+                // 1. 直接匹配
+                if (brand.indexOf(query) !== -1 || model.indexOf(query) !== -1) visible = true;
                 
-                // 2. 數字匹配：根據數字判斷系列
+                // 2. 數字匹配
                 if (!visible && seriesMatch) {
-                    // BMW
-                    if (brand.indexOf("bmw") !== -1 && seriesMatch.bmw.length > 0) {
-                        for (var i = 0; i < seriesMatch.bmw.length; i++) {
-                            if (model.indexOf(seriesMatch.bmw[i]) !== -1) { visible = true; break; }
-                        }
+                    if (brand.indexOf("bmw") !== -1) {
+                        for (var i = 0; i < seriesMatch.bmw.length; i++) { if (model.indexOf(seriesMatch.bmw[i]) !== -1) { visible = true; break; } }
                     }
-                    // 賓士
-                    if (brand.indexOf("賓士") !== -1 && seriesMatch.benz.length > 0) {
-                        for (var i = 0; i < seriesMatch.benz.length; i++) {
-                            if (model.indexOf(seriesMatch.benz[i]) !== -1) { visible = true; break; }
-                        }
+                    if (brand.indexOf("賓士") !== -1) {
+                        for (var i = 0; i < seriesMatch.benz.length; i++) { if (model.indexOf(seriesMatch.benz[i]) !== -1) { visible = true; break; } }
                     }
                 }
                 
-                // 3. 字母+數字格式 (如 c300, e200, x5)
+                // 3. BMW M系列匹配 (m3→3 series, m4→4 series, m5→5 series...)
+                if (!visible && brand.indexOf("bmw") !== -1 && bmwMSeries[query]) {
+                    if (model.indexOf(bmwMSeries[query]) !== -1) visible = true;
+                }
+                
+                // 4. 字母+數字格式
                 if (!visible) {
                     var match = query.match(/^([a-z]+)(\d*)$/);
                     if (match) {
                         var prefix = match[1];
                         var num = match[2];
+                        
+                        // BMW
+                        if (brand.indexOf("bmw") !== -1) {
+                            if (prefix === "x" && num && model.indexOf("x" + num) !== -1) visible = true;
+                            if (prefix === "i" && num && (model.indexOf("i" + num) !== -1 || model.indexOf("ix") !== -1)) visible = true;
+                            if (prefix === "z" && num && model.indexOf("z" + num) !== -1) visible = true;
+                            // M + 數字 → 對應 Series
+                            if (prefix === "m" && num) {
+                                var targetSeries = num + " series";
+                                if (model.indexOf(targetSeries) !== -1 || model.indexOf("m" + num) !== -1) visible = true;
+                            }
+                        }
                         
                         // 賓士
                         if (brand.indexOf("賓士") !== -1) {
@@ -552,22 +494,6 @@ const carData = [
                             if (prefix === "cla" && model.indexOf("cla") !== -1) visible = true;
                             if (prefix === "cls" && model.indexOf("cls") !== -1) visible = true;
                             if (prefix.indexOf("eq") === 0 && model.indexOf("eq") !== -1) visible = true;
-                        }
-                        
-                        // BMW
-                        if (brand.indexOf("bmw") !== -1) {
-                            if (prefix === "x" && num) {
-                                if (model.indexOf("x" + num) !== -1) visible = true;
-                            }
-                            if (prefix === "m" && num) {
-                                if (model.indexOf("m" + num) !== -1) visible = true;
-                            }
-                            if (prefix === "i" && num) {
-                                if (model.indexOf("i" + num) !== -1 || model.indexOf("ix" + num) !== -1) visible = true;
-                            }
-                            if (prefix === "z" && num) {
-                                if (model.indexOf("z" + num) !== -1) visible = true;
-                            }
                         }
                     }
                 }
